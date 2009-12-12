@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:jtheque="http://www.jtheque.com/schema/jtheque"
+       xsi:schemaLocation="
+            http://www.springframework.org/schema/beans 
+            http://www.springframework.org/schema/beans/spring-beans.xsd
+            http://www.jtheque.com/schema/jtheque
+            http://www.jtheque.com/schema/jtheque/jtheque.xsd"
+       default-lazy-init="true">
+
+    <!-- Proxy views -->
+
+    <jtheque:proxy id="bookAutoView" type="org.jtheque.books.view.frames.AutoView"/>
+    <jtheque:proxy id="authorView" type="org.jtheque.books.view.panels.AuthorView"/>
+    <jtheque:proxy id="bookView" type="org.jtheque.books.view.panels.BookView"/>
+    <jtheque:proxy id="editorView" type="org.jtheque.books.view.frames.EditorView"/>
+
+    <!-- Real Views -->
+
+    <bean id="_bookAutoView" class="org.jtheque.books.view.frames.AutoView">
+        <constructor-arg ref="_mainView"/>
+        <constructor-arg ref="closeAutoViewAction"/>
+        <constructor-arg ref="validateAutoViewAction"/>
+        <constructor-arg ref="autoSearchAction"/>
+        <property name="model" ref="autoAddModel"/>
+    </bean>
+
+    <bean id="_authorView" class="org.jtheque.books.view.panels.AuthorView">
+        <property name="toolBar" ref="authorToolBar"/>
+        <property name="newCountryAction" ref="newCountryAction"/>
+        <property name="sortByNote" ref="sortAuthorsByNoteAction"/>
+        <property name="sortByCountry" ref="sortAuthorsByCountryAction"/>
+        <property name="model" ref="authorModel"/>
+    </bean>
+
+    <bean id="_bookView" class="org.jtheque.books.view.panels.BookView">
+        <property name="panelInfos" ref="booksPanelInfos"/>
+        <property name="panelOthers" ref="booksPanelOthers"/>
+        <property name="newKindAction" ref="newKindAction"/>
+        <property name="newTypeAction" ref="newTypeAction"/>
+        <property name="toolBar" ref="booksToolBar"/>
+        <property name="sortByEditorAction" ref="sortBooksByEditorAction"/>
+        <property name="sortByKindAction" ref="sortBooksByKindAction"/>
+        <property name="sortByTypeAction" ref="sortBooksByTypeAction"/>
+        <property name="sortByYearAction" ref="sortBooksByYearAction"/>
+        <property name="model" ref="bookModel"/>
+    </bean>
+
+    <bean id="_editorView" class="org.jtheque.books.view.frames.EditorView">
+        <constructor-arg ref="_mainView"/>
+        <constructor-arg ref="validateEditorViewAction"/>
+        <constructor-arg ref="closeEditorViewAction"/>
+        <property name="model" ref="editorModel"/>
+    </bean>
+
+    <!-- Panels -->
+
+    <bean id="booksPanelInfos" class="org.jtheque.books.view.panels.JPanelBookInfos">
+        <constructor-arg ref="newEditorAction"/>
+        <constructor-arg ref="newLanguageAction"/>
+        <constructor-arg ref="newSagaAction"/>
+        <constructor-arg ref="addAuthorToListAction"/>
+        <constructor-arg ref="removeAuthorFromListAction"/>
+    </bean>
+
+    <bean id="booksPanelOthers" class="org.jtheque.books.view.panels.JPanelBookOthers"/>
+
+    <!-- ToolBars -->
+
+    <bean id="booksToolBar" class="org.jtheque.books.view.toolbar.JPanelBookToolBar">
+        <property name="saveAction" ref="saveBookAction"/>
+        <property name="deleteAction" ref="deleteBookAction"/>
+        <property name="cancelAction" ref="cancelBookAction"/>
+        <property name="autoEditAction" ref="autoEditBookAction"/>
+        <property name="manualEditAction" ref="manualEditBookAction"/>
+        <property name="autoAddAction" ref="autoAddBookAction"/>
+        <property name="manualAddAction" ref="manualAddBookAction"/>
+    </bean>
+
+    <bean id="authorToolBar" class="org.jtheque.books.view.toolbar.JPanelAuthorToolBar">
+        <constructor-arg ref="addAuthorAction"/>
+        <constructor-arg ref="editAuthorAction"/>
+        <constructor-arg ref="saveAuthorAction"/>
+        <constructor-arg ref="cancelAuthorAction"/>
+        <constructor-arg ref="deleteAuthorAction"/>
+    </bean>
+
+    <!-- Models -->
+
+    <bean id="bookModel" class="org.jtheque.books.view.models.BooksModel"/>
+    <bean id="authorModel" class="org.jtheque.books.view.models.AuthorsModel"/>
+    <bean id="editorModel" class="org.jtheque.books.view.models.EditorModel"/>
+    <bean id="autoAddModel" class="org.jtheque.books.view.models.AutoAddModel"/>
+
+</beans>

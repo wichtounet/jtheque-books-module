@@ -1,0 +1,2 @@
+Manifest-Version: 1.0
+Module-Context: org/jtheque/books/spring/books-beans.xml

@@ -1,0 +1,17 @@
+Versions
+
+Ce document présente les différentes versions de JTheque Books Module. 
+
+* 1.3 23.09.2009 Passage à JTheque Core 2.0, Maven 2
+
+    * Passage à JTheque Core 2.0
+    * Passage à Maven 2
+    * Integrité référentielle
+
+* 1.2 01.06.2009 Refactorings
+
+* 1.1 08.04.2009 Refactorings
+
+* 1.0 09.02.2009 Base version
+
+    * Base version

@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd"
+       default-lazy-init="true">
+
+    <bean id="booksModule" class="org.jtheque.books.BooksModule" lazy-init="false">
+        <constructor-arg>
+            <list>
+                <ref bean="bookView"/>
+                <ref bean="authorView"/>
+            </list>
+        </constructor-arg>
+        <constructor-arg>
+            <list>
+                <bean class="org.jtheque.books.view.sort.NoneSorter">
+                    <constructor-arg ref="bookController"/>
+                </bean>
+                <bean class="org.jtheque.books.view.sort.NoneSorter">
+                    <constructor-arg ref="authorController"/>
+                </bean>
+                <bean class="org.jtheque.books.view.sort.ByEditorSorter"/>
+                <bean class="org.jtheque.books.view.sort.ByKindSorter"/>
+                <bean class="org.jtheque.books.view.sort.ByTypeSorter"/>
+                <bean class="org.jtheque.books.view.sort.ByYearSorter"/>
+                <bean class="org.jtheque.books.view.sort.ByNoteSorter"/>
+                <bean class="org.jtheque.books.view.sort.ByCountrySorter"/>
+            </list>
+        </constructor-arg>
+        <constructor-arg>
+            <list>
+                <bean class="org.jtheque.books.view.controllers.choice.ModifyChoiceAction"/>
+                <bean class="org.jtheque.books.view.controllers.choice.DeleteChoiceAction"/>
+            </list>
+        </constructor-arg>
+    </bean>
+
+    <import resource="books-views.xml"/>
+    <import resource="books-actions.xml"/>
+
+    <!-- Services -->
+
+    <bean id="authorsService" class="org.jtheque.books.services.impl.AuthorsService"/>
+    <bean id="bookAutoService" class="org.jtheque.books.services.impl.BookAutoService"/>
+    <bean id="booksService" class="org.jtheque.books.services.impl.BooksService"/>
+    <bean id="editorsService" class="org.jtheque.books.services.impl.EditorsService"/>
+    <bean id="bookNotesService" class="org.jtheque.books.services.impl.NotesService"/>
+
+    <!-- Controllers -->
+
+    <bean id="authorController" class="org.jtheque.books.view.controllers.AuthorController">
+        <property name="viewState">
+            <bean class="org.jtheque.books.view.controllers.state.author.ViewAuthorState"/>
+        </property>
+        <property name="modifyState">
+            <bean class="org.jtheque.books.view.controllers.state.author.ModifyAuthorState"/>
+        </property>
+        <property name="newObjectState">
+            <bean class="org.jtheque.books.view.controllers.state.author.NewAuthorState"/>
+        </property>
+        <property name="autoAddState">
+            <bean class="org.jtheque.books.view.controllers.state.author.AutoAddAuthorState"/>
+        </property>
+    </bean>
+
+    <bean id="autoBookController" class="org.jtheque.books.view.controllers.BookAutoController"/>
+
+    <bean id="bookController" class="org.jtheque.books.view.controllers.BookController">
+        <property name="viewState">
+            <bean class="org.jtheque.books.view.controllers.state.book.ViewBookState"/>
+        </property>
+        <property name="modifyState">
+            <bean class="org.jtheque.books.view.controllers.state.book.ModifyBookState"/>
+        </property>
+        <property name="newObjectState">
+            <bean class="org.jtheque.books.view.controllers.state.book.NewBookState"/>
+        </property>
+        <property name="autoAddState">
+            <bean class="org.jtheque.books.view.controllers.state.book.AutoAddBookState"/>
+        </property>
+    </bean>
+
+    <bean id="editorController" class="org.jtheque.books.view.controllers.EditorController"/>
+
+    <!--  Daos -->
+
+    <bean id="daoBooks" class="org.jtheque.books.persistence.dao.impl.DaoBooks"/>
+    <bean id="daoEditors" class="org.jtheque.books.persistence.dao.impl.DaoEditors"/>
+
+</beans>

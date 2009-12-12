@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:jtheque="http://www.jtheque.com/schema/jtheque"
+       xsi:schemaLocation="
+            http://www.springframework.org/schema/beans 
+            http://www.springframework.org/schema/beans/spring-beans.xsd
+            http://www.jtheque.com/schema/jtheque
+            http://www.jtheque.com/schema/jtheque/jtheque.xsd"
+       default-lazy-init="true">
+
+    <!-- Auto -->
+
+    <bean id="autoSearchAction" class="org.jtheque.books.view.actions.auto.AcSearch"/>
+    <bean id="validateAutoViewAction" class="org.jtheque.books.view.actions.auto.AcValidateAutoAddView"/>
+
+    <jtheque:close key="auto.action.cancel" view="bookAutoView" id="closeAutoViewAction"/>
+
+    <!-- Authors -->
+
+    <bean id="addAuthorAction" class="org.jtheque.books.view.actions.author.AcNewAuthor"/>
+    <bean id="cancelAuthorAction" class="org.jtheque.books.view.actions.author.AcCancelAuthor"/>
+    <bean id="deleteAuthorAction" class="org.jtheque.books.view.actions.author.AcDeleteAuthor"/>
+    <bean id="editAuthorAction" class="org.jtheque.books.view.actions.author.AcEditAuthor"/>
+    <bean id="saveAuthorAction" class="org.jtheque.books.view.actions.author.AcSaveAuthor"/>
+
+    <bean id="newLanguageAction" class="org.jtheque.primary.view.impl.actions.language.AcNewLanguage">
+        <constructor-arg value="languages.actions.new"/>
+    </bean>
+
+    <bean id="newSagaAction" class="org.jtheque.primary.view.impl.actions.saga.NewSagaAction"/>
+    <jtheque:display key="editor.action.new" view="editorView" id="newEditorAction"/>
+
+    <bean id="addAuthorToListAction" class="org.jtheque.books.view.actions.book.AcAddToList"/>
+    <bean id="removeAuthorFromListAction" class="org.jtheque.books.view.actions.book.AcRemoveFromList"/>
+
+    <bean id="newCountryAction" class="org.jtheque.primary.view.impl.actions.country.AcNewCountry">
+        <constructor-arg value="country.actions.new"/>
+    </bean>
+
+    <bean id="sortAuthorsByCountryAction" class="org.jtheque.books.view.actions.AcSortAuthors">
+        <constructor-arg value="author.actions.sort.country"/>
+        <constructor-arg value="Countries"/>
+    </bean>
+
+    <bean id="sortAuthorsByNoteAction" class="org.jtheque.books.view.actions.AcSortAuthors">
+        <constructor-arg value="author.actions.sort.note"/>
+        <constructor-arg value="Notes"/>
+    </bean>
+
+    <!-- Books -->
+
+    <bean id="saveBookAction" class="org.jtheque.books.view.actions.book.AcSaveBook"/>
+    <bean id="autoAddBookAction" class="org.jtheque.books.view.actions.book.AcAutoAddBook"/>
+    <bean id="autoEditBookAction" class="org.jtheque.books.view.actions.book.AcAutoEditBook"/>
+    <bean id="cancelBookAction" class="org.jtheque.books.view.actions.book.AcCancelBook"/>
+    <bean id="deleteBookAction" class="org.jtheque.books.view.actions.book.AcDeleteBook"/>
+    <bean id="manualAddBookAction" class="org.jtheque.books.view.actions.book.AcNewBook"/>
+    <bean id="manualEditBookAction" class="org.jtheque.books.view.actions.book.AcManualEditBook"/>
+
+    <jtheque:display id="newTypeAction" key="type.actions.new" view="typeView"/>
+    <jtheque:display id="newKindAction" key="kind.actions.new" view="kindView"/>
+
+    <bean id="sortBooksByEditorAction" class="org.jtheque.books.view.actions.AcSortBooks">
+        <constructor-arg value="book.actions.sort.editor"/>
+        <constructor-arg value="Editors"/>
+    </bean>
+
+    <bean id="sortBooksByKindAction" class="org.jtheque.books.view.actions.AcSortBooks">
+        <constructor-arg value="book.actions.sort.kind"/>
+        <constructor-arg value="Kinds"/>
+    </bean>
+
+    <bean id="sortBooksByTypeAction" class="org.jtheque.books.view.actions.AcSortBooks">
+        <constructor-arg value="book.actions.sort.type"/>
+        <constructor-arg value="Types"/>
+    </bean>
+
+    <bean id="sortBooksByYearAction" class="org.jtheque.books.view.actions.AcSortBooks">
+        <constructor-arg value="book.actions.sort.year"/>
+        <constructor-arg value="Year"/>
+    </bean>
+
+    <!-- AbstractEditor -->
+
+    <jtheque:close key="editor.actions.cancel" view="editorView" id="closeEditorViewAction"/>
+
+    <bean id="validateEditorViewAction" class="org.jtheque.books.view.actions.editor.AcValidateEditorView"/>
+
+    <!-- General -->
+
+    <bean id="refreshAction" class="org.jtheque.books.view.actions.generals.AcRefreshList"/>
+
+    <!-- Others menu actions -->
+
+    <bean id="deleteKindAction" class="org.jtheque.primary.view.impl.actions.kind.AcDeleteKind"/>
+    <bean id="deleteTypeAction" class="org.jtheque.primary.view.impl.actions.type.AcDeleteType"/>
+    <bean id="deleteLanguageAction" class="org.jtheque.primary.view.impl.actions.language.AcDeleteLanguage">
+        <constructor-arg value="data.titles.language"/>
+    </bean>
+    <bean id="deleteCountryAction" class="org.jtheque.primary.view.impl.actions.country.AcDeleteCountry">
+        <constructor-arg value="data.titles.country"/>
+    </bean>
+    <bean id="deleteEditorAction" class="org.jtheque.books.view.actions.editor.AcDeleteEditor"/>
+
+    <bean id="editKindAction" class="org.jtheque.primary.view.impl.actions.kind.AcEditKind"/>
+    <bean id="editTypeAction" class="org.jtheque.primary.view.impl.actions.type.AcEditType"/>
+    <bean id="editLanguageAction" class="org.jtheque.primary.view.impl.actions.language.AcEditLanguage">
+        <constructor-arg value="data.titles.language"/>
+    </bean>
+    <bean id="editCountryAction" class="org.jtheque.primary.view.impl.actions.country.AcEditCountry">
+        <constructor-arg value="data.titles.country"/>
+    </bean>
+    <bean id="editEditorAction" class="org.jtheque.books.view.actions.editor.AcEditEditor"/>
+
+</beans>
