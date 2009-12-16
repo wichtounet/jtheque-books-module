@@ -33,8 +33,6 @@ import javax.swing.undo.CannotUndoException;
  * @author Baptiste Wicht
  */
 public final class DeletedCountryEdit extends AbstractUndoableEdit {
-    private static final long serialVersionUID = -3037357344759861059L;
-
     private final Country country;
 
     @Resource

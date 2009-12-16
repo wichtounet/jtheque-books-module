@@ -17,10 +17,11 @@ package org.jtheque.books.view.actions.book;
  */
 
 import org.jtheque.books.view.able.IBookView;
+import org.jtheque.core.managers.Managers;
+import org.jtheque.core.managers.beans.IBeansManager;
 import org.jtheque.core.managers.view.impl.actions.JThequeSimpleAction;
 import org.jtheque.utils.collections.ArrayUtils;
 
-import javax.annotation.Resource;
 import javax.swing.DefaultListModel;
 import java.awt.event.ActionEvent;
 import java.util.Arrays;
@@ -31,8 +32,6 @@ import java.util.Arrays;
  * @author Baptiste Wicht
  */
 public final class AcAddToList extends JThequeSimpleAction {
-    private static final long serialVersionUID = -1335864379997427135L;
-
     /**
      * Construct a new <code>AcAddToList</code>.
      */
@@ -42,11 +41,10 @@ public final class AcAddToList extends JThequeSimpleAction {
         setText(" >> ");
     }
 
-    @Resource
-    private IBookView bookView;
-
     @Override
     public void actionPerformed(ActionEvent e) {
+        IBookView bookView = Managers.getManager(IBeansManager.class).getBean("bookView");
+
         DefaultListModel authorsModel = bookView.getPanelInfos().getAuthorsModel();
         DefaultListModel authorsBookModel = bookView.getPanelInfos().getAuthorsBookModel();
 

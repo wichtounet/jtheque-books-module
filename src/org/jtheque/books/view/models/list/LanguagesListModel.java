@@ -29,8 +29,6 @@ import javax.swing.DefaultListModel;
  * @author Baptiste Wicht
  */
 public final class LanguagesListModel extends DefaultListModel {
-    private static final long serialVersionUID = 7060472242015464173L;
-
     private final String[] languages;
 
     @Resource

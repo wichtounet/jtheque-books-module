@@ -20,11 +20,11 @@ import org.jtheque.books.services.able.IBookAutoService;
 import org.jtheque.books.services.impl.utils.web.BookResult;
 import org.jtheque.books.view.able.IAutoView;
 import org.jtheque.core.managers.Managers;
+import org.jtheque.core.managers.beans.IBeansManager;
 import org.jtheque.core.managers.view.able.IViewManager;
 import org.jtheque.core.managers.view.edt.SimpleTask;
 import org.jtheque.core.managers.view.impl.actions.JThequeSimpleAction;
 
-import javax.annotation.Resource;
 import java.awt.event.ActionEvent;
 import java.util.Collection;
 
@@ -34,13 +34,8 @@ import java.util.Collection;
  * @author Baptiste Wicht
  */
 public final class AcSearch extends JThequeSimpleAction {
-    private static final long serialVersionUID = 3194558380565655475L;
-
-    @Resource
-    private IAutoView autoView;
-
-    @Resource
-    private IBookAutoService bookAutoService;
+    private final IAutoView autoView;
+    private final IBookAutoService bookAutoService;
 
     /**
      * Construct a new <code>AcSearch</code>.
@@ -49,6 +44,9 @@ public final class AcSearch extends JThequeSimpleAction {
         super();
 
         setText(">>");
+
+        autoView = Managers.getManager(IBeansManager.class).getBean("autoView");
+        bookAutoService = Managers.getManager(IBeansManager.class).getBean("bookAutoService");
     }
 
     @Override

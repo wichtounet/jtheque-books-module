@@ -18,26 +18,28 @@ package org.jtheque.books.view.panels;
 
 import org.jtheque.books.persistence.od.able.Book;
 import org.jtheque.books.persistence.od.able.Editor;
-import org.jtheque.books.services.able.IEditorsService;
+import org.jtheque.books.view.actions.DisplayBeanViewAction;
+import org.jtheque.books.view.actions.book.AcAddToList;
+import org.jtheque.books.view.actions.book.AcRemoveFromList;
 import org.jtheque.books.view.fb.IBookFormBean;
 import org.jtheque.books.view.models.list.AuthorsListModel;
 import org.jtheque.books.view.models.list.SimpleAuthorsModel;
+import org.jtheque.core.managers.Managers;
+import org.jtheque.core.managers.beans.IBeansManager;
 import org.jtheque.core.managers.error.JThequeError;
+import org.jtheque.core.managers.persistence.able.DataContainer;
 import org.jtheque.core.utils.ui.PanelBuilder;
 import org.jtheque.core.utils.ui.ValidationUtils;
 import org.jtheque.primary.od.able.Language;
 import org.jtheque.primary.od.able.Person;
 import org.jtheque.primary.od.able.Saga;
-import org.jtheque.primary.services.able.ILanguagesService;
-import org.jtheque.primary.services.able.ISagasService;
+import org.jtheque.primary.view.impl.actions.language.AcNewLanguage;
+import org.jtheque.primary.view.impl.actions.saga.NewSagaAction;
 import org.jtheque.primary.view.impl.listeners.ObjectChangedEvent;
 import org.jtheque.primary.view.impl.models.DataContainerCachedComboBoxModel;
 import org.jtheque.utils.ui.GridBagUtils;
 import org.jtheque.utils.ui.SwingUtils;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.Resource;
-import javax.swing.Action;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -56,8 +58,6 @@ import java.util.Collection;
  * @author Baptiste Wicht
  */
 public final class JPanelBookInfos extends JPanel implements IInfosPanel {
-    private static final long serialVersionUID = 6833310794095034469L;
-
     private DataContainerCachedComboBoxModel<Editor> editorsModel;
     private DataContainerCachedComboBoxModel<Language> languagesModel;
     private DataContainerCachedComboBoxModel<Saga> sagasModel;
@@ -69,13 +69,6 @@ public final class JPanelBookInfos extends JPanel implements IInfosPanel {
     private JFormattedTextField fieldYear;
     private JFormattedTextField fieldPages;
 
-    private final Action newEditorAction;
-    private final Action newLanguageAction;
-    private final Action newSagaAction;
-
-    private final Action addAuthorAction;
-    private final Action removeAuthorAction;
-
     private JList authorsList;
     private JList authorsBookList;
 
@@ -85,41 +78,17 @@ public final class JPanelBookInfos extends JPanel implements IInfosPanel {
     private JButton buttonNewEditor;
     private JButton buttonNewLanguage;
     private JButton buttonNewSaga;
+    private JButton buttonAddAuthor;
+    private JButton buttonRemoveAuthor;
 
-    @Resource
-    private ILanguagesService languagesService;
-
-    @Resource
-    private IEditorsService editorsService;
-
-    @Resource
-    private ISagasService sagasService;
     private static final double AN_HALF = 0.5;
 
     /**
      * Construct a new JPanelBookInfos.
-     *
-     * @param newEditorAction    The action to create a new editor.
-     * @param newLanguageAction  The action to create a new language.
-     * @param newSagaAction      The action to create a new saga.
-     * @param addAuthorAction    The action to add an author.
-     * @param removeAuthorAction The action to add an author.
      */
-    public JPanelBookInfos(Action newEditorAction, Action newLanguageAction, Action newSagaAction, Action addAuthorAction, Action removeAuthorAction) {
+    public JPanelBookInfos() {
         super();
 
-        this.newEditorAction = newEditorAction;
-        this.newLanguageAction = newLanguageAction;
-        this.newSagaAction = newSagaAction;
-        this.addAuthorAction = addAuthorAction;
-        this.removeAuthorAction = removeAuthorAction;
-    }
-
-    /**
-     * Build the view.
-     */
-    @PostConstruct
-    private void build() {
         PanelBuilder builder = new PanelBuilder(this);
 
         addEditorField(builder);
@@ -137,12 +106,14 @@ public final class JPanelBookInfos extends JPanel implements IInfosPanel {
     private void addEditorField(PanelBuilder builder) {
         builder.addI18nLabel("book.editor", builder.gbcSet(0, 0));
 
-        editorsModel = new DataContainerCachedComboBoxModel<Editor>(editorsService);
+        editorsModel = new DataContainerCachedComboBoxModel<Editor>(
+                Managers.getManager(IBeansManager.class).<DataContainer<Editor>>getBean("editorsService"));
 
         comboEditors = builder.addComboBox(editorsModel, builder.gbcSet(1, 0));
         comboEditors.setEnabled(false);
 
-        buttonNewEditor = builder.addButton(newEditorAction, builder.gbcSet(2, 0, GridBagUtils.NONE, GridBagUtils.REMAINDER, 1));
+        buttonNewEditor = builder.addButton(new DisplayBeanViewAction("editor.action.new", "editorView"),
+                builder.gbcSet(2, 0, GridBagUtils.NONE, GridBagUtils.REMAINDER, 1));
         buttonNewEditor.setEnabled(false);
     }
 
@@ -154,12 +125,14 @@ public final class JPanelBookInfos extends JPanel implements IInfosPanel {
     private void addLanguageField(PanelBuilder builder) {
         builder.addI18nLabel("book.language", builder.gbcSet(0, 1));
 
-        languagesModel = new DataContainerCachedComboBoxModel<Language>(languagesService);
+        languagesModel = new DataContainerCachedComboBoxModel<Language>(
+                Managers.getManager(IBeansManager.class).<DataContainer<Language>>getBean("languagesService"));
 
         comboLanguages = builder.addComboBox(languagesModel, builder.gbcSet(1, 1));
         comboLanguages.setEnabled(false);
 
-        buttonNewLanguage = builder.addButton(newLanguageAction, builder.gbcSet(2, 1, GridBagUtils.NONE, GridBagUtils.REMAINDER, 1));
+        buttonNewLanguage = builder.addButton(new AcNewLanguage("languages.actions.new"),
+                builder.gbcSet(2, 1, GridBagUtils.NONE, GridBagUtils.REMAINDER, 1));
         buttonNewLanguage.setEnabled(false);
     }
 
@@ -171,12 +144,13 @@ public final class JPanelBookInfos extends JPanel implements IInfosPanel {
     private void addSagaField(PanelBuilder builder) {
         builder.addI18nLabel("book.saga", builder.gbcSet(0, 2));
 
-        sagasModel = new DataContainerCachedComboBoxModel<Saga>(sagasService);
+        sagasModel = new DataContainerCachedComboBoxModel<Saga>(
+                Managers.getManager(IBeansManager.class).<DataContainer<Saga>>getBean("sagasService"));
 
         comboSagas = builder.addComboBox(sagasModel, builder.gbcSet(1, 2));
         comboSagas.setEnabled(false);
 
-        buttonNewSaga = builder.addButton(newSagaAction, builder.gbcSet(2, 2, GridBagUtils.NONE, GridBagUtils.REMAINDER, 1));
+        buttonNewSaga = builder.addButton(new NewSagaAction(), builder.gbcSet(2, 2, GridBagUtils.NONE, GridBagUtils.REMAINDER, 1));
         buttonNewSaga.setEnabled(false);
     }
 
@@ -220,11 +194,11 @@ public final class JPanelBookInfos extends JPanel implements IInfosPanel {
 
         builder.addScrolled(authorsList, builder.gbcSet(0, 0, GridBagUtils.BOTH, GridBagUtils.BASELINE_LEADING, 1, GridBagUtils.REMAINDER, AN_HALF, 1.0));
 
-        addAuthorAction.setEnabled(false);
-        builder.addButton(addAuthorAction, builder.gbcSet(1, 0));
+        buttonAddAuthor = builder.addButton(new AcAddToList(), builder.gbcSet(1, 0));
+        buttonAddAuthor.setEnabled(false);
 
-        removeAuthorAction.setEnabled(false);
-        builder.addButton(removeAuthorAction, builder.gbcSet(1, 1));
+        buttonRemoveAuthor = builder.addButton(new AcRemoveFromList(), builder.gbcSet(1, 1));
+        buttonRemoveAuthor.setEnabled(false);
 
         authorsBookModel = new SimpleAuthorsModel();
 
@@ -270,8 +244,8 @@ public final class JPanelBookInfos extends JPanel implements IInfosPanel {
         buttonNewLanguage.setEnabled(enabled);
         buttonNewEditor.setEnabled(enabled);
         buttonNewSaga.setEnabled(enabled);
-        addAuthorAction.setEnabled(enabled);
-        removeAuthorAction.setEnabled(enabled);
+        buttonAddAuthor.setEnabled(enabled);
+        buttonRemoveAuthor.setEnabled(enabled);
 
         authorsList.setEnabled(enabled);
         authorsBookList.setEnabled(enabled);

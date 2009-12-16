@@ -28,7 +28,6 @@ import org.jtheque.primary.view.impl.renderers.NoteComboRenderer;
 import org.jtheque.utils.ui.GridBagUtils;
 import org.jtheque.utils.ui.SwingUtils;
 
-import javax.annotation.PostConstruct;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
@@ -43,20 +42,24 @@ import java.util.Collection;
  * @author Baptiste Wicht
  */
 public final class JPanelBookOthers extends JPanel implements IOthersPanel {
-    private static final long serialVersionUID = 6833310794095034469L;
-
     private NotesComboBoxModel modelNote;
     private JComboBox comboNote;
     private JTextArea areaResume;
     private JTextField fieldISBN10;
     private JTextField fieldISBN13;
+
     private static final int ISBN_MAX_LENGTH = 20;
     private static final int RESUME_MAX_LENGTH = 2000;
+
+    public JPanelBookOthers() {
+        super();
+
+        build();
+    }
 
     /**
      * Build the view.
      */
-    @PostConstruct
     private void build() {
         PanelBuilder builder = new PanelBuilder(this);
 

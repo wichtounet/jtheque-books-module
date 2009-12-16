@@ -17,9 +17,10 @@ package org.jtheque.books.view.actions.book;
  */
 
 import org.jtheque.books.view.controllers.able.IBookAutoController;
+import org.jtheque.core.managers.Managers;
+import org.jtheque.core.managers.beans.IBeansManager;
 import org.jtheque.core.managers.view.impl.actions.JThequeAction;
 
-import javax.annotation.Resource;
 import java.awt.event.ActionEvent;
 
 /**
@@ -28,11 +29,6 @@ import java.awt.event.ActionEvent;
  * @author Baptiste Wicht
  */
 public final class AcAutoAddBook extends JThequeAction {
-    private static final long serialVersionUID = -5987872857618331512L;
-
-    @Resource
-    private IBookAutoController bookAutoController;
-
     /**
      * Construct a AcAutoAddBook.
      */
@@ -42,6 +38,6 @@ public final class AcAutoAddBook extends JThequeAction {
 
     @Override
     public void actionPerformed(ActionEvent event) {
-        bookAutoController.add();
+        Managers.getManager(IBeansManager.class).<IBookAutoController>getBean("bookAutoController").add();
     }
 }

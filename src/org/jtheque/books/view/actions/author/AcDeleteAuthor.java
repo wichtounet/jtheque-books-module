@@ -19,11 +19,11 @@ package org.jtheque.books.view.actions.author;
 import org.jtheque.books.view.controllers.able.IAuthorController;
 import org.jtheque.books.view.models.able.IAuthorsModel;
 import org.jtheque.core.managers.Managers;
+import org.jtheque.core.managers.beans.IBeansManager;
 import org.jtheque.core.managers.language.ILanguageManager;
 import org.jtheque.core.managers.view.able.IViewManager;
 import org.jtheque.core.managers.view.impl.actions.JThequeAction;
 
-import javax.annotation.Resource;
 import java.awt.event.ActionEvent;
 
 /**
@@ -32,11 +32,6 @@ import java.awt.event.ActionEvent;
  * @author Baptiste Wicht
  */
 public final class AcDeleteAuthor extends JThequeAction {
-    private static final long serialVersionUID = -4065895872194033911L;
-
-    @Resource
-    private IAuthorController authorController;
-
     /**
      * Construct a new AcDeleteAuthor.
      */
@@ -46,14 +41,14 @@ public final class AcDeleteAuthor extends JThequeAction {
 
     @Override
     public void actionPerformed(ActionEvent event) {
-        IAuthorsModel model = authorController.getView().getModel();
+        IAuthorsModel model = Managers.getManager(IBeansManager.class).<IAuthorController>getBean("authorController").getView().getModel();
 
         final boolean yes = Managers.getManager(IViewManager.class).askUserForConfirmation(
                 Managers.getManager(ILanguageManager.class).getMessage("author.dialogs.confirmDelete", model.getCurrentAuthor().getDisplayableText()),
                 Managers.getManager(ILanguageManager.class).getMessage("author.dialogs.confirmDelete.title"));
 
         if (yes) {
-            authorController.deleteCurrentAuthor();
+            Managers.getManager(IBeansManager.class).<IAuthorController>getBean("authorController").deleteCurrentAuthor();
         }
     }
 }

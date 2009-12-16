@@ -18,10 +18,11 @@ package org.jtheque.books.view.actions;
 
 import org.jtheque.books.services.able.IAuthorsService;
 import org.jtheque.books.view.able.IAuthorView;
+import org.jtheque.core.managers.Managers;
+import org.jtheque.core.managers.beans.IBeansManager;
 import org.jtheque.core.managers.view.impl.actions.JThequeSimpleAction;
 import org.jtheque.primary.view.impl.sort.SortManager;
 
-import javax.annotation.Resource;
 import java.awt.event.ActionEvent;
 
 /**
@@ -30,14 +31,9 @@ import java.awt.event.ActionEvent;
  * @author Baptiste Wicht
  */
 public final class AcSortAuthors extends JThequeSimpleAction {
-    private static final long serialVersionUID = 1651417572586677829L;
-
     private final SortManager sorter = new SortManager();
 
     private final String sortType;
-
-    @Resource
-    private IAuthorView authorView;
 
     /**
      * Construct a new AcSortAuthors.
@@ -55,6 +51,8 @@ public final class AcSortAuthors extends JThequeSimpleAction {
 
     @Override
     public void actionPerformed(ActionEvent arg0) {
+        IAuthorView authorView = Managers.getManager(IBeansManager.class).getBean("authorView");
+
         authorView.sort(sortType);
         sorter.sort(authorView.getTreeModel(), IAuthorsService.DATA_TYPE, sortType);
     }

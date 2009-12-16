@@ -17,10 +17,11 @@ package org.jtheque.books.view.actions.editor;
  */
 
 import org.jtheque.books.services.able.IEditorsService;
+import org.jtheque.core.managers.Managers;
+import org.jtheque.core.managers.beans.IBeansManager;
 import org.jtheque.core.managers.view.impl.actions.JThequeAction;
 import org.jtheque.primary.controller.able.IChoiceController;
 
-import javax.annotation.Resource;
 import java.awt.event.ActionEvent;
 
 /**
@@ -29,11 +30,6 @@ import java.awt.event.ActionEvent;
  * @author Baptiste Wicht
  */
 public final class AcEditEditor extends JThequeAction {
-    private static final long serialVersionUID = 6690745007540155631L;
-
-    @Resource
-    private IChoiceController choiceController;
-
     /**
      * Construct a AcEditEditor.
      */
@@ -43,6 +39,8 @@ public final class AcEditEditor extends JThequeAction {
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        IChoiceController choiceController = Managers.getManager(IBeansManager.class).getBean("choiceController");
+
         choiceController.setAction("edit");
         choiceController.setContent(IEditorsService.DATA_TYPE);
         choiceController.displayView();

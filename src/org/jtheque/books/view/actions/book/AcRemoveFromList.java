@@ -17,11 +17,11 @@ package org.jtheque.books.view.actions.book;
  */
 
 import org.jtheque.books.view.able.IBookView;
-import org.jtheque.books.view.controllers.able.IBookController;
+import org.jtheque.core.managers.Managers;
+import org.jtheque.core.managers.beans.IBeansManager;
 import org.jtheque.core.managers.view.impl.actions.JThequeSimpleAction;
 import org.jtheque.utils.collections.ArrayUtils;
 
-import javax.annotation.Resource;
 import javax.swing.DefaultListModel;
 import java.awt.event.ActionEvent;
 import java.util.Arrays;
@@ -32,8 +32,6 @@ import java.util.Arrays;
  * @author Baptiste Wicht
  */
 public final class AcRemoveFromList extends JThequeSimpleAction {
-    private static final long serialVersionUID = -8163503906464833282L;
-
     /**
      * Construct a new <code>AcRemoveFromList</code>.
      */
@@ -43,17 +41,14 @@ public final class AcRemoveFromList extends JThequeSimpleAction {
         setText(" << ");
     }
 
-    @Resource
-    private IBookController bookController;
-
     @Override
     public void actionPerformed(ActionEvent e) {
-        IBookView view = bookController.getView();
+        IBookView bookView = Managers.getManager(IBeansManager.class).getBean("bookView");
 
-        DefaultListModel authorsModel = view.getPanelInfos().getAuthorsModel();
-        DefaultListModel authorsBookModel = view.getPanelInfos().getAuthorsBookModel();
+        DefaultListModel authorsModel = bookView.getPanelInfos().getAuthorsModel();
+        DefaultListModel authorsBookModel = bookView.getPanelInfos().getAuthorsBookModel();
 
-        int[] selectedActors = view.getPanelInfos().getSelectedAuthorsBookIndexes();
+        int[] selectedActors = bookView.getPanelInfos().getSelectedAuthorsBookIndexes();
 
         Arrays.sort(selectedActors);
 

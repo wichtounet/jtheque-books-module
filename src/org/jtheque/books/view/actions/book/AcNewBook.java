@@ -17,9 +17,10 @@ package org.jtheque.books.view.actions.book;
  */
 
 import org.jtheque.books.view.controllers.able.IBookController;
+import org.jtheque.core.managers.Managers;
+import org.jtheque.core.managers.beans.IBeansManager;
 import org.jtheque.core.managers.view.impl.actions.JThequeAction;
 
-import javax.annotation.Resource;
 import java.awt.event.ActionEvent;
 
 /**
@@ -28,11 +29,6 @@ import java.awt.event.ActionEvent;
  * @author Baptiste Wicht
  */
 public final class AcNewBook extends JThequeAction {
-    private static final long serialVersionUID = -7636108788149237216L;
-
-    @Resource
-    private IBookController bookController;
-
     /**
      * Construct a AcNewBook.
      */
@@ -42,6 +38,6 @@ public final class AcNewBook extends JThequeAction {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        bookController.createFilm();
+        Managers.getManager(IBeansManager.class).<IBookController>getBean("bookController").createFilm();
     }
 }

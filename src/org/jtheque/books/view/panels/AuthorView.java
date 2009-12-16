@@ -22,18 +22,23 @@ import org.jdesktop.swingx.JXTree;
 import org.jdesktop.swingx.border.DropShadowBorder;
 import org.jtheque.books.services.able.IAuthorsService;
 import org.jtheque.books.view.able.IAuthorView;
-import org.jtheque.books.view.controllers.able.IAuthorController;
+import org.jtheque.books.view.actions.AcSortAuthors;
 import org.jtheque.books.view.fb.AuthorFormBean;
 import org.jtheque.books.view.fb.IAuthorFormBean;
+import org.jtheque.books.view.models.AuthorsModel;
 import org.jtheque.books.view.models.able.IAuthorsModel;
 import org.jtheque.books.view.toolbar.JPanelAuthorToolBar;
+import org.jtheque.core.managers.Managers;
+import org.jtheque.core.managers.beans.IBeansManager;
 import org.jtheque.core.managers.error.JThequeError;
+import org.jtheque.core.managers.persistence.able.DataContainer;
 import org.jtheque.core.utils.ui.PanelBuilder;
 import org.jtheque.core.utils.ui.ValidationUtils;
 import org.jtheque.primary.od.able.Country;
 import org.jtheque.primary.od.able.Person;
 import org.jtheque.primary.services.able.ICountriesService;
 import org.jtheque.primary.view.able.ToolbarView;
+import org.jtheque.primary.view.impl.actions.country.AcNewCountry;
 import org.jtheque.primary.view.impl.components.panels.JThequeTitledPanel;
 import org.jtheque.primary.view.impl.components.panels.PrincipalDataPanel;
 import org.jtheque.primary.view.impl.listeners.ObjectChangedEvent;
@@ -44,13 +49,11 @@ import org.jtheque.primary.view.impl.sort.SortManager;
 import org.jtheque.utils.ui.GridBagUtils;
 import org.jtheque.utils.ui.SwingUtils;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.Resource;
-import javax.swing.Action;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JTextField;
+import javax.swing.event.TreeSelectionListener;
 import java.awt.Font;
 import java.util.Collection;
 
@@ -60,8 +63,6 @@ import java.util.Collection;
  * @author Baptiste Wicht
  */
 public final class AuthorView extends PrincipalDataPanel<IAuthorsModel> implements IAuthorView {
-    private static final long serialVersionUID = -7634054000892878297L;
-
     private JXTitledPanel authorsPanel;
 
     private JTextField fieldFirstName;
@@ -73,28 +74,21 @@ public final class AuthorView extends PrincipalDataPanel<IAuthorsModel> implemen
 
     private final SortManager sorter = new SortManager();
 
-    private Action newCountryAction;
-    private Action sortByCountry;
-    private Action sortByNote;
     private JPanelAuthorToolBar toolBar;
 
     private JComboBox comboCountries;
     private JComboBox comboNote;
 
-    @Resource
-    private ICountriesService countriesService;
-
-    @Resource
-    private IAuthorController authorController;
     private JButton buttonNewCountry;
+
     private static final int NAMES_LIMIT = 80;
     private static final double A_QUARTER = 0.25;
 
-    /**
-     * Build the view.
-     */
-    @PostConstruct
-    private void build() {
+    public AuthorView() {
+        super();
+
+        setModel(new AuthorsModel());
+
         PanelBuilder builder = new PanelBuilder(this);
 
         buildListPanel(builder);
@@ -108,7 +102,7 @@ public final class AuthorView extends PrincipalDataPanel<IAuthorsModel> implemen
      * Add the listeners.
      */
     private void addListeners() {
-        treeAuthors.addTreeSelectionListener(authorController);
+        treeAuthors.addTreeSelectionListener(Managers.getManager(IBeansManager.class).<TreeSelectionListener>getBean("authorController"));
 
         getModel().addDisplayListListener(this);
         getModel().addCurrentObjectListener(this);
@@ -144,18 +138,18 @@ public final class AuthorView extends PrincipalDataPanel<IAuthorsModel> implemen
      *
      * @param parent The parent builder.
      */
-    private void buildSortPanel(PanelBuilder parent) {
+    private static void buildSortPanel(PanelBuilder parent) {
         JXTitledPanel panelTri = new JThequeTitledPanel("author.panel.sort.title");
         panelTri.setBorder(new DropShadowBorder());
         panelTri.setTitleFont(panelTri.getTitleFont().deriveFont(Font.BOLD));
 
         PanelBuilder builder = new PanelBuilder();
 
-        JXHyperlink linkSortCountry = builder.add(new JXHyperlink(sortByCountry),
+        JXHyperlink linkSortCountry = builder.add(new JXHyperlink(new AcSortAuthors("author.actions.sort.country", "Notes")),
                 builder.gbcSet(0, 0, GridBagUtils.HORIZONTAL, GridBagUtils.BASELINE_LEADING, 1.0, 0.0));
         linkSortCountry.setClickedColor(linkSortCountry.getUnclickedColor());
 
-        JXHyperlink linkSortNote = builder.add(new JXHyperlink(sortByNote),
+        JXHyperlink linkSortNote = builder.add(new JXHyperlink(new AcSortAuthors("author.actions.sort.note", ICountriesService.DATA_TYPE)),
                 builder.gbcSet(0, 1, GridBagUtils.HORIZONTAL, GridBagUtils.BASELINE_LEADING, 1.0, 0.0));
         linkSortNote.setClickedColor(linkSortNote.getUnclickedColor());
 
@@ -175,6 +169,8 @@ public final class AuthorView extends PrincipalDataPanel<IAuthorsModel> implemen
         authorsPanel.setTitleFont(authorsPanel.getTitleFont().deriveFont(Font.BOLD));
 
         PanelBuilder builder = new PanelBuilder();
+
+        toolBar = new JPanelAuthorToolBar();
 
         builder.add(toolBar, builder.gbcSet(0, 0, GridBagUtils.HORIZONTAL, GridBagUtils.BASELINE_LEADING, GridBagUtils.REMAINDER, 1, 1.0, 0.0));
 
@@ -224,12 +220,13 @@ public final class AuthorView extends PrincipalDataPanel<IAuthorsModel> implemen
     private void addCountryField(PanelBuilder builder) {
         builder.addI18nLabel("author.country", builder.gbcSet(0, 3));
 
-        countriesModel = new DataContainerCachedComboBoxModel<Country>(countriesService);
+        countriesModel = new DataContainerCachedComboBoxModel<Country>(
+                Managers.getManager(IBeansManager.class).<DataContainer<Country>>getBean("countriesService"));
 
         comboCountries = builder.addComboBox(countriesModel, builder.gbcSet(1, 3));
         comboCountries.setEnabled(false);
 
-        buttonNewCountry = builder.addButton(newCountryAction,
+        buttonNewCountry = builder.addButton(new AcNewCountry("country.actions.new"),
                 builder.gbcSet(2, 3, GridBagUtils.NONE, GridBagUtils.BASELINE_LEADING, GridBagUtils.REMAINDER, 1, 1.0, 0.0));
         buttonNewCountry.setEnabled(false);
     }
@@ -356,41 +353,5 @@ public final class AuthorView extends PrincipalDataPanel<IAuthorsModel> implemen
     @Override
     public JComponent getComponent() {
         return this;
-    }
-
-    /**
-     * Set the toolbar.
-     *
-     * @param toolBar The toolbar.
-     */
-    public void setToolBar(JPanelAuthorToolBar toolBar) {
-        this.toolBar = toolBar;
-    }
-
-    /**
-     * Set the action to sort by note.
-     *
-     * @param sortByNote The action to sort by note.
-     */
-    public void setSortByNote(Action sortByNote) {
-        this.sortByNote = sortByNote;
-    }
-
-    /**
-     * Set the action to sort by country.
-     *
-     * @param sortByCountry The action to sort by country.
-     */
-    public void setSortByCountry(Action sortByCountry) {
-        this.sortByCountry = sortByCountry;
-    }
-
-    /**
-     * Set the action to create a new country.
-     *
-     * @param newCountryAction The action to create a new country.
-     */
-    public void setNewCountryAction(Action newCountryAction) {
-        this.newCountryAction = newCountryAction;
     }
 }

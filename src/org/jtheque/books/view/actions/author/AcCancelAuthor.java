@@ -17,9 +17,10 @@ package org.jtheque.books.view.actions.author;
  */
 
 import org.jtheque.books.view.controllers.able.IAuthorController;
+import org.jtheque.core.managers.Managers;
+import org.jtheque.core.managers.beans.IBeansManager;
 import org.jtheque.core.managers.view.impl.actions.JThequeAction;
 
-import javax.annotation.Resource;
 import java.awt.event.ActionEvent;
 
 /**
@@ -28,11 +29,6 @@ import java.awt.event.ActionEvent;
  * @author Baptiste Wicht
  */
 public final class AcCancelAuthor extends JThequeAction {
-    private static final long serialVersionUID = -8874148033701214800L;
-
-    @Resource
-    private IAuthorController authorController;
-
     /**
      * Construct a new AcCancelAuthor.
      */
@@ -42,6 +38,6 @@ public final class AcCancelAuthor extends JThequeAction {
 
     @Override
     public void actionPerformed(ActionEvent event) {
-        authorController.cancel();
+        Managers.getManager(IBeansManager.class).<IAuthorController>getBean("authorController").cancel();
     }
 }

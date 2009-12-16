@@ -16,6 +16,11 @@ package org.jtheque.books.view.toolbar;
  * along with JTheque.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import org.jtheque.books.view.actions.author.AcCancelAuthor;
+import org.jtheque.books.view.actions.author.AcDeleteAuthor;
+import org.jtheque.books.view.actions.author.AcEditAuthor;
+import org.jtheque.books.view.actions.author.AcNewAuthor;
+import org.jtheque.books.view.actions.author.AcSaveAuthor;
 import org.jtheque.core.managers.Managers;
 import org.jtheque.core.managers.view.able.IViewManager;
 import org.jtheque.core.utils.ui.PanelBuilder;
@@ -23,8 +28,6 @@ import org.jtheque.primary.view.able.ToolbarView;
 import org.jtheque.primary.view.able.ViewMode;
 import org.jtheque.utils.ui.GridBagUtils;
 
-import javax.annotation.PostConstruct;
-import javax.swing.Action;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
@@ -34,19 +37,11 @@ import javax.swing.JPanel;
  * @author Baptiste Wicht
  */
 public final class JPanelAuthorToolBar extends JPanel implements ToolbarView {
-    private static final long serialVersionUID = -6509195368792317882L;
-
     private JButton buttonAdd;
     private JButton buttonEdit;
     private JButton buttonSave;
     private JButton buttonCancel;
     private JButton buttonDelete;
-
-    private final Action addAction;
-    private final Action editAction;
-    private final Action saveAction;
-    private final Action cancelAction;
-    private final Action deleteAction;
 
     private ViewMode mode = ViewMode.VIEW;
 
@@ -54,36 +49,25 @@ public final class JPanelAuthorToolBar extends JPanel implements ToolbarView {
 
     /**
      * Create a new JPanelAuthorToolBar.
-     *
-     * @param addAction    The action to add an author.
-     * @param editAction   The action to edit an author.
-     * @param saveAction   The action to save an author.
-     * @param cancelAction The action to cancel.
-     * @param deleteAction The action to delete the current author.
+     * 
      */
-    public JPanelAuthorToolBar(Action addAction, Action editAction, Action saveAction,
-                               Action cancelAction, Action deleteAction) {
+    public JPanelAuthorToolBar() {
         super();
 
-        this.addAction = addAction;
-        this.editAction = editAction;
-        this.saveAction = saveAction;
-        this.cancelAction = cancelAction;
-        this.deleteAction = deleteAction;
+        build();
     }
 
     /**
      * Build the toolbar.
      */
-    @PostConstruct
     private void build() {
         PanelBuilder builder = new PanelBuilder(this);
 
-        buttonSave = new JButton(saveAction);
-        buttonCancel = new JButton(cancelAction);
-        buttonDelete = new JButton(deleteAction);
-        buttonAdd = new JButton(addAction);
-        buttonEdit = new JButton(editAction);
+        buttonSave = new JButton(new AcSaveAuthor());
+        buttonCancel = new JButton(new AcCancelAuthor());
+        buttonDelete = new JButton(new AcDeleteAuthor());
+        buttonAdd = new JButton(new AcNewAuthor());
+        buttonEdit = new JButton(new AcEditAuthor());
 
         if (mode == ViewMode.VIEW) {
             builder.add(buttonAdd, gbc.gbcSet(0, 0));

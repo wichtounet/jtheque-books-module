@@ -17,9 +17,10 @@ package org.jtheque.books.view.actions.book;
  */
 
 import org.jtheque.books.view.controllers.able.IBookController;
+import org.jtheque.core.managers.Managers;
+import org.jtheque.core.managers.beans.IBeansManager;
 import org.jtheque.core.managers.view.impl.actions.JThequeAction;
 
-import javax.annotation.Resource;
 import java.awt.event.ActionEvent;
 
 /**
@@ -28,11 +29,6 @@ import java.awt.event.ActionEvent;
  * @author Baptiste Wicht
  */
 public final class AcSaveBook extends JThequeAction {
-    private static final long serialVersionUID = -7830940231903754057L;
-
-    @Resource
-    private IBookController bookController;
-
     /**
      * Construct a AcSaveBook.
      */
@@ -42,8 +38,8 @@ public final class AcSaveBook extends JThequeAction {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (bookController.getView().validateContent()) {
-            bookController.save();
+        if (Managers.getManager(IBeansManager.class).<IBookController>getBean("bookController").getView().validateContent()) {
+            Managers.getManager(IBeansManager.class).<IBookController>getBean("bookController").save();
         }
     }
 }

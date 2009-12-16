@@ -18,9 +18,10 @@ package org.jtheque.books.view.actions.editor;
 
 import org.jtheque.books.view.able.IEditorView;
 import org.jtheque.books.view.controllers.able.IEditorController;
+import org.jtheque.core.managers.Managers;
+import org.jtheque.core.managers.beans.IBeansManager;
 import org.jtheque.core.managers.view.impl.actions.JThequeAction;
 
-import javax.annotation.Resource;
 import java.awt.event.ActionEvent;
 
 /**
@@ -29,11 +30,6 @@ import java.awt.event.ActionEvent;
  * @author Baptiste Wicht
  */
 public final class AcValidateEditorView extends JThequeAction {
-    private static final long serialVersionUID = -6791055361978541369L;
-
-    @Resource
-    private IEditorController editorController;
-
     /**
      * Construct a AcValidateEditorView.
      */
@@ -43,10 +39,10 @@ public final class AcValidateEditorView extends JThequeAction {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        IEditorView view = (IEditorView) editorController.getView();
+        IEditorView view = (IEditorView) Managers.getManager(IBeansManager.class).<IEditorController>getBean("editorController").getView();
 
         if (view.validateContent()) {
-            editorController.save(view.getFieldName().getText());
+            Managers.getManager(IBeansManager.class).<IEditorController>getBean("editorController").save(view.getFieldName().getText());
 
             view.closeDown();
         }

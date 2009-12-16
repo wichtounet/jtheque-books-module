@@ -18,6 +18,10 @@ package org.jtheque.books.view.frames;
 
 import org.jtheque.books.services.impl.utils.web.BookResult;
 import org.jtheque.books.view.able.IAutoView;
+import org.jtheque.books.view.actions.CloseViewAction;
+import org.jtheque.books.view.actions.auto.AcSearch;
+import org.jtheque.books.view.actions.auto.AcValidateAutoAddView;
+import org.jtheque.books.view.models.AutoAddModel;
 import org.jtheque.books.view.models.able.IAutoAddModel;
 import org.jtheque.books.view.models.list.LanguagesListModel;
 import org.jtheque.core.managers.error.JThequeError;
@@ -27,7 +31,6 @@ import org.jtheque.core.utils.ui.ValidationUtils;
 import org.jtheque.utils.ui.GridBagUtils;
 import org.jtheque.utils.ui.SwingUtils;
 
-import javax.annotation.PostConstruct;
 import javax.swing.Action;
 import javax.swing.DefaultListModel;
 import javax.swing.JList;
@@ -43,8 +46,6 @@ import java.util.Collection;
  * @author Baptiste Wicht
  */
 public final class AutoView extends SwingDialogView implements IAutoView {
-    private static final long serialVersionUID = 4633039680922071605L;
-
     private JTextField fieldTitle;
     private JList listLanguages;
     private JList listBooks;
@@ -53,31 +54,16 @@ public final class AutoView extends SwingDialogView implements IAutoView {
 
     private int phase = PHASE_1;
 
-    private final Action validateAction;
-    private final Action closeAction;
-    private final Action searchAction;
-
     /**
      * Construct a new JFrameAutoAdd.
      *
-     * @param frame          The parent frame.
-     * @param closeAction    The action to close the view.
-     * @param validateAction The action to validate the view.
-     * @param searchAction   The action to search for books.
+     * @param frame The parent frame.
      */
-    public AutoView(Frame frame, Action closeAction, Action validateAction, Action searchAction) {
+    public AutoView(Frame frame) {
         super(frame);
 
-        this.closeAction = closeAction;
-        this.validateAction = validateAction;
-        this.searchAction = searchAction;
-    }
+        setModel(new AutoAddModel());
 
-    /**
-     * Build the view.
-     */
-    @PostConstruct
-    private void build() {
         setTitleKey("auto.view.title");
         setContentPane(buildContentPane());
         pack();
@@ -94,6 +80,8 @@ public final class AutoView extends SwingDialogView implements IAutoView {
         PanelBuilder builder = new PanelBuilder();
 
         builder.addI18nLabel("auto.view.title.film", builder.gbcSet(0, 0));
+
+        Action searchAction = new AcSearch();
 
         fieldTitle = builder.add(new JTextField(), builder.gbcSet(1, 0, GridBagUtils.HORIZONTAL, 2, 1));
         SwingUtils.addFieldValidateAction(fieldTitle, searchAction);
@@ -113,7 +101,7 @@ public final class AutoView extends SwingDialogView implements IAutoView {
         builder.addScrolled(listBooks, builder.gbcSet(2, 1, GridBagUtils.HORIZONTAL));
 
         builder.addButtonBar(builder.gbcSet(0, 2, GridBagUtils.HORIZONTAL),
-                validateAction, closeAction);
+                new AcValidateAutoAddView(), new CloseViewAction("generic.actions.cancel", this));
 
         return builder.getPanel();
     }

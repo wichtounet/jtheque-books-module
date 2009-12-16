@@ -33,8 +33,6 @@ import java.util.List;
  * @author Baptiste Wicht
  */
 public final class AuthorsListModel extends DefaultListModel implements DataListener {
-    private static final long serialVersionUID = 627034111249354845L;
-
     @Resource
     private IAuthorsService authorsService;
 

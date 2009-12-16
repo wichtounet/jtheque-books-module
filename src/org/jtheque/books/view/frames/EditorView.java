@@ -18,6 +18,8 @@ package org.jtheque.books.view.frames;
 
 import org.jtheque.books.persistence.od.able.Editor;
 import org.jtheque.books.view.able.IEditorView;
+import org.jtheque.books.view.actions.CloseViewAction;
+import org.jtheque.books.view.actions.editor.AcValidateEditorView;
 import org.jtheque.books.view.models.able.IEditorModel;
 import org.jtheque.core.managers.Managers;
 import org.jtheque.core.managers.error.JThequeError;
@@ -29,7 +31,6 @@ import org.jtheque.primary.od.able.Data;
 import org.jtheque.utils.ui.GridBagUtils;
 import org.jtheque.utils.ui.SwingUtils;
 
-import javax.annotation.PostConstruct;
 import javax.swing.Action;
 import javax.swing.JTextField;
 import java.awt.Container;
@@ -42,12 +43,7 @@ import java.util.Collection;
  * @author Baptiste Wicht
  */
 public final class EditorView extends SwingDialogView implements IEditorView {
-    private static final long serialVersionUID = -3525319522701158262L;
-
     private JTextField fieldName;
-
-    private final Action validateAction;
-    private final Action closeAction;
 
     private static final int NAME_LENGTH_LIMIT = 50;
     private static final int FIELD_COLUMNS = 15;
@@ -56,14 +52,16 @@ public final class EditorView extends SwingDialogView implements IEditorView {
      * Construct a new JFrameEditor modal to his parent view.
      *
      * @param frame          The parent frame.
-     * @param validateAction The action to validate the view.
-     * @param closeAction    The action to close the view.
      */
-    public EditorView(Frame frame, Action validateAction, Action closeAction) {
+    public EditorView(Frame frame) {
         super(frame);
 
-        this.validateAction = validateAction;
-        this.closeAction = closeAction;
+        setContentPane(buildContentPane());
+        reload();
+
+        pack();
+
+        setLocationRelativeTo(getOwner());
     }
 
     @Override
@@ -87,19 +85,6 @@ public final class EditorView extends SwingDialogView implements IEditorView {
     }
 
     /**
-     * Build the view.
-     */
-    @PostConstruct
-    private void build() {
-        setContentPane(buildContentPane());
-        reload();
-
-        pack();
-
-        setLocationRelativeTo(getOwner());
-    }
-
-    /**
      * Build the content pane.
      *
      * @return The builded content pane.
@@ -109,11 +94,14 @@ public final class EditorView extends SwingDialogView implements IEditorView {
 
         builder.addI18nLabel("editor.view.name", builder.gbcSet(0, 0));
 
+        Action validateAction = new AcValidateEditorView();
+
         fieldName = builder.add(new JTextField(FIELD_COLUMNS), builder.gbcSet(1, 0, GridBagUtils.HORIZONTAL));
         SwingUtils.addFieldLengthLimit(fieldName, NAME_LENGTH_LIMIT);
         SwingUtils.addFieldValidateAction(fieldName, validateAction);
 
-        builder.addButtonBar(builder.gbcSet(0, 1, GridBagUtils.HORIZONTAL, 2, 1), validateAction, closeAction);
+        builder.addButtonBar(builder.gbcSet(0, 1, GridBagUtils.HORIZONTAL, 2, 1), validateAction,
+                new CloseViewAction("generic.view.actions.cancel", this));
 
         return builder.getPanel();
     }

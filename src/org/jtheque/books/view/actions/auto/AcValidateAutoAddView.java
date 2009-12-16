@@ -19,11 +19,11 @@ package org.jtheque.books.view.actions.auto;
 import org.jtheque.books.view.able.IAutoView;
 import org.jtheque.books.view.controllers.able.IBookAutoController;
 import org.jtheque.core.managers.Managers;
+import org.jtheque.core.managers.beans.IBeansManager;
 import org.jtheque.core.managers.view.able.IViewManager;
 import org.jtheque.core.managers.view.edt.SimpleTask;
 import org.jtheque.core.managers.view.impl.actions.JThequeAction;
 
-import javax.annotation.Resource;
 import java.awt.event.ActionEvent;
 
 /**
@@ -32,14 +32,6 @@ import java.awt.event.ActionEvent;
  * @author Baptiste Wicht
  */
 public final class AcValidateAutoAddView extends JThequeAction {
-    private static final long serialVersionUID = -859591053047928367L;
-
-    @Resource
-    private IAutoView autoView;
-
-    @Resource
-    private IBookAutoController bookAutoController;
-
     /**
      * Construct a new AcValidateAutoAddView.
      */
@@ -49,6 +41,9 @@ public final class AcValidateAutoAddView extends JThequeAction {
 
     @Override
     public void actionPerformed(ActionEvent event) {
+        final IAutoView autoView = Managers.getManager(IBeansManager.class).getBean("autoView");
+        final IBookAutoController bookAutoController = Managers.getManager(IBeansManager.class).getBean("bookAutoController");
+
         if (autoView.validateContent(IAutoView.PHASE_2)) {
             Managers.getManager(IViewManager.class).execute(new SimpleTask() {
                 @Override

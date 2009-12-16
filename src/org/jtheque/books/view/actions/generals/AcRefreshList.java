@@ -29,8 +29,6 @@ import java.awt.event.ActionEvent;
  * @author Baptiste Wicht
  */
 public final class AcRefreshList extends JThequeAction {
-    private static final long serialVersionUID = -6059011169838015671L;
-
     /**
      * Construct a AcRefreshList.
      */

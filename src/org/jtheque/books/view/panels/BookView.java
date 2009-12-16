@@ -22,17 +22,22 @@ import org.jdesktop.swingx.JXTree;
 import org.jdesktop.swingx.border.DropShadowBorder;
 import org.jtheque.books.persistence.od.able.Book;
 import org.jtheque.books.services.able.IBooksService;
+import org.jtheque.books.services.able.IEditorsService;
 import org.jtheque.books.view.able.IBookView;
 import org.jtheque.books.view.able.IOthersPanel;
-import org.jtheque.books.view.controllers.able.IBookController;
+import org.jtheque.books.view.actions.AcSortBooks;
+import org.jtheque.books.view.actions.DisplayBeanViewAction;
 import org.jtheque.books.view.fb.BookFormBean;
 import org.jtheque.books.view.fb.IBookFormBean;
+import org.jtheque.books.view.models.BooksModel;
 import org.jtheque.books.view.models.able.IBooksModel;
 import org.jtheque.books.view.toolbar.JPanelBookToolBar;
 import org.jtheque.core.managers.Managers;
+import org.jtheque.core.managers.beans.IBeansManager;
 import org.jtheque.core.managers.error.JThequeError;
 import org.jtheque.core.managers.language.ILanguageManager;
 import org.jtheque.core.managers.language.TabTitleUpdater;
+import org.jtheque.core.managers.persistence.able.DataContainer;
 import org.jtheque.core.utils.ui.PanelBuilder;
 import org.jtheque.core.utils.ui.ValidationUtils;
 import org.jtheque.primary.od.able.Kind;
@@ -49,15 +54,13 @@ import org.jtheque.primary.view.impl.sort.SortManager;
 import org.jtheque.utils.ui.GridBagUtils;
 import org.jtheque.utils.ui.SwingUtils;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.Resource;
-import javax.swing.Action;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import javax.swing.UIManager;
+import javax.swing.event.TreeSelectionListener;
 import java.awt.Font;
 import java.awt.Insets;
 import java.util.Collection;
@@ -70,8 +73,6 @@ import java.util.Map;
  * @author Baptiste Wicht
  */
 public final class BookView extends PrincipalDataPanel<IBooksModel> implements IBookView {
-    private static final long serialVersionUID = -7634054000892878297L;
-
     private JXTitledPanel booksPanel;
     private JTextField fieldTitle;
     private DataContainerCachedComboBoxModel<Kind> kindsModel;
@@ -80,38 +81,34 @@ public final class BookView extends PrincipalDataPanel<IBooksModel> implements I
     private JComboBox comboType;
     private JXTree treeBooks;
 
-    private IInfosPanel panelInfos;
-    private IOthersPanel panelOthers;
-    private JPanelBookToolBar toolBar;
+    private final IInfosPanel panelInfos;
+    private final IOthersPanel panelOthers;
 
-    private Action newKindAction;
-    private Action newTypeAction;
+    private JPanelBookToolBar toolBar;
 
     private JButton buttonNewType;
     private JButton buttonNewKind;
 
-    private Action sortByKindAction;
-    private Action sortByTypeAction;
-    private Action sortByEditorAction;
-    private Action sortByYearAction;
-
     private final SortManager sorter = new SortManager();
 
-    @Resource
-    private IKindsService kindsService;
 
-    @Resource
-    private ITypesService typesService;
-
-    @Resource
-    private IBookController bookController;
     private static final int TITLE_MAX_LENGTH = 150;
     private static final double A_QUARTER = 0.25;
+
+    public BookView(IInfosPanel panelInfos, IOthersPanel panelOthers) {
+        super();
+
+        setModel(new BooksModel());
+
+        this.panelInfos = panelInfos;
+        this.panelOthers = panelOthers;
+
+        build();
+    }
 
     /**
      * Build the view.
      */
-    @PostConstruct
     private void build() {
         PanelBuilder builder = new PanelBuilder(this);
 
@@ -126,7 +123,7 @@ public final class BookView extends PrincipalDataPanel<IBooksModel> implements I
      * Add listeners to and from view.
      */
     private void addListeners() {
-        treeBooks.addTreeSelectionListener(bookController);
+        treeBooks.addTreeSelectionListener(Managers.getManager(IBeansManager.class).<TreeSelectionListener>getBean("bookController"));
 
         getModel().addViewStateListener(this);
 
@@ -167,32 +164,28 @@ public final class BookView extends PrincipalDataPanel<IBooksModel> implements I
      *
      * @param parent The parent builder.
      */
-    private void buildSortPanel(PanelBuilder parent) {
+    private static void buildSortPanel(PanelBuilder parent) {
         JXTitledPanel panelTri = new JThequeTitledPanel("book.panel.sort.title");
         panelTri.setBorder(new DropShadowBorder());
         panelTri.setTitleFont(panelTri.getTitleFont().deriveFont(Font.BOLD));
 
         PanelBuilder builder = new PanelBuilder();
 
-        JXHyperlink linkTriGenre = builder.add(new JXHyperlink(sortByKindAction),
-                builder.gbcSet(0, 0, GridBagUtils.HORIZONTAL, GridBagUtils.BASELINE_LEADING, 1.0, 0.0));
-        linkTriGenre.setClickedColor(linkTriGenre.getUnclickedColor());
-
-        JXHyperlink linkTriType = builder.add(new JXHyperlink(sortByTypeAction),
-                builder.gbcSet(0, 1, GridBagUtils.HORIZONTAL, GridBagUtils.BASELINE_LEADING, 1.0, 0.0));
-        linkTriType.setClickedColor(linkTriGenre.getUnclickedColor());
-
-        JXHyperlink linkTriEditor = builder.add(new JXHyperlink(sortByEditorAction),
-                builder.gbcSet(0, 2, GridBagUtils.HORIZONTAL, GridBagUtils.BASELINE_LEADING, 1.0, 0.0));
-        linkTriEditor.setClickedColor(linkTriEditor.getUnclickedColor());
-
-        JXHyperlink linkTriYear = builder.add(new JXHyperlink(sortByYearAction),
-                builder.gbcSet(0, 3, GridBagUtils.HORIZONTAL, GridBagUtils.BASELINE_LEADING, 1.0, 0.0));
-        linkTriYear.setClickedColor(linkTriYear.getUnclickedColor());
+        addSortAction(builder, 0, "book.actions.sort.editor", IEditorsService.DATA_TYPE);
+        addSortAction(builder, 1, "book.actions.sort.kind", IKindsService.DATA_TYPE);
+        addSortAction(builder, 2, "book.actions.sort.type", ITypesService.DATA_TYPE);
+        addSortAction(builder, 3, "book.actions.sort.year", "Year");
 
         panelTri.setContentContainer(builder.getPanel());
 
         parent.add(panelTri, parent.gbcSet(0, 1, GridBagUtils.HORIZONTAL, GridBagUtils.FIRST_LINE_START, A_QUARTER, 0.0));
+    }
+
+    private static void addSortAction(PanelBuilder builder, int row, String key, String dataType) {
+        JXHyperlink sortLink = builder.add(new JXHyperlink(new AcSortBooks(key, dataType)),
+                    builder.gbcSet(0, row, GridBagUtils.HORIZONTAL, GridBagUtils.BASELINE_LEADING, 1.0, 0.0));
+
+        sortLink.setClickedColor(sortLink.getUnclickedColor());
     }
 
     /**
@@ -206,6 +199,8 @@ public final class BookView extends PrincipalDataPanel<IBooksModel> implements I
         booksPanel.setTitleFont(booksPanel.getTitleFont().deriveFont(Font.BOLD));
 
         PanelBuilder builder = new PanelBuilder();
+
+        toolBar = new JPanelBookToolBar();
 
         builder.add(toolBar,
                 builder.gbcSet(0, 0, GridBagUtils.HORIZONTAL, GridBagUtils.BASELINE_LEADING, GridBagUtils.REMAINDER, 1, 1.0, 0.0));
@@ -234,14 +229,16 @@ public final class BookView extends PrincipalDataPanel<IBooksModel> implements I
     private void addKindFields(PanelBuilder builder) {
         builder.addI18nLabel("book.kind", builder.gbcSet(0, 2));
 
-        kindsModel = new DataContainerCachedComboBoxModel<Kind>(kindsService);
+        kindsModel = new DataContainerCachedComboBoxModel<Kind>(
+                Managers.getManager(IBeansManager.class).<DataContainer<Kind>>getBean("kindsService"));
 
         comboKind = new JComboBox(kindsModel);
 
         comboKind = builder.addComboBox(kindsModel, builder.gbcSet(1, 2));
         comboKind.setEnabled(false);
 
-        buttonNewKind = builder.addButton(newKindAction, builder.gbcSet(2, 2, GridBagUtils.NONE, GridBagUtils.REMAINDER, 1));
+        buttonNewKind = builder.addButton(new DisplayBeanViewAction("kind.actions.new", "kindView"),
+                builder.gbcSet(2, 2, GridBagUtils.NONE, GridBagUtils.REMAINDER, 1));
         buttonNewKind.setEnabled(false);
     }
 
@@ -253,12 +250,14 @@ public final class BookView extends PrincipalDataPanel<IBooksModel> implements I
     private void addTypeFields(PanelBuilder builder) {
         builder.addI18nLabel("book.type", builder.gbcSet(0, 3));
 
-        typesModel = new DataContainerCachedComboBoxModel<Type>(typesService);
+        typesModel = new DataContainerCachedComboBoxModel<Type>(
+                Managers.getManager(IBeansManager.class).<DataContainer<Type>>getBean("typesService"));
 
         comboType = builder.addComboBox(typesModel, builder.gbcSet(1, 3));
         comboType.setEnabled(false);
 
-        buttonNewType = builder.addButton(newTypeAction, builder.gbcSet(2, 3, GridBagUtils.NONE, GridBagUtils.REMAINDER, 1));
+        buttonNewType = builder.addButton(new DisplayBeanViewAction("type.actions.new", "typeView"),
+                builder.gbcSet(2, 3, GridBagUtils.NONE, GridBagUtils.REMAINDER, 1));
         buttonNewType.setEnabled(false);
     }
 
@@ -406,86 +405,5 @@ public final class BookView extends PrincipalDataPanel<IBooksModel> implements I
     @Override
     public JComponent getComponent() {
         return this;
-    }
-
-    /**
-     * The panel for the informations about the book.
-     *
-     * @param panelInfos The panel of the informations.
-     */
-    public void setPanelInfos(IInfosPanel panelInfos) {
-        this.panelInfos = panelInfos;
-    }
-
-    /**
-     * The panel for the other informations about the book.
-     *
-     * @param panelOthers The panel of the other informations.
-     */
-    public void setPanelOthers(IOthersPanel panelOthers) {
-        this.panelOthers = panelOthers;
-    }
-
-    /**
-     * Set the tool bar of the view.
-     *
-     * @param toolBar The tool bar of the view.
-     */
-    public void setToolBar(JPanelBookToolBar toolBar) {
-        this.toolBar = toolBar;
-    }
-
-    /**
-     * Set the action to create a new kind.
-     *
-     * @param newKindAction The action to create a new kind.
-     */
-    public void setNewKindAction(Action newKindAction) {
-        this.newKindAction = newKindAction;
-    }
-
-    /**
-     * Set the action to create a new type.
-     *
-     * @param newTypeAction The action to create a new type.
-     */
-    public void setNewTypeAction(Action newTypeAction) {
-        this.newTypeAction = newTypeAction;
-    }
-
-    /**
-     * Set the action to sort the books by kind.
-     *
-     * @param sortByKindAction The action to sort the books by kind.
-     */
-    public void setSortByKindAction(Action sortByKindAction) {
-        this.sortByKindAction = sortByKindAction;
-    }
-
-    /**
-     * Set the action to sort the books by type.
-     *
-     * @param sortByTypeAction The action to sort the books by type.
-     */
-    public void setSortByTypeAction(Action sortByTypeAction) {
-        this.sortByTypeAction = sortByTypeAction;
-    }
-
-    /**
-     * Set the action to sort the books by editor.
-     *
-     * @param sortByEditorAction The action to sort the books by editor.
-     */
-    public void setSortByEditorAction(Action sortByEditorAction) {
-        this.sortByEditorAction = sortByEditorAction;
-    }
-
-    /**
-     * Set the action to sort the books by year.
-     *
-     * @param sortByYearAction The action to sort the books by year.
-     */
-    public void setSortByYearAction(Action sortByYearAction) {
-        this.sortByYearAction = sortByYearAction;
     }
 }
