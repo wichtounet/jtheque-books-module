@@ -18,12 +18,12 @@ package org.jtheque.books.view.models;
 
 import org.jtheque.books.services.able.IAuthorsService;
 import org.jtheque.books.view.models.able.IAuthorsModel;
+import org.jtheque.core.managers.Managers;
+import org.jtheque.core.managers.beans.IBeansManager;
 import org.jtheque.primary.od.able.Person;
 import org.jtheque.primary.view.impl.listeners.ObjectChangedEvent;
 import org.jtheque.primary.view.impl.models.PrincipalDataModel;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -38,14 +38,12 @@ public final class AuthorsModel extends PrincipalDataModel<Person> implements IA
 
     private Collection<Person> displayList;
 
-    @Resource
-    private IAuthorsService authorsService;
+    private final IAuthorsService authorsService;
 
-    /**
-     * Init the model.
-     */
-    @PostConstruct
-    private void init() {
+    public AuthorsModel() {
+        super();
+
+        authorsService = Managers.getManager(IBeansManager.class).getBean("authorsService");
         authorsService.addDataListener(this);
     }
 

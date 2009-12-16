@@ -16,7 +16,6 @@ package org.jtheque.books.services.impl.utils.web.analyzers;
  * along with JTheque.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import org.jtheque.books.BooksModule;
 import org.jtheque.books.persistence.od.able.Editor;
 import org.jtheque.books.services.able.IAuthorsService;
 import org.jtheque.books.services.able.IEditorsService;
@@ -57,9 +56,6 @@ public final class GenericBookAnalyzer extends AbstractBookAnalyzer implements S
 
     @Resource
     private IAuthorsService authorsService;
-
-    @Resource
-    private BooksModule booksModule;
 
     /**
      * The generator of the field getters.

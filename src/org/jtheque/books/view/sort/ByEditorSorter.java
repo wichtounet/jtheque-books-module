@@ -36,9 +36,6 @@ import java.util.Map;
  */
 public final class ByEditorSorter implements Sorter {
     @Resource
-    private IEditorsService editorsService;
-
-    @Resource
     private IBooksService booksService;
 
     @Override

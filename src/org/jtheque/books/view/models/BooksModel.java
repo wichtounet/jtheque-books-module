@@ -19,12 +19,12 @@ package org.jtheque.books.view.models;
 import org.jtheque.books.persistence.od.able.Book;
 import org.jtheque.books.services.able.IBooksService;
 import org.jtheque.books.view.models.able.IBooksModel;
+import org.jtheque.core.managers.Managers;
+import org.jtheque.core.managers.beans.IBeansManager;
 import org.jtheque.primary.view.impl.listeners.ObjectChangedEvent;
 import org.jtheque.primary.view.impl.listeners.ViewStateListener;
 import org.jtheque.primary.view.impl.models.PrincipalDataModel;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -39,14 +39,12 @@ public final class BooksModel extends PrincipalDataModel<Book> implements IBooks
 
     private Collection<Book> displayList;
 
-    @Resource
     private IBooksService booksService;
 
-    /**
-     * Init the model.
-     */
-    @PostConstruct
-    private void init() {
+    public BooksModel() {
+        super();
+
+        booksService = Managers.getManager(IBeansManager.class).getBean("booksService");
         booksService.addDataListener(this);
     }
 

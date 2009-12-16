@@ -18,6 +18,7 @@ package org.jtheque.books.persistence.od.impl;
 
 import org.jtheque.books.persistence.od.able.Editor;
 import org.jtheque.books.persistence.od.impl.abstraction.AbstractEditor;
+import org.jtheque.utils.Constants;
 
 /**
  * An editor.
@@ -37,9 +38,11 @@ public final class EditorImpl extends AbstractEditor {
 
     @Override
     public int hashCode() {
-        int result = 17;
-        result = HASHCODE_PRIME * result + getId();
-        result = HASHCODE_PRIME * result + (getName() == null ? 0 : getName().hashCode());
+        int result = Constants.HASH_CODE_START;
+        
+        result = Constants.HASH_CODE_PRIME * result + getId();
+        result = Constants.HASH_CODE_PRIME * result + (getName() == null ? 0 : getName().hashCode());
+
         return result;
     }
 

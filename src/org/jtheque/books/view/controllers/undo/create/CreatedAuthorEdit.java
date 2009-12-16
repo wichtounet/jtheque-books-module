@@ -24,8 +24,6 @@ import org.jtheque.primary.od.able.Person;
 
 import javax.annotation.Resource;
 import javax.swing.undo.AbstractUndoableEdit;
-import javax.swing.undo.CannotRedoException;
-import javax.swing.undo.CannotUndoException;
 
 /**
  * An edit corresponding to a creation of an author.
@@ -52,14 +50,14 @@ public final class CreatedAuthorEdit extends AbstractUndoableEdit {
     }
 
     @Override
-    public void undo() throws CannotUndoException {
+    public void undo(){
         super.undo();
 
         authorsService.delete(author);
     }
 
     @Override
-    public void redo() throws CannotRedoException {
+    public void redo(){
         super.redo();
 
         authorsService.create(author);
