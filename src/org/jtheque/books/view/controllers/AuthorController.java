@@ -24,7 +24,6 @@ import org.jtheque.primary.controller.able.ControllerState;
 import org.jtheque.primary.controller.impl.PrincipalController;
 import org.jtheque.primary.od.able.Data;
 import org.jtheque.primary.od.able.Person;
-import org.jtheque.primary.view.impl.models.tree.TreeElement;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;

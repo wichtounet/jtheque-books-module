@@ -22,10 +22,8 @@ import org.jtheque.books.view.models.able.IBooksModel;
 import org.jtheque.core.managers.Managers;
 import org.jtheque.core.managers.beans.IBeansManager;
 import org.jtheque.primary.view.impl.listeners.ObjectChangedEvent;
-import org.jtheque.primary.view.impl.listeners.ViewStateListener;
 import org.jtheque.primary.view.impl.models.PrincipalDataModel;
 
-import java.util.ArrayList;
 import java.util.Collection;
 
 /**

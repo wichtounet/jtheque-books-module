@@ -44,8 +44,6 @@ import org.jtheque.primary.od.able.Kind;
 import org.jtheque.primary.od.able.Type;
 import org.jtheque.primary.services.able.IKindsService;
 import org.jtheque.primary.services.able.ITypesService;
-import org.jtheque.primary.view.impl.actions.kind.AcNewKind;
-import org.jtheque.primary.view.impl.actions.type.AcNewType;
 import org.jtheque.primary.view.impl.components.panels.JThequeTitledPanel;
 import org.jtheque.primary.view.impl.listeners.ObjectChangedEvent;
 import org.jtheque.primary.view.impl.models.DataContainerCachedComboBoxModel;

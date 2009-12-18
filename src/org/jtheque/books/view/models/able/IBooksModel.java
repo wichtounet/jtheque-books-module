@@ -17,7 +17,6 @@ package org.jtheque.books.view.models.able;
  */
 
 import org.jtheque.books.persistence.od.able.Book;
-import org.jtheque.primary.view.impl.listeners.ViewStateListener;
 import org.jtheque.primary.view.impl.models.able.IPrincipalDataModel;
 
 /**
