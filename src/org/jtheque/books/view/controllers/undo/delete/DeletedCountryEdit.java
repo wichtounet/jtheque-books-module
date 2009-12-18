@@ -50,14 +50,14 @@ public final class DeletedCountryEdit extends AbstractUndoableEdit {
     }
 
     @Override
-    public void undo(){
+    public void undo() {
         super.undo();
 
         countriesService.create(country);
     }
 
     @Override
-    public void redo(){
+    public void redo() {
         super.redo();
 
         countriesService.delete(country);

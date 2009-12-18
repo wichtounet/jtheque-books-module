@@ -18,9 +18,9 @@ package org.jtheque.books.view.panels;
 
 import org.jtheque.books.persistence.od.able.Book;
 import org.jtheque.books.persistence.od.able.Editor;
-import org.jtheque.books.view.actions.DisplayBeanViewAction;
 import org.jtheque.books.view.actions.book.AcAddToList;
 import org.jtheque.books.view.actions.book.AcRemoveFromList;
+import org.jtheque.books.view.actions.editor.AcNewEditor;
 import org.jtheque.books.view.fb.IBookFormBean;
 import org.jtheque.books.view.models.list.AuthorsListModel;
 import org.jtheque.books.view.models.list.SimpleAuthorsModel;
@@ -28,12 +28,12 @@ import org.jtheque.core.managers.Managers;
 import org.jtheque.core.managers.beans.IBeansManager;
 import org.jtheque.core.managers.error.JThequeError;
 import org.jtheque.core.managers.persistence.able.DataContainer;
+import org.jtheque.core.managers.resource.IResourceManager;
 import org.jtheque.core.utils.ui.PanelBuilder;
 import org.jtheque.core.utils.ui.ValidationUtils;
 import org.jtheque.primary.od.able.Language;
 import org.jtheque.primary.od.able.Person;
 import org.jtheque.primary.od.able.Saga;
-import org.jtheque.primary.view.impl.actions.language.AcNewLanguage;
 import org.jtheque.primary.view.impl.actions.saga.NewSagaAction;
 import org.jtheque.primary.view.impl.listeners.ObjectChangedEvent;
 import org.jtheque.primary.view.impl.models.DataContainerCachedComboBoxModel;
@@ -112,7 +112,7 @@ public final class JPanelBookInfos extends JPanel implements IInfosPanel {
         comboEditors = builder.addComboBox(editorsModel, builder.gbcSet(1, 0));
         comboEditors.setEnabled(false);
 
-        buttonNewEditor = builder.addButton(new DisplayBeanViewAction("editor.action.new", "editorView"),
+        buttonNewEditor = builder.addButton(new AcNewEditor(),
                 builder.gbcSet(2, 0, GridBagUtils.NONE, GridBagUtils.REMAINDER, 1));
         buttonNewEditor.setEnabled(false);
     }
@@ -131,7 +131,7 @@ public final class JPanelBookInfos extends JPanel implements IInfosPanel {
         comboLanguages = builder.addComboBox(languagesModel, builder.gbcSet(1, 1));
         comboLanguages.setEnabled(false);
 
-        buttonNewLanguage = builder.addButton(new AcNewLanguage("languages.actions.new"),
+        buttonNewLanguage = builder.addButton(Managers.getManager(IResourceManager.class).getAction("newLanguageAction"),
                 builder.gbcSet(2, 1, GridBagUtils.NONE, GridBagUtils.REMAINDER, 1));
         buttonNewLanguage.setEnabled(false);
     }

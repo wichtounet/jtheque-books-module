@@ -27,25 +27,25 @@
             <name>JTheque FTP Server</name>
             <url>ftp://developpez.com/collections/books</url>
         </site>
-    </distributionManagement>  
+    </distributionManagement>
 
     <issueManagement>
         <system>Redmine</system>
         <url>http://projets.developpez.com/projects/jtheque-books-mod/issues</url>
     </issueManagement>
-    
+
     <scm>
         <url>http://projets.developpez.com/repositories/show/jtheque-books-mod</url>
         <connection>scm:svn:http://subversion.developpez.com/projets/JTheque/modules/books/</connection>
     </scm>
-    
+
     <build>
         <directory>${env.BUILD_HOME}/modules/jtheque-books-module</directory>
 
         <sourceDirectory>src</sourceDirectory>
 
         <outputDirectory>${env.BUILD_HOME}/modules/jtheque-books-module/classes/production</outputDirectory>
-        
+
         <resources>
             <resource>
                 <directory>src</directory>
@@ -56,13 +56,13 @@
                 </excludes>
             </resource>
         </resources>
-        
+
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
             </plugin>
-            
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
@@ -89,10 +89,10 @@
             </plugin>
         </plugins>
     </build>
-    
+
     <reporting>
         <plugins>
-            
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
@@ -110,16 +110,16 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>
             </plugin>
-            
+
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>taglist-maven-plugin</artifactId>
             </plugin>
-            
+
         </plugins>
     </reporting>
 
-    <dependencies> 
+    <dependencies>
         <dependency>
             <groupId>org.jtheque</groupId>
             <artifactId>jtheque-primary-utils</artifactId>

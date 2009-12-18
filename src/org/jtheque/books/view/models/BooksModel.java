@@ -34,12 +34,11 @@ import java.util.Collection;
  * @author Baptiste Wicht
  */
 public final class BooksModel extends PrincipalDataModel<Book> implements IBooksModel {
-    private boolean enabled;
     private Book currentBook;
 
     private Collection<Book> displayList;
 
-    private IBooksService booksService;
+    private final IBooksService booksService;
 
     public BooksModel() {
         super();
@@ -70,23 +69,10 @@ public final class BooksModel extends PrincipalDataModel<Book> implements IBooks
     @Override
     public Collection<Book> getDisplayList() {
         if (displayList == null) {
-            displayList = new ArrayList<Book>(25);
-            updateDisplayList();
+            displayList= booksService.getBooks();
         }
 
         return displayList;
-    }
-
-    @Override
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
-
-        fireStateChanged();
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return enabled;
     }
 
     @Override
@@ -99,21 +85,5 @@ public final class BooksModel extends PrincipalDataModel<Book> implements IBooks
         this.currentBook = currentBook;
 
         fireCurrentObjectChanged(new ObjectChangedEvent(this, currentBook));
-    }
-
-    @Override
-    public void addViewStateListener(ViewStateListener listener) {
-        getEventListenerList().add(ViewStateListener.class, listener);
-    }
-
-    /**
-     * Fire a event who indicate that the current state has changed.
-     */
-    private void fireStateChanged() {
-        ViewStateListener[] listeners = getEventListenerList().getListeners(ViewStateListener.class);
-
-        for (ViewStateListener listener : listeners) {
-            listener.stateChanged();
-        }
     }
 }

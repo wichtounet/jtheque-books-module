@@ -22,32 +22,17 @@
         <constructor-arg ref="_mainView"/>
     </bean>
 
-    <bean id="_authorView" class="org.jtheque.books.view.panels.AuthorView" />
+    <bean id="_authorView" class="org.jtheque.books.view.panels.AuthorView"/>
 
-    <bean id="_bookView" class="org.jtheque.books.view.panels.BookView">
-        <constructor-arg ref="booksPanelInfos"/>
-        <constructor-arg ref="booksPanelOthers"/>
-    </bean>
+    <bean id="_bookView" class="org.jtheque.books.view.panels.BookView" />
 
     <bean id="_editorView" class="org.jtheque.books.view.frames.EditorView">
         <constructor-arg ref="_mainView"/>
-        <property name="model" ref="editorModel"/>
     </bean>
 
     <!-- Panels -->
-
-    <bean id="booksPanelInfos" class="org.jtheque.books.view.panels.JPanelBookInfos">
-        <constructor-arg ref="newEditorAction"/>
-        <constructor-arg ref="newLanguageAction"/>
-        <constructor-arg ref="newSagaAction"/>
-        <constructor-arg ref="addAuthorToListAction"/>
-        <constructor-arg ref="removeAuthorFromListAction"/>
-    </bean>
-
+    
+    <bean id="booksPanelInfos" class="org.jtheque.books.view.panels.JPanelBookInfos" />
     <bean id="booksPanelOthers" class="org.jtheque.books.view.panels.JPanelBookOthers"/>
-
-    <!-- Models -->
-
-    <bean id="editorModel" class="org.jtheque.books.view.models.EditorModel"/>
 
 </beans>

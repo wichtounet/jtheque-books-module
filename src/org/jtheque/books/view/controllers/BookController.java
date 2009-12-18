@@ -23,7 +23,6 @@ import org.jtheque.books.view.controllers.able.IBookController;
 import org.jtheque.books.view.models.able.IBooksModel;
 import org.jtheque.primary.controller.able.ControllerState;
 import org.jtheque.primary.controller.impl.PrincipalController;
-import org.jtheque.primary.view.impl.models.tree.TreeElement;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
@@ -58,7 +57,7 @@ public final class BookController extends PrincipalController<Book> implements I
     public void valueChanged(TreeSelectionEvent event) {
         TreePath current = ((JTree) event.getSource()).getSelectionPath();
 
-        if (current != null && current.getLastPathComponent() instanceof TreeElement) {
+        if (current != null && current.getLastPathComponent() instanceof Book) {
             Book book = (Book) current.getLastPathComponent();
 
             if (book != null) {

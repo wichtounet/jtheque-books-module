@@ -18,7 +18,6 @@ package org.jtheque.books.view.panels;
 
 import org.jdesktop.swingx.JXHyperlink;
 import org.jdesktop.swingx.JXTitledPanel;
-import org.jdesktop.swingx.JXTree;
 import org.jdesktop.swingx.border.DropShadowBorder;
 import org.jtheque.books.services.able.IAuthorsService;
 import org.jtheque.books.view.able.IAuthorView;
@@ -32,26 +31,24 @@ import org.jtheque.core.managers.Managers;
 import org.jtheque.core.managers.beans.IBeansManager;
 import org.jtheque.core.managers.error.JThequeError;
 import org.jtheque.core.managers.persistence.able.DataContainer;
+import org.jtheque.core.managers.resource.IResourceManager;
 import org.jtheque.core.utils.ui.PanelBuilder;
 import org.jtheque.core.utils.ui.ValidationUtils;
+import org.jtheque.primary.controller.able.FormBean;
 import org.jtheque.primary.od.able.Country;
 import org.jtheque.primary.od.able.Person;
 import org.jtheque.primary.services.able.ICountriesService;
-import org.jtheque.primary.view.able.ToolbarView;
-import org.jtheque.primary.view.impl.actions.country.AcNewCountry;
 import org.jtheque.primary.view.impl.components.panels.JThequeTitledPanel;
-import org.jtheque.primary.view.impl.components.panels.PrincipalDataPanel;
 import org.jtheque.primary.view.impl.listeners.ObjectChangedEvent;
 import org.jtheque.primary.view.impl.models.DataContainerCachedComboBoxModel;
 import org.jtheque.primary.view.impl.models.NotesComboBoxModel;
-import org.jtheque.primary.view.impl.renderers.JThequeTreeCellRenderer;
-import org.jtheque.primary.view.impl.sort.SortManager;
+import org.jtheque.primary.view.impl.models.tree.JThequeTreeModel;
 import org.jtheque.utils.ui.GridBagUtils;
 import org.jtheque.utils.ui.SwingUtils;
 
+import javax.annotation.PostConstruct;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JComponent;
 import javax.swing.JTextField;
 import javax.swing.event.TreeSelectionListener;
 import java.awt.Font;
@@ -62,263 +59,38 @@ import java.util.Collection;
  *
  * @author Baptiste Wicht
  */
-public final class AuthorView extends PrincipalDataPanel<IAuthorsModel> implements IAuthorView {
-    private JXTitledPanel authorsPanel;
-
-    private JTextField fieldFirstName;
-    private JTextField fieldName;
-    private DataContainerCachedComboBoxModel<Country> countriesModel;
-    private NotesComboBoxModel notesModel;
-
-    private JXTree treeAuthors;
-
-    private final SortManager sorter = new SortManager();
-
-    private JPanelAuthorToolBar toolBar;
-
-    private JComboBox comboCountries;
-    private JComboBox comboNote;
-
-    private JButton buttonNewCountry;
-
+public final class AuthorView extends AbstractPrincipalDelegatedView implements IAuthorView {
     private static final int NAMES_LIMIT = 80;
     private static final double A_QUARTER = 0.25;
 
     public AuthorView() {
-        super();
-
-        setModel(new AuthorsModel());
-
-        PanelBuilder builder = new PanelBuilder(this);
-
-        buildListPanel(builder);
-        buildSortPanel(builder);
-        buildAuthorsPanel(builder);
-
-        addListeners();
+        super(1, "data.titles.author");
     }
 
-    /**
-     * Add the listeners.
-     */
-    private void addListeners() {
-        treeAuthors.addTreeSelectionListener(Managers.getManager(IBeansManager.class).<TreeSelectionListener>getBean("authorController"));
+    @PostConstruct
+    public void init() {
+        buildInEDT();
 
-        getModel().addDisplayListListener(this);
         getModel().addCurrentObjectListener(this);
     }
 
-    /**
-     * Build the internal panel for the list of authors.
-     *
-     * @param parent The parent builder.
-     */
-    private void buildListPanel(PanelBuilder parent) {
-        JXTitledPanel panelList = new JThequeTitledPanel("author.panel.list.title");
-        panelList.setBorder(new DropShadowBorder());
-        panelList.setTitleFont(panelList.getTitleFont().deriveFont(Font.BOLD));
-
-        PanelBuilder builder = new PanelBuilder();
-
-        setTreeModel(sorter.createInitialModel(IAuthorsService.DATA_TYPE));
-
-        treeAuthors = new JXTree(getTreeModel());
-        treeAuthors.setCellRenderer(new JThequeTreeCellRenderer());
-        treeAuthors.putClientProperty("JTree.lineStyle", "None");
-
-        builder.addScrolled(treeAuthors, builder.gbcSet(0, 0, GridBagUtils.BOTH, GridBagUtils.FIRST_LINE_START, 1.0, 1.0));
-
-        panelList.setContentContainer(builder.getPanel());
-
-        parent.add(panelList, parent.gbcSet(0, 0, GridBagUtils.BOTH, GridBagUtils.FIRST_LINE_START, A_QUARTER, 1.0));
-    }
-
-    /**
-     * Build the internal panel for the sorts.
-     *
-     * @param parent The parent builder.
-     */
-    private static void buildSortPanel(PanelBuilder parent) {
-        JXTitledPanel panelTri = new JThequeTitledPanel("author.panel.sort.title");
-        panelTri.setBorder(new DropShadowBorder());
-        panelTri.setTitleFont(panelTri.getTitleFont().deriveFont(Font.BOLD));
-
-        PanelBuilder builder = new PanelBuilder();
-
-        JXHyperlink linkSortCountry = builder.add(new JXHyperlink(new AcSortAuthors("author.actions.sort.country", "Notes")),
-                builder.gbcSet(0, 0, GridBagUtils.HORIZONTAL, GridBagUtils.BASELINE_LEADING, 1.0, 0.0));
-        linkSortCountry.setClickedColor(linkSortCountry.getUnclickedColor());
-
-        JXHyperlink linkSortNote = builder.add(new JXHyperlink(new AcSortAuthors("author.actions.sort.note", ICountriesService.DATA_TYPE)),
-                builder.gbcSet(0, 1, GridBagUtils.HORIZONTAL, GridBagUtils.BASELINE_LEADING, 1.0, 0.0));
-        linkSortNote.setClickedColor(linkSortNote.getUnclickedColor());
-
-        panelTri.setContentContainer(builder.getPanel());
-
-        parent.add(panelTri, parent.gbcSet(0, 1, GridBagUtils.HORIZONTAL, GridBagUtils.FIRST_LINE_START, A_QUARTER, 0.0));
-    }
-
-    /**
-     * Build the internal panel for the author.
-     *
-     * @param parent the parent builder
-     */
-    private void buildAuthorsPanel(PanelBuilder parent) {
-        authorsPanel = new JThequeTitledPanel("author.panel.author.title");
-        authorsPanel.setBorder(new DropShadowBorder());
-        authorsPanel.setTitleFont(authorsPanel.getTitleFont().deriveFont(Font.BOLD));
-
-        PanelBuilder builder = new PanelBuilder();
-
-        toolBar = new JPanelAuthorToolBar();
-
-        builder.add(toolBar, builder.gbcSet(0, 0, GridBagUtils.HORIZONTAL, GridBagUtils.BASELINE_LEADING, GridBagUtils.REMAINDER, 1, 1.0, 0.0));
-
-        addFirstNameField(builder);
-        addNameField(builder);
-        addCountryField(builder);
-        addNoteField(builder);
-
-        authorsPanel.setContentContainer(builder.getPanel());
-
-        parent.add(authorsPanel, parent.gbcSet(1, 0, GridBagUtils.BOTH, GridBagUtils.FIRST_LINE_START, 1, 2, 1 - A_QUARTER, 1.0));
-    }
-
-    /**
-     * Add the first name field and label.
-     *
-     * @param builder The builder to use.
-     */
-    private void addFirstNameField(PanelBuilder builder) {
-        builder.addI18nLabel("author.firstname", builder.gbcSet(0, 1));
-
-        fieldFirstName = builder.add(new JTextField(10),
-                builder.gbcSet(1, 1, GridBagUtils.NONE, GridBagUtils.BASELINE_LEADING, GridBagUtils.REMAINDER, 1, 1.0, 0.0));
-        SwingUtils.addFieldLengthLimit(fieldFirstName, NAMES_LIMIT);
-        fieldFirstName.setEnabled(false);
-    }
-
-    /**
-     * Add the name field and label.
-     *
-     * @param builder The builder to use.
-     */
-    private void addNameField(PanelBuilder builder) {
-        builder.addI18nLabel("author.name", builder.gbcSet(0, 2));
-
-        fieldName = builder.add(new JTextField(10),
-                builder.gbcSet(1, 2, GridBagUtils.NONE, GridBagUtils.BASELINE_LEADING, GridBagUtils.REMAINDER, 1, 1.0, 0.0));
-        SwingUtils.addFieldLengthLimit(fieldName, NAMES_LIMIT);
-        fieldName.setEnabled(false);
-    }
-
-    /**
-     * Add the country field and label.
-     *
-     * @param builder The builder to use.
-     */
-    private void addCountryField(PanelBuilder builder) {
-        builder.addI18nLabel("author.country", builder.gbcSet(0, 3));
-
-        countriesModel = new DataContainerCachedComboBoxModel<Country>(
-                Managers.getManager(IBeansManager.class).<DataContainer<Country>>getBean("countriesService"));
-
-        comboCountries = builder.addComboBox(countriesModel, builder.gbcSet(1, 3));
-        comboCountries.setEnabled(false);
-
-        buttonNewCountry = builder.addButton(new AcNewCountry("country.actions.new"),
-                builder.gbcSet(2, 3, GridBagUtils.NONE, GridBagUtils.BASELINE_LEADING, GridBagUtils.REMAINDER, 1, 1.0, 0.0));
-        buttonNewCountry.setEnabled(false);
-    }
-
-    /**
-     * Add the note field and label.
-     *
-     * @param builder The builder to use.
-     */
-    private void addNoteField(PanelBuilder builder) {
-        builder.addI18nLabel("author.note", builder.gbcSet(0, 4));
-
-        notesModel = new NotesComboBoxModel();
-
-        comboNote = builder.addComboBox(notesModel,
-                builder.gbcSet(1, 4, GridBagUtils.NONE, GridBagUtils.BASELINE_LEADING, GridBagUtils.REMAINDER, GridBagUtils.REMAINDER, 1.0, 1.0));
-        comboNote.setEnabled(false);
+    @Override
+    public IAuthorsModel getModel() {
+        return (IAuthorsModel) super.getModel();
     }
 
     @Override
-    public String getDataType() {
-        return IAuthorsService.DATA_TYPE;
-    }
+    protected void buildDelegatedView() {
+        AuthorViewImpl impl = new AuthorViewImpl();
+        setView(impl);
+        impl.build();
 
-    @Override
-    protected JXTree getTree() {
-        return treeAuthors;
-    }
-
-    @Override
-    public JComponent getImpl() {
-        return this;
-    }
-
-    @Override
-    public Integer getPosition() {
-        return 1;
-    }
-
-    @Override
-    public String getTitleKey() {
-        return "data.titles.author";
-    }
-
-    @Override
-    public ToolbarView getToolbarView() {
-        return toolBar;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return getModel().isEnabled();
-    }
-
-    @Override
-    public void setEnabled(boolean enabled) {
-        getModel().setEnabled(enabled);
-
-        fieldFirstName.setEnabled(enabled);
-        fieldName.setEnabled(enabled);
-        buttonNewCountry.setEnabled(enabled);
-        comboNote.setEnabled(enabled);
-        comboCountries.setEnabled(enabled);
+        getModel().addCurrentObjectListener(this);
     }
 
     @Override
     public void objectChanged(ObjectChangedEvent event) {
-        setCurrentAuthor((Person) event.getObject());
-    }
-
-    /**
-     * Set the current author.
-     *
-     * @param author The current author.
-     */
-    private void setCurrentAuthor(Person author) {
-        authorsPanel.setTitle(author.getDisplayableText());
-
-        fieldFirstName.setText(author.getFirstName());
-        fieldName.setText(author.getName());
-        countriesModel.setSelectedItem(author.getTheCountry());
-        notesModel.setSelectedItem(author.getNote());
-    }
-
-    @Override
-    public void clear() {
-        authorsPanel.setTitle(getMessage("author.panel.author.title"));
-
-        fieldFirstName.setText("");
-        fieldName.setText("");
-        countriesModel.setSelectedItem(null);
-        notesModel.setSelectedItem(null);
+        getImplementationView().setCurrent(event.getObject());
     }
 
     /**
@@ -330,28 +102,240 @@ public final class AuthorView extends PrincipalDataPanel<IAuthorsModel> implemen
     public IAuthorFormBean fillFilmFormBean() {
         IAuthorFormBean fb = new AuthorFormBean();
 
-        fb.setName(fieldName.getText());
-        fb.setFirstName(fieldFirstName.getText());
-        fb.setNote(notesModel.getSelectedNote());
-        fb.setCountry(countriesModel.getSelectedData());
+        getImplementationView().fillFormBean(fb);
 
         return fb;
     }
 
     @Override
-    protected void validate(Collection<JThequeError> errors) {
-        ValidationUtils.rejectIfEmpty(fieldName.getText(), "author.name", errors);
-        ValidationUtils.rejectIfEmpty(fieldFirstName.getText(), "author.firstname", errors);
-
-        ValidationUtils.rejectIfLongerThan(fieldName.getText(), "author.name", 100, errors);
-        ValidationUtils.rejectIfLongerThan(fieldFirstName.getText(), "author.firstname", 100, errors);
-
-        ValidationUtils.rejectIfNothingSelected(notesModel, "author.note", errors);
-        ValidationUtils.rejectIfNothingSelected(countriesModel, "author.country", errors);
+    public JThequeTreeModel getTreeModel() {
+        return getImplementationView().getTreeModel();
     }
 
-    @Override
-    public JComponent getComponent() {
-        return this;
+    private static final class AuthorViewImpl extends AbstractPrincipalDataPanel<IAuthorsModel> {
+        private JXTitledPanel authorsPanel;
+
+        private JTextField fieldFirstName;
+        private JTextField fieldName;
+        private DataContainerCachedComboBoxModel<Country> countriesModel;
+        private NotesComboBoxModel notesModel;
+
+        private JComboBox comboCountries;
+        private JComboBox comboNote;
+
+        private JButton buttonNewCountry;
+
+        private AuthorViewImpl() {
+            super(IAuthorsService.DATA_TYPE);
+
+            setModel(new AuthorsModel());
+        }
+
+        /**
+         * Build the view.
+         */
+        private void build() {
+            getModel().addDisplayListListener(this);
+
+            PanelBuilder builder = new PanelBuilder(this);
+
+            buildListPanel(builder);
+            buildSortPanel(builder);
+            buildAuthorsPanel(builder);
+
+            getTree().addTreeSelectionListener(Managers.getManager(IBeansManager.class).<TreeSelectionListener>getBean("authorController"));
+        }
+
+        /**
+         * Build the internal panel for the list of authors.
+         *
+         * @param parent The parent builder.
+         */
+        private void buildListPanel(PanelBuilder parent) {
+            JXTitledPanel panelList = new JThequeTitledPanel("author.panel.list.title");
+            panelList.setBorder(new DropShadowBorder());
+            panelList.setTitleFont(panelList.getTitleFont().deriveFont(Font.BOLD));
+
+            PanelBuilder builder = new PanelBuilder();
+
+            setTreeModel(getSorter().createInitialModel(IAuthorsService.DATA_TYPE));
+
+            initTree();
+
+            builder.addScrolled(getTree(), builder.gbcSet(0, 0, GridBagUtils.BOTH, GridBagUtils.FIRST_LINE_START, 1.0, 1.0));
+
+            panelList.setContentContainer(builder.getPanel());
+
+            parent.add(panelList, parent.gbcSet(0, 0, GridBagUtils.BOTH, GridBagUtils.FIRST_LINE_START, A_QUARTER, 1.0));
+        }
+
+        /**
+         * Build the internal panel for the sorts.
+         *
+         * @param parent The parent builder.
+         */
+        private static void buildSortPanel(PanelBuilder parent) {
+            JXTitledPanel panelTri = new JThequeTitledPanel("author.panel.sort.title");
+            panelTri.setBorder(new DropShadowBorder());
+            panelTri.setTitleFont(panelTri.getTitleFont().deriveFont(Font.BOLD));
+
+            PanelBuilder builder = new PanelBuilder();
+
+            addSortAction(builder, 0, "author.actions.sort.country", ICountriesService.DATA_TYPE);
+            addSortAction(builder, 1, "author.actions.sort.note", "Notes");
+
+            panelTri.setContentContainer(builder.getPanel());
+
+            parent.add(panelTri, parent.gbcSet(0, 1, GridBagUtils.HORIZONTAL, GridBagUtils.FIRST_LINE_START, A_QUARTER, 0.0));
+        }
+
+        private static void addSortAction(PanelBuilder builder, int row, String key, String dataType) {
+            JXHyperlink linkSortCountry = builder.add(new JXHyperlink(new AcSortAuthors(key, dataType)),
+                    builder.gbcSet(0, row, GridBagUtils.HORIZONTAL, GridBagUtils.BASELINE_LEADING, 1.0, 0.0));
+            linkSortCountry.setClickedColor(linkSortCountry.getUnclickedColor());
+        }
+
+        /**
+         * Build the internal panel for the author.
+         *
+         * @param parent the parent builder
+         */
+        private void buildAuthorsPanel(PanelBuilder parent) {
+            authorsPanel = new JThequeTitledPanel("author.panel.author.title");
+            authorsPanel.setBorder(new DropShadowBorder());
+            authorsPanel.setTitleFont(authorsPanel.getTitleFont().deriveFont(Font.BOLD));
+
+            PanelBuilder builder = new PanelBuilder();
+
+            JPanelAuthorToolBar toolBar = new JPanelAuthorToolBar();
+
+            setToolBar(toolBar);
+
+            builder.add(toolBar, builder.gbcSet(0, 0, GridBagUtils.HORIZONTAL, GridBagUtils.BASELINE_LEADING, GridBagUtils.REMAINDER, 1, 1.0, 0.0));
+
+            addFirstNameField(builder);
+            addNameField(builder);
+            addCountryField(builder);
+            addNoteField(builder);
+
+            authorsPanel.setContentContainer(builder.getPanel());
+
+            parent.add(authorsPanel, parent.gbcSet(1, 0, GridBagUtils.BOTH, GridBagUtils.FIRST_LINE_START, 1, 2, 1 - A_QUARTER, 1.0));
+        }
+
+        /**
+         * Add the first name field and label.
+         *
+         * @param builder The builder to use.
+         */
+        private void addFirstNameField(PanelBuilder builder) {
+            builder.addI18nLabel("author.firstname", builder.gbcSet(0, 1));
+
+            fieldFirstName = builder.add(new JTextField(10),
+                    builder.gbcSet(1, 1, GridBagUtils.NONE, GridBagUtils.BASELINE_LEADING, GridBagUtils.REMAINDER, 1, 1.0, 0.0));
+            SwingUtils.addFieldLengthLimit(fieldFirstName, NAMES_LIMIT);
+            fieldFirstName.setEnabled(false);
+        }
+
+        /**
+         * Add the name field and label.
+         *
+         * @param builder The builder to use.
+         */
+        private void addNameField(PanelBuilder builder) {
+            builder.addI18nLabel("author.name", builder.gbcSet(0, 2));
+
+            fieldName = builder.add(new JTextField(10),
+                    builder.gbcSet(1, 2, GridBagUtils.NONE, GridBagUtils.BASELINE_LEADING, GridBagUtils.REMAINDER, 1, 1.0, 0.0));
+            SwingUtils.addFieldLengthLimit(fieldName, NAMES_LIMIT);
+            fieldName.setEnabled(false);
+        }
+
+        /**
+         * Add the country field and label.
+         *
+         * @param builder The builder to use.
+         */
+        private void addCountryField(PanelBuilder builder) {
+            builder.addI18nLabel("author.country", builder.gbcSet(0, 3));
+
+            countriesModel = new DataContainerCachedComboBoxModel<Country>(
+                    Managers.getManager(IBeansManager.class).<DataContainer<Country>>getBean("countriesService"));
+
+            comboCountries = builder.addComboBox(countriesModel, builder.gbcSet(1, 3));
+            comboCountries.setEnabled(false);
+
+            buttonNewCountry = builder.addButton(Managers.getManager(IResourceManager.class).getAction("newCountryAction"),
+                    builder.gbcSet(2, 3, GridBagUtils.NONE, GridBagUtils.BASELINE_LEADING, GridBagUtils.REMAINDER, 1, 1.0, 0.0));
+            buttonNewCountry.setEnabled(false);
+        }
+
+        /**
+         * Add the note field and label.
+         *
+         * @param builder The builder to use.
+         */
+        private void addNoteField(PanelBuilder builder) {
+            builder.addI18nLabel("author.note", builder.gbcSet(0, 4));
+
+            notesModel = new NotesComboBoxModel();
+
+            comboNote = builder.addComboBox(notesModel,
+                    builder.gbcSet(1, 4, GridBagUtils.NONE, GridBagUtils.BASELINE_LEADING, GridBagUtils.REMAINDER, GridBagUtils.REMAINDER, 1.0, 1.0));
+            comboNote.setEnabled(false);
+        }
+
+        @Override
+        public void fillFormBean(FormBean formBean) {
+            IAuthorFormBean fb = (IAuthorFormBean) formBean;
+
+            fb.setName(fieldName.getText());
+            fb.setFirstName(fieldFirstName.getText());
+            fb.setNote(notesModel.getSelectedNote());
+            fb.setCountry(countriesModel.getSelectedData());
+        }
+
+        @Override
+        public void setCurrent(Object object) {
+            Person author = (Person) object;
+
+            authorsPanel.setTitle(author.getDisplayableText());
+
+            fieldFirstName.setText(author.getFirstName());
+            fieldName.setText(author.getName());
+            countriesModel.setSelectedItem(author.getTheCountry());
+            notesModel.setSelectedItem(author.getNote());
+        }
+
+        @Override
+        protected void validate(Collection<JThequeError> errors) {
+            ValidationUtils.rejectIfEmpty(fieldName.getText(), "author.name", errors);
+            ValidationUtils.rejectIfEmpty(fieldFirstName.getText(), "author.firstname", errors);
+
+            ValidationUtils.rejectIfLongerThan(fieldName.getText(), "author.name", 100, errors);
+            ValidationUtils.rejectIfLongerThan(fieldFirstName.getText(), "author.firstname", 100, errors);
+
+            ValidationUtils.rejectIfNothingSelected(notesModel, "author.note", errors);
+            ValidationUtils.rejectIfNothingSelected(countriesModel, "author.country", errors);
+        }
+
+        @Override
+        public void setEnabled(boolean enabled) {
+            fieldFirstName.setEnabled(enabled);
+            fieldName.setEnabled(enabled);
+            buttonNewCountry.setEnabled(enabled);
+            comboNote.setEnabled(enabled);
+            comboCountries.setEnabled(enabled);
+        }
+
+        @Override
+        public void clear() {
+            authorsPanel.setTitle(getMessage("author.panel.author.title"));
+
+            fieldFirstName.setText("");
+            fieldName.setText("");
+            countriesModel.setSelectedItem(null);
+            notesModel.setSelectedItem(null);
+        }
     }
 }

@@ -29,8 +29,8 @@ public final class DisplayBeanViewAction extends JThequeAction {
     /**
      * Construct a new DisplayViewAction with a specific internationalization key.
      *
-     * @param key The i18n key.
-     * @param view The bean view to display. 
+     * @param key  The i18n key.
+     * @param view The bean view to display.
      */
     public DisplayBeanViewAction(String key, String view) {
         super(key);

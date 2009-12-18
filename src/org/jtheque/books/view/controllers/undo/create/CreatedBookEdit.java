@@ -50,14 +50,14 @@ public final class CreatedBookEdit extends AbstractUndoableEdit {
     }
 
     @Override
-    public void undo(){
+    public void undo() {
         super.undo();
 
         booksService.delete(book);
     }
 
     @Override
-    public void redo(){
+    public void redo() {
         super.redo();
 
         booksService.create(book);

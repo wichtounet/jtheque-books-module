@@ -20,6 +20,7 @@ import org.jtheque.books.persistence.od.able.Editor;
 import org.jtheque.books.view.able.IEditorView;
 import org.jtheque.books.view.actions.CloseViewAction;
 import org.jtheque.books.view.actions.editor.AcValidateEditorView;
+import org.jtheque.books.view.models.EditorModel;
 import org.jtheque.books.view.models.able.IEditorModel;
 import org.jtheque.core.managers.Managers;
 import org.jtheque.core.managers.error.JThequeError;
@@ -51,10 +52,12 @@ public final class EditorView extends SwingDialogView implements IEditorView {
     /**
      * Construct a new JFrameEditor modal to his parent view.
      *
-     * @param frame          The parent frame.
+     * @param frame The parent frame.
      */
     public EditorView(Frame frame) {
         super(frame);
+
+        setModel(new EditorModel());
 
         setContentPane(buildContentPane());
         reload();

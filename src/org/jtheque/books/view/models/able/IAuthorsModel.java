@@ -31,23 +31,9 @@ public interface IAuthorsModel extends IPrincipalDataModel<Person> {
     Person getCurrentAuthor();
 
     /**
-     * Indicate if the view is enabled or not.
-     *
-     * @return true if the view is enabled else false.
-     */
-    boolean isEnabled();
-
-    /**
      * Set the current author.
      *
      * @param author The current author.
      */
     void setCurrentAuthor(Person author);
-
-    /**
-     * Enable or disable the view.
-     *
-     * @param enabled true if the view has to be enabled else false.
-     */
-    void setEnabled(boolean enabled);
 }

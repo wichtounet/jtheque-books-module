@@ -40,7 +40,7 @@ public final class AcDeleteEditor extends JThequeAction {
     @Override
     public void actionPerformed(ActionEvent e) {
         IChoiceController choiceController = Managers.getManager(IBeansManager.class).getBean("choiceController");
-        
+
         choiceController.setAction("delete");
         choiceController.setContent(IEditorsService.DATA_TYPE);
         choiceController.displayView();

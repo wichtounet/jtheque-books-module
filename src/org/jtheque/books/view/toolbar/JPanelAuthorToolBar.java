@@ -49,7 +49,6 @@ public final class JPanelAuthorToolBar extends JPanel implements ToolbarView {
 
     /**
      * Create a new JPanelAuthorToolBar.
-     * 
      */
     public JPanelAuthorToolBar() {
         super();

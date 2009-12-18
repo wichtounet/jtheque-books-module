@@ -50,14 +50,14 @@ public final class DeletedLanguageEdit extends AbstractUndoableEdit {
     }
 
     @Override
-    public void undo(){
+    public void undo() {
         super.undo();
 
         languagesService.create(language);
     }
 
     @Override
-    public void redo(){
+    public void redo() {
         super.redo();
 
         languagesService.delete(language);

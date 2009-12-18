@@ -8,6 +8,16 @@
 
     <bean id="refreshAction" class="org.jtheque.books.view.actions.generals.AcRefreshList"/>
 
+    <bean id="newKindAction" class="org.jtheque.primary.view.impl.actions.kind.AcNewKind"/>
+    <bean id="newTypeAction" class="org.jtheque.primary.view.impl.actions.type.AcNewType"/>
+    <bean id="newLanguageAction" class="org.jtheque.primary.view.impl.actions.language.AcNewLanguage">
+        <constructor-arg value="language.view.actions.new"/>
+    </bean>
+    <bean id="newCountryAction" class="org.jtheque.primary.view.impl.actions.country.AcNewCountry">
+        <constructor-arg value="countries.view.actions.new"/>
+    </bean>
+    <bean id="newEditorAction" class="org.jtheque.books.view.actions.editor.AcNewEditor"/>
+
     <bean id="deleteKindAction" class="org.jtheque.primary.view.impl.actions.kind.AcDeleteKind"/>
     <bean id="deleteTypeAction" class="org.jtheque.primary.view.impl.actions.type.AcDeleteType"/>
     <bean id="deleteLanguageAction" class="org.jtheque.primary.view.impl.actions.language.AcDeleteLanguage">

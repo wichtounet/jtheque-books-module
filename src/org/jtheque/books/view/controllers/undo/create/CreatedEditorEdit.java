@@ -50,14 +50,14 @@ public final class CreatedEditorEdit extends AbstractUndoableEdit {
     }
 
     @Override
-    public void undo(){
+    public void undo() {
         super.undo();
 
         editorsService.delete(editor);
     }
 
     @Override
-    public void redo(){
+    public void redo() {
         super.redo();
 
         editorsService.create(editor);

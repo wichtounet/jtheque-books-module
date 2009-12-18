@@ -54,7 +54,7 @@ public final class AuthorController extends PrincipalController<Person> implemen
     public void valueChanged(TreeSelectionEvent event) {
         TreePath current = ((JTree) event.getSource()).getSelectionPath();
 
-        if (current != null && current.getLastPathComponent() instanceof TreeElement) {
+        if (current != null && current.getLastPathComponent() instanceof Data) {
             Data author = (Data) current.getLastPathComponent();
 
             if (author != null) {

@@ -24,21 +24,6 @@ import org.jtheque.primary.view.impl.models.able.IPrincipalDataModel;
  * @author Baptiste Wicht
  */
 public interface IBooksModel extends IPrincipalDataModel<Book> {
-
-    /**
-     * Enable or disable the view.
-     *
-     * @param enabled true if the view has to be enabled else false.
-     */
-    void setEnabled(boolean enabled);
-
-    /**
-     * Indicate if the view is enabled or not.
-     *
-     * @return true if the view is enabled else false.
-     */
-    boolean isEnabled();
-
     /**
      * Return the current book.
      *
@@ -52,12 +37,5 @@ public interface IBooksModel extends IPrincipalDataModel<Book> {
      * @param currentBook The new current book
      */
     void setCurrentBook(Book currentBook);
-
-    /**
-     * Add a view state listener.
-     *
-     * @param listener The listener to add.
-     */
-    void addViewStateListener(ViewStateListener listener);
 
 }

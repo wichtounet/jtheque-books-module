@@ -24,7 +24,6 @@ import org.jtheque.primary.od.able.Person;
 import org.jtheque.primary.view.impl.listeners.ObjectChangedEvent;
 import org.jtheque.primary.view.impl.models.PrincipalDataModel;
 
-import java.util.ArrayList;
 import java.util.Collection;
 
 /**
@@ -33,7 +32,6 @@ import java.util.Collection;
  * @author Baptiste Wicht
  */
 public final class AuthorsModel extends PrincipalDataModel<Person> implements IAuthorsModel {
-    private boolean enabled;
     private Person currentAuthor;
 
     private Collection<Person> displayList;
@@ -74,21 +72,10 @@ public final class AuthorsModel extends PrincipalDataModel<Person> implements IA
     @Override
     public Collection<Person> getDisplayList() {
         if (displayList == null) {
-            displayList = new ArrayList<Person>(25);
-            updateDisplayList();
+            displayList = authorsService.getAuthors();
         }
 
         return displayList;
-    }
-
-    @Override
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return enabled;
     }
 
     @Override

@@ -16,7 +16,7 @@ package org.jtheque.books.view.actions.book;
  * along with JTheque.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import org.jtheque.books.view.able.IBookView;
+import org.jtheque.books.view.panels.IInfosPanel;
 import org.jtheque.core.managers.Managers;
 import org.jtheque.core.managers.beans.IBeansManager;
 import org.jtheque.core.managers.view.impl.actions.JThequeSimpleAction;
@@ -43,12 +43,12 @@ public final class AcAddToList extends JThequeSimpleAction {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        IBookView bookView = Managers.getManager(IBeansManager.class).getBean("bookView");
+        IInfosPanel infosView = Managers.getManager(IBeansManager.class).getBean("bookPanelInfos");
 
-        DefaultListModel authorsModel = bookView.getPanelInfos().getAuthorsModel();
-        DefaultListModel authorsBookModel = bookView.getPanelInfos().getAuthorsBookModel();
+        DefaultListModel authorsModel = infosView.getAuthorsModel();
+        DefaultListModel authorsBookModel = infosView.getAuthorsBookModel();
 
-        int[] selectedActors = bookView.getPanelInfos().getSelectedAuthorsIndexes();
+        int[] selectedActors = infosView.getSelectedAuthorsIndexes();
 
         Arrays.sort(selectedActors);
 

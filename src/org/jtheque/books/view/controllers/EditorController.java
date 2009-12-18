@@ -44,6 +44,14 @@ public final class EditorController extends AbstractController implements IEdito
     private IEditorView editorView;
 
     @Override
+    public void newEditor() {
+        state = ViewMode.NEW;
+
+        editorView.reload();
+        currentEditor = editorsService.getEmptyEditor();
+    }
+
+    @Override
     public void editEditor(Editor editor) {
         state = ViewMode.EDIT;
 

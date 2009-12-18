@@ -1,4 +1,4 @@
-package org.jtheque.books.view.controllers.able;
+package org.jtheque.books.view.actions.editor;
 
 /*
  * This file is part of JTheque.
@@ -16,29 +16,28 @@ package org.jtheque.books.view.controllers.able;
  * along with JTheque.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import org.jtheque.books.persistence.od.able.Editor;
-import org.jtheque.core.managers.view.able.controller.Controller;
+import org.jtheque.books.view.controllers.able.IEditorController;
+import org.jtheque.core.managers.Managers;
+import org.jtheque.core.managers.beans.IBeansManager;
+import org.jtheque.core.managers.view.impl.actions.JThequeAction;
+
+import java.awt.event.ActionEvent;
 
 /**
- * An editor controller specification.
+ * An action to create a new editor.
  *
  * @author Baptiste Wicht
  */
-public interface IEditorController extends Controller {
-
+public final class AcNewEditor extends JThequeAction {
     /**
-     * Display the view to edit a editor.
-     *
-     * @param editor The editor to edit.
+     * Construct a AcNewEditor.
      */
-    void editEditor(Editor editor);
+    public AcNewEditor() {
+        super("editor.actions.ok");
+    }
 
-    /**
-     * Save modifications made to the editor.
-     *
-     * @param name The name of the editor.
-     */
-    void save(String name);
-
-    void newEditor();
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        Managers.getManager(IBeansManager.class).<IEditorController>getBean("editorController").newEditor();
+    }
 }

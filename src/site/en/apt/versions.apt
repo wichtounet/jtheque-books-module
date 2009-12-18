@@ -2,6 +2,12 @@ Versions
 
 This document present the different versions of JTheque Books Module. 
 
+* 1.4.1 16.12.2009 Switch to JTheque Core 2.0.2
+
+    * Switch to JTheque Core 2.0.2
+    * Maven 2 folder architecture
+    * Big refactorings of the code base
+
 * 1.3 23.09.2009 Passage à JTheque Core 2.0, Maven 2
 
     * Passage à JTheque Core 2.0

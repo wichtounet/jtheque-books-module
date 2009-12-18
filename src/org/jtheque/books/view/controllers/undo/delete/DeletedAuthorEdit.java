@@ -50,14 +50,14 @@ public final class DeletedAuthorEdit extends AbstractUndoableEdit {
     }
 
     @Override
-    public void undo(){
+    public void undo() {
         super.undo();
 
         authorsService.create(author);
     }
 
     @Override
-    public void redo(){
+    public void redo() {
         super.redo();
 
         authorsService.delete(author);

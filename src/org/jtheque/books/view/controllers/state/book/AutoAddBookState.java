@@ -54,7 +54,7 @@ public final class AutoAddBookState implements ControllerState {
 
     @Override
     public void apply() {
-        getViewModel().setEnabled(true);
+        controller.getView().setEnabled(true);
         controller.getView().getToolbarView().setDisplayMode(ViewMode.AUTO);
 
         getViewModel().getCurrentBook().saveToMemento();

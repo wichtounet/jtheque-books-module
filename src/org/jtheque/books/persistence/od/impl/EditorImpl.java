@@ -39,7 +39,7 @@ public final class EditorImpl extends AbstractEditor {
     @Override
     public int hashCode() {
         int result = Constants.HASH_CODE_START;
-        
+
         result = Constants.HASH_CODE_PRIME * result + getId();
         result = Constants.HASH_CODE_PRIME * result + (getName() == null ? 0 : getName().hashCode());
 

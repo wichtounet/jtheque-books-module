@@ -57,7 +57,7 @@ public final class NewBookState implements ControllerState {
     @Override
     public void apply() {
         getViewModel().setCurrentBook(booksService.getDefaultBook());
-        getViewModel().setEnabled(true);
+        controller.getView().setEnabled(true);
         controller.getView().getToolbarView().setDisplayMode(ViewMode.NEW);
     }
 
