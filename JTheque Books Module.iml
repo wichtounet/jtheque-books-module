@@ -5,12 +5,12 @@
       <configuration>
         <fileset id="fileset1" name="JTheque Books Fileset" removed="false">
           <file>file://$MODULE_DIR$/src/org/jtheque/books/spring/books-beans.xml</file>
-          <file>file://$MODULE_DIR$/../../JTheque Utilities/JTheque Core/src/org/jtheque/core/spring/core-actions.xml</file>
-          <file>file://$MODULE_DIR$/../../JTheque Utilities/JTheque Core/src/org/jtheque/core/spring/core-beans.xml</file>
-          <file>file://$MODULE_DIR$/../../JTheque Utilities/JTheque Core/src/org/jtheque/core/spring/core-managers.xml</file>
-          <file>file://$MODULE_DIR$/../../JTheque Utilities/JTheque Core/src/org/jtheque/core/spring/core-resources.xml</file>
-          <file>file://$MODULE_DIR$/../../JTheque Utilities/JTheque Core/src/org/jtheque/core/spring/core-views.xml</file>
-          <file>file://$MODULE_DIR$/../../JTheque Utilities/JTheque Primary Utils/src/org/jtheque/primary/spring/primary-beans.xml</file>
+          <file>file://$MODULE_DIR$/../JTheque Core/src/org/jtheque/core/spring/core-actions.xml</file>
+          <file>file://$MODULE_DIR$/../JTheque Core/src/org/jtheque/core/spring/core-beans.xml</file>
+          <file>file://$MODULE_DIR$/../JTheque Core/src/org/jtheque/core/spring/core-managers.xml</file>
+          <file>file://$MODULE_DIR$/../JTheque Core/src/org/jtheque/core/spring/core-resources.xml</file>
+          <file>file://$MODULE_DIR$/../JTheque Core/src/org/jtheque/core/spring/core-views.xml</file>
+          <file>file://$MODULE_DIR$/../JTheque Primary Utils/src/org/jtheque/primary/spring/primary-beans.xml</file>
           <file>file://$MODULE_DIR$/src/org/jtheque/books/spring/books-views.xml</file>
           <file>file://$MODULE_DIR$/src/org/jtheque/books/spring/books-actions.xml</file>
           <file>file://$MODULE_DIR$/src/org/jtheque/books/spring/books-services.xml</file>
@@ -19,22 +19,21 @@
     </facet>
   </component>
   <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_6" inherit-compiler-output="false">
-    <output url="file://C:/Server/builds/modules/jtheque-books-module/classes/production" />
-    <output-test url="file://C:/Server/builds/modules/jtheque-books-module/test-classes" />
+    <output url="file://M:/Server/Builds/modules/jtheque-books-module/classes/production" />
+    <output-test url="file://M:/Server/Builds/modules/jtheque-books-module/test-classes" />
     <content url="file://$MODULE_DIR$">
       <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/&gt;M:/Server/Builds/builds/modules/jtheque-books-module" />
     </content>
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="inheritedJdk" />
-    <orderEntry type="library" name="JTheque Library" level="application" />
-    <orderEntry type="module" module-name="JTheque Primary Utils" exported="" />
-    <orderEntry type="module" module-name="JTheque Core" exported="" />
+    <orderEntry type="library" exported="" name="Maven: org.jtheque:jtheque-primary-utils:1.3.1" level="project" />
+    <orderEntry type="library" exported="" name="Maven: org.jtheque:jtheque-core:2.0.2" level="project" />
     <orderEntry type="library" exported="" name="Maven: org.dbunit:dbunit:2.4.4" level="project" />
     <orderEntry type="library" exported="" name="Maven: junit:junit:4.4" level="project" />
     <orderEntry type="library" exported="" name="Maven: org.slf4j:slf4j-api:1.5.8" level="project" />
     <orderEntry type="library" exported="" name="Maven: commons-collections:commons-collections:3.2.1" level="project" />
-    <orderEntry type="module" module-name="JTheque Utils" exported="" />
+    <orderEntry type="library" exported="" name="Maven: org.jtheque:jtheque-utils:1.1.2" level="project" />
     <orderEntry type="library" exported="" name="Maven: org.slf4j:jcl-over-slf4j:1.5.8" level="project" />
     <orderEntry type="library" exported="" name="Maven: org.substance:substance:6.0" level="project" />
     <orderEntry type="library" exported="" name="Maven: org.trident:trident:1.2" level="project" />
@@ -80,9 +79,6 @@
     <orderEntry type="library" exported="" name="Maven: org.jdom:jdom:1.1" level="project" />
     <orderEntry type="library" exported="" name="Maven: xerces:xercesImpl:2.9.1" level="project" />
     <orderEntry type="library" exported="" name="Maven: org.swinglabs:jxlayer:3.0.4" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.springframework:spring-test:2.5.6" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.slf4j:slf4j-log4j12:1.5.8" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.easymock:easymock:2.4" level="project" />
   </component>
   <component name="org.twodividedbyzero.idea.findbugs">
     <option name="_basePreferences">
