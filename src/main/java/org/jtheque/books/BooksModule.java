@@ -49,10 +49,10 @@ import org.jtheque.primary.view.impl.sort.SorterFactory;
  *
  * @author Baptiste Wicht
  */
-@Module(id = "jtheque-books-module", i18n = "classpath:org/jtheque/books/ressources/i18n/books", version = "1.3.1", core = "2.0.2",
+@Module(id = "jtheque-books-module", i18n = "classpath:org/jtheque/books/i18n/books", version = "1.3.1", core = "2.0.2",
         jarFile = "jtheque-books-module-1.3.1.jar", updateURL = "http://jtheque.developpez.com/public/versions/BooksModule.versions")
 public final class BooksModule {
-    public static final String IMAGE_BASE_NAME = "org/jtheque/books/ressources/images";
+    public static final String IMAGE_BASE_NAME = "org/jtheque/books/images";
 
     private Feature refreshFeature;
     private Feature othersFeature;

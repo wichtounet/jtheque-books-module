@@ -82,7 +82,7 @@ public final class GenericBookAnalyzer extends AbstractBookAnalyzer implements S
         super();
 
         generator = new GenericGenerator(this);
-        generator.generate("org/jtheque/books/ressources/analyzers/" + file);
+        generator.generate("org/jtheque/books/analyzers/" + file);
 
         init();
 

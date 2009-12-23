@@ -64,20 +64,7 @@
     <build>
         <directory>${env.BUILD_HOME}/modules/jtheque-books-module</directory>
 
-        <sourceDirectory>src</sourceDirectory>
-
         <outputDirectory>${env.BUILD_HOME}/modules/jtheque-books-module/classes/production</outputDirectory>
-
-        <resources>
-            <resource>
-                <directory>src</directory>
-                <excludes>
-                    <exclude>site/**</exclude>
-                    <exclude>**/*.java</exclude>
-                    <exclude>**/package.html</exclude>
-                </excludes>
-            </resource>
-        </resources>
 
         <plugins>
                 <plugin>
