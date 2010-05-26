@@ -17,7 +17,7 @@ package org.jtheque.books.view.sort;
  */
 
 import org.jtheque.books.services.able.IAuthorsService;
-import org.jtheque.books.services.able.INotesService;
+import org.jtheque.primary.services.able.INotesService;
 import org.jtheque.core.utils.db.Note;
 import org.jtheque.primary.od.able.Person;
 import org.jtheque.primary.view.impl.models.tree.Category;
@@ -48,7 +48,7 @@ public final class ByNoteSorter implements Sorter {
         TreeElement root = model.getRoot();
 
         Map<Note, Category> groups = new HashMap<Note, Category>(authorsService.getNumberOfAuthors() / 4);
-        Iterable<Person> authors = authorsService.getAuthors();
+        Iterable<Person> authors = authorsService.getPersons();
 
         for (Person author : authors) {
             Note note = author.getNote();

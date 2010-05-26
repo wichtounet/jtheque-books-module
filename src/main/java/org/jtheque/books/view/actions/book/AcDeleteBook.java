@@ -48,7 +48,7 @@ public final class AcDeleteBook extends JThequeAction {
                 Managers.getManager(ILanguageManager.class).getMessage("book.dialogs.confirmDelete.title"));
 
         if (yes) {
-            bookController.deleteCurrentBook();
+            bookController.deleteCurrent();
         }
     }
 }

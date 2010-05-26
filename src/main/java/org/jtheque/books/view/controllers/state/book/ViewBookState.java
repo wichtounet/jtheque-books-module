@@ -19,12 +19,12 @@ package org.jtheque.books.view.controllers.state.book;
 import org.jtheque.books.persistence.od.able.Book;
 import org.jtheque.books.services.able.IBooksService;
 import org.jtheque.books.view.controllers.able.IBookController;
-import org.jtheque.books.view.controllers.undo.delete.DeletedBookEdit;
 import org.jtheque.books.view.models.able.IBooksModel;
 import org.jtheque.core.managers.Managers;
 import org.jtheque.core.managers.undo.IUndoRedoManager;
 import org.jtheque.primary.controller.able.ControllerState;
-import org.jtheque.primary.controller.able.FormBean;
+import org.jtheque.primary.controller.impl.AbstractControllerState;
+import org.jtheque.primary.controller.impl.undo.GenericDataDeletedEdit;
 import org.jtheque.primary.od.able.Data;
 import org.jtheque.primary.view.able.ViewMode;
 
@@ -35,7 +35,7 @@ import javax.annotation.Resource;
  *
  * @author Baptiste Wicht
  */
-public final class ViewBookState implements ControllerState {
+public final class ViewBookState extends AbstractControllerState {
     @Resource
     private IBookController controller;
 
@@ -62,29 +62,6 @@ public final class ViewBookState implements ControllerState {
     }
 
     @Override
-    public ControllerState autoEdit(Data data) {
-        Book book = (Book) data;
-
-        getViewModel().setCurrentBook(book);
-
-        return controller.getAutoAddState();
-    }
-
-    @Override
-    public ControllerState save(FormBean bean) {
-        //Do nothing
-
-        return null;
-    }
-
-    @Override
-    public ControllerState cancel() {
-        //Do nothing
-
-        return null;
-    }
-
-    @Override
     public ControllerState create() {
         return controller.getNewObjectState();
     }
@@ -107,7 +84,7 @@ public final class ViewBookState implements ControllerState {
                 controller.getView().selectFirst();
             }
 
-            Managers.getManager(IUndoRedoManager.class).addEdit(new DeletedBookEdit(book));
+            Managers.getManager(IUndoRedoManager.class).addEdit(new GenericDataDeletedEdit<Book>("authorsService", book));
         }
 
         return null;

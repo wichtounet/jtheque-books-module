@@ -19,13 +19,12 @@ package org.jtheque.books.services.impl.utils.web.analyzers;
 import org.jtheque.books.persistence.od.able.Editor;
 import org.jtheque.books.services.able.IAuthorsService;
 import org.jtheque.books.services.able.IEditorsService;
-import org.jtheque.books.services.able.INotesService;
+import org.jtheque.primary.od.able.SimpleData;
+import org.jtheque.primary.services.able.INotesService;
 import org.jtheque.core.managers.Managers;
 import org.jtheque.core.managers.beans.IBeansManager;
-import org.jtheque.primary.od.able.Kind;
 import org.jtheque.primary.od.able.Person;
-import org.jtheque.primary.services.able.ICountriesService;
-import org.jtheque.primary.services.able.IKindsService;
+import org.jtheque.primary.services.able.ISimpleDataService;
 import org.jtheque.primary.utils.web.analyzers.generic.GenericGenerator;
 import org.jtheque.primary.utils.web.analyzers.generic.field.FieldGetter;
 import org.jtheque.primary.utils.web.analyzers.generic.operation.ScannerPossessor;
@@ -43,7 +42,7 @@ import java.util.regex.Pattern;
  */
 public final class GenericBookAnalyzer extends AbstractBookAnalyzer implements ScannerPossessor {
     @Resource
-    private IKindsService kindsService;
+    private ISimpleDataService kindsService;
 
     @Resource
     private IEditorsService editorsService;
@@ -52,7 +51,7 @@ public final class GenericBookAnalyzer extends AbstractBookAnalyzer implements S
     private INotesService notesService;
 
     @Resource
-    private ICountriesService countriesService;
+    private ISimpleDataService countriesService;
 
     @Resource
     private IAuthorsService authorsService;
@@ -157,10 +156,10 @@ public final class GenericBookAnalyzer extends AbstractBookAnalyzer implements S
             if (value != null) {
                 value = StringUtils.setFirstLetterOnlyUpper(value);
 
-                if (kindsService.exists(value)) {
-                    getBook().setTheKind(kindsService.getKind(value));
+                if (kindsService.exist(value)) {
+                    getBook().setTheKind(kindsService.getSimpleData(value));
                 } else {
-                    Kind kind = kindsService.getEmptyKind();
+                    SimpleData kind = kindsService.getEmptySimpleData();
 
                     kind.setName(value);
 
@@ -236,13 +235,13 @@ public final class GenericBookAnalyzer extends AbstractBookAnalyzer implements S
      * @param firstName The first name of the author.
      */
     private void addAuthor(String name, String firstName) {
-        if (authorsService.exists(firstName, name)) {
-            getBook().addAuthor(authorsService.getAuthor(firstName, name));
+        if (authorsService.exist(firstName, name)) {
+            getBook().addAuthor(authorsService.getPerson(firstName, name));
         } else {
-            Person author = authorsService.getEmptyAuthor();
+            Person author = authorsService.getEmptyPerson();
             author.setName(name);
             author.setFirstName(firstName);
-            author.setTheCountry(countriesService.getDefaultCountry());
+            author.setTheCountry(countriesService.getDefaultSimpleData());
             author.setNote(notesService.getDefaultNote());
 
             authorsService.create(author);

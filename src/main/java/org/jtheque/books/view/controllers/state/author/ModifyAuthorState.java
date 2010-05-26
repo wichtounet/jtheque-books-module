@@ -18,16 +18,17 @@ package org.jtheque.books.view.controllers.state.author;
 
 import org.jtheque.books.services.able.IAuthorsService;
 import org.jtheque.books.view.controllers.able.IAuthorController;
-import org.jtheque.books.view.fb.IAuthorFormBean;
 import org.jtheque.books.view.models.able.IAuthorsModel;
 import org.jtheque.core.managers.Managers;
 import org.jtheque.core.managers.language.ILanguageManager;
 import org.jtheque.core.managers.view.able.IViewManager;
 import org.jtheque.primary.controller.able.ControllerState;
 import org.jtheque.primary.controller.able.FormBean;
+import org.jtheque.primary.controller.impl.AbstractControllerState;
 import org.jtheque.primary.od.able.Data;
 import org.jtheque.primary.od.able.Person;
 import org.jtheque.primary.view.able.ViewMode;
+import org.jtheque.primary.view.able.fb.IPersonFormBean;
 
 import javax.annotation.Resource;
 
@@ -36,7 +37,7 @@ import javax.annotation.Resource;
  *
  * @author Baptiste Wicht
  */
-public final class ModifyAuthorState implements ControllerState {
+public final class ModifyAuthorState extends AbstractControllerState {
     @Resource
     private IAuthorController controller;
 
@@ -61,23 +62,6 @@ public final class ModifyAuthorState implements ControllerState {
     }
 
     @Override
-    public ControllerState autoEdit(Data data) {
-        Person author = (Person) data;
-
-        if (Managers.getManager(IViewManager.class).askUserForConfirmation(
-                Managers.getManager(ILanguageManager.class).getMessage("actor.dialogs.confirmSave"),
-                Managers.getManager(ILanguageManager.class).getMessage("actor.dialogs.confirmSave.title"))) {
-            controller.save();
-        } else {
-            getViewModel().getCurrentAuthor().restoreMemento();
-        }
-
-        getViewModel().setCurrentAuthor(author);
-
-        return controller.getAutoAddState();
-    }
-
-    @Override
     public ControllerState cancel() {
         getViewModel().getCurrentAuthor().restoreMemento();
 
@@ -85,35 +69,14 @@ public final class ModifyAuthorState implements ControllerState {
     }
 
     @Override
-    public ControllerState create() {
-        //Do nothing
-
-        return null;
-    }
-
-    @Override
-    public ControllerState manualEdit() {
-        //Do nothing
-
-        return null;
-    }
-
-    @Override
-    public ControllerState delete() {
-        //Do nothing
-
-        return null;
-    }
-
-    @Override
     public ControllerState save(FormBean bean) {
-        IAuthorFormBean infos = (IAuthorFormBean) bean;
+        IPersonFormBean infos = (IPersonFormBean) bean;
 
         String oldName = getViewModel().getCurrentAuthor().getDisplayableText();
 
-        Person author = authorsService.getEmptyAuthor();
+        Person author = authorsService.getEmptyPerson();
 
-        infos.fillAuthor(author);
+        infos.fillPerson(author);
 
         authorsService.save(getViewModel().getCurrentAuthor());
 

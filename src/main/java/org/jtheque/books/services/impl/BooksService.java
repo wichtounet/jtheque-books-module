@@ -20,13 +20,11 @@ import org.jtheque.books.persistence.dao.able.IDaoBooks;
 import org.jtheque.books.persistence.od.able.Book;
 import org.jtheque.books.services.able.IBooksService;
 import org.jtheque.books.services.able.IEditorsService;
-import org.jtheque.books.services.able.INotesService;
+import org.jtheque.primary.services.able.INotesService;
 import org.jtheque.core.managers.Managers;
 import org.jtheque.core.managers.language.ILanguageManager;
 import org.jtheque.core.managers.persistence.able.DataListener;
-import org.jtheque.primary.services.able.IKindsService;
-import org.jtheque.primary.services.able.ILanguagesService;
-import org.jtheque.primary.services.able.ITypesService;
+import org.jtheque.primary.services.able.ISimpleDataService;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
@@ -41,19 +39,19 @@ public final class BooksService implements IBooksService {
     private Book defaultBook;
 
     @Resource
-    private ILanguagesService languagesService;
+    private ISimpleDataService languagesService;
 
     @Resource
     private INotesService notesService;
 
     @Resource
-    private ITypesService typesService;
+    private ISimpleDataService typesService;
 
     @Resource
     private IEditorsService editorsService;
 
     @Resource
-    private IKindsService kindsService;
+    private ISimpleDataService kindsService;
 
     @Resource
     private IDaoBooks daoBooks;
@@ -66,9 +64,9 @@ public final class BooksService implements IBooksService {
             defaultBook.setTitle(Managers.getManager(ILanguageManager.class).getMessage("book.actions.new"));
             defaultBook.setNote(notesService.getDefaultNote());
             defaultBook.setTheEditor(editorsService.getDefaultEditor());
-            defaultBook.setTheKind(kindsService.getDefaultKind());
-            defaultBook.setTheType(typesService.getDefaultType());
-            defaultBook.setTheLanguage(languagesService.getDefaultLanguage());
+            defaultBook.setTheKind(kindsService.getDefaultSimpleData());
+            defaultBook.setTheType(typesService.getDefaultSimpleData());
+            defaultBook.setTheLanguage(languagesService.getDefaultSimpleData());
         }
 
         return defaultBook;

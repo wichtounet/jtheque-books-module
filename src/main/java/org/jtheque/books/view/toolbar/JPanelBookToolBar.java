@@ -18,14 +18,15 @@ package org.jtheque.books.view.toolbar;
 
 import org.jtheque.books.view.actions.book.AcAutoAddBook;
 import org.jtheque.books.view.actions.book.AcAutoEditBook;
-import org.jtheque.books.view.actions.book.AcCancelBook;
 import org.jtheque.books.view.actions.book.AcDeleteBook;
-import org.jtheque.books.view.actions.book.AcManualEditBook;
-import org.jtheque.books.view.actions.book.AcNewBook;
 import org.jtheque.books.view.actions.book.AcSaveBook;
-import org.jtheque.core.utils.ui.PanelBuilder;
+import org.jtheque.core.utils.ui.builders.JThequePanelBuilder;
+import org.jtheque.core.utils.ui.builders.PanelBuilder;
 import org.jtheque.primary.view.able.ToolbarView;
 import org.jtheque.primary.view.able.ViewMode;
+import org.jtheque.primary.view.impl.actions.principal.CancelPrincipalAction;
+import org.jtheque.primary.view.impl.actions.principal.CreateNewPrincipalAction;
+import org.jtheque.primary.view.impl.actions.principal.ManualEditPrincipalAction;
 import org.jtheque.primary.view.impl.components.JDropDownButton;
 import org.jtheque.utils.ui.GridBagUtils;
 
@@ -58,14 +59,19 @@ public final class JPanelBookToolBar extends JPanel implements ToolbarView {
      * Build the tool bar.
      */
     private void build() {
-        PanelBuilder builder = new PanelBuilder(this);
+        PanelBuilder builder = new JThequePanelBuilder(this);
 
         buttonSave = new JButton(new AcSaveBook());
-        buttonCancel = new JButton(new AcCancelBook());
+        buttonCancel = new JButton(new CancelPrincipalAction("book.actions.cancel", "bookController"));
         buttonDelete = new JButton(new AcDeleteBook());
 
-        buttonAdd = new JDropDownButton(new AcNewBook(), new AcAutoAddBook());
-        buttonEdit = new JDropDownButton(new AcManualEditBook(), new AcAutoEditBook());
+        buttonAdd = new JDropDownButton(
+                new CreateNewPrincipalAction("book.actions.add.manual", "bookController"),
+                new AcAutoAddBook());
+        
+        buttonEdit = new JDropDownButton(
+                new ManualEditPrincipalAction("book.actions.edit.manual", "bookController"),
+                new AcAutoEditBook());
 
         if (mode == ViewMode.VIEW) {
             builder.add(buttonAdd, gbc.gbcSet(0, 0));

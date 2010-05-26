@@ -18,8 +18,6 @@ package org.jtheque.books.view.controllers.state.author;
 
 import org.jtheque.books.services.able.IAuthorsService;
 import org.jtheque.books.view.controllers.able.IAuthorController;
-import org.jtheque.books.view.controllers.undo.create.CreatedAuthorEdit;
-import org.jtheque.books.view.fb.IAuthorFormBean;
 import org.jtheque.books.view.models.able.IAuthorsModel;
 import org.jtheque.core.managers.Managers;
 import org.jtheque.core.managers.language.ILanguageManager;
@@ -27,9 +25,12 @@ import org.jtheque.core.managers.undo.IUndoRedoManager;
 import org.jtheque.core.managers.view.able.IViewManager;
 import org.jtheque.primary.controller.able.ControllerState;
 import org.jtheque.primary.controller.able.FormBean;
+import org.jtheque.primary.controller.impl.AbstractControllerState;
+import org.jtheque.primary.controller.impl.undo.GenericDataCreatedEdit;
 import org.jtheque.primary.od.able.Data;
 import org.jtheque.primary.od.able.Person;
 import org.jtheque.primary.view.able.ViewMode;
+import org.jtheque.primary.view.able.fb.IPersonFormBean;
 
 import javax.annotation.Resource;
 
@@ -38,7 +39,7 @@ import javax.annotation.Resource;
  *
  * @author Baptiste Wicht
  */
-public final class NewAuthorState implements ControllerState {
+public final class NewAuthorState extends AbstractControllerState {
     @Resource
     private IAuthorController controller;
 
@@ -56,16 +57,9 @@ public final class NewAuthorState implements ControllerState {
 
     @Override
     public void apply() {
-        getViewModel().setCurrentAuthor(authorsService.getDefaultAuthor());
+        getViewModel().setCurrentAuthor(authorsService.getDefaultPerson());
         controller.getView().setEnabled(true);
         controller.getView().getToolbarView().setDisplayMode(ViewMode.NEW);
-    }
-
-    @Override
-    public ControllerState autoEdit(Data data) {
-        switchCurrentAuthor(data);
-
-        return controller.getAutoAddState();
     }
 
     @Override
@@ -74,45 +68,24 @@ public final class NewAuthorState implements ControllerState {
 
         controller.getView().selectFirst();
 
-        if (authorsService.getAuthors().size() <= 0) {
-            nextState = controller.getViewState();
-        }
+		if (authorsService.getPersons().size() <= 0) {
+			nextState = controller.getViewState();
+		}
 
-        return nextState;
-    }
-
-    @Override
-    public ControllerState create() {
-        //Do nothing
-
-        return null;
-    }
-
-    @Override
-    public ControllerState manualEdit() {
-        //Do nothing
-
-        return null;
-    }
-
-    @Override
-    public ControllerState delete() {
-        //Do nothing
-
-        return null;
+		return nextState;
     }
 
     @Override
     public ControllerState save(FormBean bean) {
-        IAuthorFormBean infos = (IAuthorFormBean) bean;
+        IPersonFormBean infos = (IPersonFormBean) bean;
 
-        Person author = authorsService.getEmptyAuthor();
+        Person author = authorsService.getEmptyPerson();
 
-        infos.fillAuthor(author);
+        infos.fillPerson(author);
 
         authorsService.create(author);
 
-        Managers.getManager(IUndoRedoManager.class).addEdit(new CreatedAuthorEdit(author));
+        Managers.getManager(IUndoRedoManager.class).addEdit(new GenericDataCreatedEdit<Person>("authorsService", author));
 
         controller.getView().resort();
 

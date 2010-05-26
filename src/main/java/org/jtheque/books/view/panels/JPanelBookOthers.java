@@ -18,9 +18,10 @@ package org.jtheque.books.view.panels;
 
 import org.jtheque.books.persistence.od.able.Book;
 import org.jtheque.books.view.able.IOthersPanel;
-import org.jtheque.books.view.fb.IBookFormBean;
+import org.jtheque.books.view.able.fb.IBookFormBean;
 import org.jtheque.core.managers.error.JThequeError;
-import org.jtheque.core.utils.ui.PanelBuilder;
+import org.jtheque.core.utils.ui.builders.I18nPanelBuilder;
+import org.jtheque.core.utils.ui.builders.JThequePanelBuilder;
 import org.jtheque.core.utils.ui.ValidationUtils;
 import org.jtheque.primary.view.impl.listeners.ObjectChangedEvent;
 import org.jtheque.primary.view.impl.models.NotesComboBoxModel;
@@ -61,13 +62,13 @@ public final class JPanelBookOthers extends JPanel implements IOthersPanel {
      * Build the view.
      */
     private void build() {
-        PanelBuilder builder = new PanelBuilder(this);
+        I18nPanelBuilder builder = new JThequePanelBuilder(this);
 
         builder.addI18nLabel("book.note", builder.gbcSet(0, 0));
 
-        ListCellRenderer noteRenderer = new NoteComboRenderer();
+        ListCellRenderer noteRenderer = new NoteComboRenderer(daoNotes);
 
-        modelNote = new NotesComboBoxModel();
+        modelNote = new NotesComboBoxModel(daoNotes);
 
         comboNote = builder.addComboBox(modelNote,
                 builder.gbcSet(1, 0, GridBagUtils.NONE, GridBagUtils.BASELINE_LEADING, GridBagUtils.REMAINDER, 1, 1.0, 0.0));

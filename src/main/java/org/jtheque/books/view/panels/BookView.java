@@ -24,9 +24,9 @@ import org.jtheque.books.services.able.IBooksService;
 import org.jtheque.books.services.able.IEditorsService;
 import org.jtheque.books.view.able.IBookView;
 import org.jtheque.books.view.able.IOthersPanel;
+import org.jtheque.books.view.able.fb.IBookFormBean;
 import org.jtheque.books.view.actions.AcSortBooks;
 import org.jtheque.books.view.fb.BookFormBean;
-import org.jtheque.books.view.fb.IBookFormBean;
 import org.jtheque.books.view.models.BooksModel;
 import org.jtheque.books.view.models.able.IBooksModel;
 import org.jtheque.books.view.toolbar.JPanelBookToolBar;
@@ -37,13 +37,13 @@ import org.jtheque.core.managers.language.ILanguageManager;
 import org.jtheque.core.managers.language.TabTitleUpdater;
 import org.jtheque.core.managers.persistence.able.DataContainer;
 import org.jtheque.core.managers.resource.IResourceManager;
-import org.jtheque.core.utils.ui.PanelBuilder;
+import org.jtheque.core.utils.ui.builders.I18nPanelBuilder;
+import org.jtheque.core.utils.ui.builders.JThequePanelBuilder;
 import org.jtheque.core.utils.ui.ValidationUtils;
+import org.jtheque.core.utils.ui.builders.PanelBuilder;
 import org.jtheque.primary.controller.able.FormBean;
-import org.jtheque.primary.od.able.Kind;
-import org.jtheque.primary.od.able.Type;
-import org.jtheque.primary.services.able.IKindsService;
-import org.jtheque.primary.services.able.ITypesService;
+import org.jtheque.primary.od.able.SimpleData;
+import org.jtheque.primary.view.impl.components.panels.AbstractPrincipalDataPanel;
 import org.jtheque.primary.view.impl.components.panels.JThequeTitledPanel;
 import org.jtheque.primary.view.impl.listeners.ObjectChangedEvent;
 import org.jtheque.primary.view.impl.models.DataContainerCachedComboBoxModel;
@@ -70,7 +70,7 @@ import java.util.Map;
  *
  * @author Baptiste Wicht
  */
-public final class BookView extends AbstractPrincipalDelegatedView implements IBookView {
+public final class BookView extends AbstractPrincipalDelegatedView<AbstractPrincipalDataPanel<IBooksModel>> implements IBookView {
     public BookView() {
         super(0, "data.titles.book");
     }
@@ -119,8 +119,8 @@ public final class BookView extends AbstractPrincipalDelegatedView implements IB
 
         private JXTitledPanel booksPanel;
         private JTextField fieldTitle;
-        private DataContainerCachedComboBoxModel<Kind> kindsModel;
-        private DataContainerCachedComboBoxModel<Type> typesModel;
+        private DataContainerCachedComboBoxModel<SimpleData> kindsModel;
+        private DataContainerCachedComboBoxModel<SimpleData> typesModel;
         private JComboBox comboKind;
         private JComboBox comboType;
 
@@ -143,7 +143,7 @@ public final class BookView extends AbstractPrincipalDelegatedView implements IB
          * Build the view.
          */
         private void build() {
-            PanelBuilder builder = new PanelBuilder(this);
+            PanelBuilder builder = new JThequePanelBuilder(this);
 
             buildListPanel(builder);
             buildSortPanel(builder);
@@ -165,7 +165,7 @@ public final class BookView extends AbstractPrincipalDelegatedView implements IB
             panelList.setBorder(new DropShadowBorder());
             panelList.setTitleFont(panelList.getTitleFont().deriveFont(Font.BOLD));
 
-            PanelBuilder builder = new PanelBuilder();
+            PanelBuilder builder = new JThequePanelBuilder();
 
             setTreeModel(getSorter().createInitialModel(IBooksService.DATA_TYPE));
 
@@ -190,11 +190,11 @@ public final class BookView extends AbstractPrincipalDelegatedView implements IB
             panelTri.setBorder(new DropShadowBorder());
             panelTri.setTitleFont(panelTri.getTitleFont().deriveFont(Font.BOLD));
 
-            PanelBuilder builder = new PanelBuilder();
+            PanelBuilder builder = new JThequePanelBuilder();
 
             addSortAction(builder, 0, "book.actions.sort.editor", IEditorsService.DATA_TYPE);
-            addSortAction(builder, 1, "book.actions.sort.kind", IKindsService.DATA_TYPE);
-            addSortAction(builder, 2, "book.actions.sort.type", ITypesService.DATA_TYPE);
+            addSortAction(builder, 1, "book.actions.sort.kind", SimpleData.DataType.KIND.getDataType());
+            addSortAction(builder, 2, "book.actions.sort.type", SimpleData.DataType.TYPE.getDataType());
             addSortAction(builder, 3, "book.actions.sort.year", "Year");
 
             panelTri.setContentContainer(builder.getPanel());
@@ -219,7 +219,7 @@ public final class BookView extends AbstractPrincipalDelegatedView implements IB
             booksPanel.setBorder(new DropShadowBorder());
             booksPanel.setTitleFont(booksPanel.getTitleFont().deriveFont(Font.BOLD));
 
-            PanelBuilder builder = new PanelBuilder();
+            I18nPanelBuilder builder = new JThequePanelBuilder();
 
             JPanelBookToolBar toolBar = new JPanelBookToolBar();
 
@@ -249,11 +249,11 @@ public final class BookView extends AbstractPrincipalDelegatedView implements IB
          *
          * @param builder The builder of the panel.
          */
-        private void addKindFields(PanelBuilder builder) {
+        private void addKindFields(I18nPanelBuilder builder) {
             builder.addI18nLabel("book.kind", builder.gbcSet(0, 2));
 
-            kindsModel = new DataContainerCachedComboBoxModel<Kind>(
-                    Managers.getManager(IBeansManager.class).<DataContainer<Kind>>getBean("kindsService"));
+            kindsModel = new DataContainerCachedComboBoxModel<SimpleData>(
+                    Managers.getManager(IBeansManager.class).<DataContainer<SimpleData>>getBean("kindsService"));
 
             comboKind = new JComboBox(kindsModel);
 
@@ -270,11 +270,11 @@ public final class BookView extends AbstractPrincipalDelegatedView implements IB
          *
          * @param builder The builder of the view.
          */
-        private void addTypeFields(PanelBuilder builder) {
+        private void addTypeFields(I18nPanelBuilder builder) {
             builder.addI18nLabel("book.type", builder.gbcSet(0, 3));
 
-            typesModel = new DataContainerCachedComboBoxModel<Type>(
-                    Managers.getManager(IBeansManager.class).<DataContainer<Type>>getBean("typesServices"));
+            typesModel = new DataContainerCachedComboBoxModel<SimpleData>(
+                    Managers.getManager(IBeansManager.class).<DataContainer<SimpleData>>getBean("typesServices"));
 
             comboType = builder.addComboBox(typesModel, builder.gbcSet(1, 3));
             comboType.setEnabled(false);

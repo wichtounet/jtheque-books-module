@@ -18,13 +18,14 @@ package org.jtheque.books.services.able;
 
 import org.jtheque.books.persistence.od.able.Editor;
 import org.jtheque.core.managers.persistence.able.DataContainer;
+import org.jtheque.primary.services.able.DataService;
 
 /**
  * A editors service specification.
  *
  * @author Baptiste Wicht
  */
-public interface IEditorsService extends DataContainer<Editor> {
+public interface IEditorsService extends DataContainer<Editor>, DataService<Editor> {
     String DATA_TYPE = "Editors";
 
     /**
@@ -33,13 +34,6 @@ public interface IEditorsService extends DataContainer<Editor> {
      * @return The default editor.
      */
     Editor getDefaultEditor();
-
-    /**
-     * Create the editor.
-     *
-     * @param editor The editor to create.
-     */
-    void create(Editor editor);
 
     /**
      * Return the editor with the name.
@@ -56,21 +50,6 @@ public interface IEditorsService extends DataContainer<Editor> {
      * @return true if the author exists else false.
      */
     boolean exists(String name);
-
-    /**
-     * Delete the editor.
-     *
-     * @param editor The editor to delete.
-     * @return true if the editor has been deleted else false.
-     */
-    boolean delete(Editor editor);
-
-    /**
-     * Save the editor.
-     *
-     * @param editor The editor to save.
-     */
-    void save(Editor editor);
 
     /**
      * Create an empty editor.

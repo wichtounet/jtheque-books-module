@@ -16,10 +16,10 @@ package org.jtheque.books.view.able;
  * along with JTheque.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import org.jtheque.books.view.fb.IAuthorFormBean;
 import org.jtheque.books.view.models.able.IAuthorsModel;
 import org.jtheque.core.managers.view.able.components.TabComponent;
 import org.jtheque.primary.view.able.PrincipalDataView;
+import org.jtheque.primary.view.able.fb.IPersonFormBean;
 import org.jtheque.primary.view.impl.listeners.CurrentObjectListener;
 import org.jtheque.primary.view.impl.models.tree.JThequeTreeModel;
 
@@ -41,7 +41,7 @@ public interface IAuthorView extends PrincipalDataView, CurrentObjectListener, T
      *
      * @return The filled form bean.
      */
-    IAuthorFormBean fillFilmFormBean();
+    IPersonFormBean fillFilmFormBean();
 
     @Override
     IAuthorsModel getModel();

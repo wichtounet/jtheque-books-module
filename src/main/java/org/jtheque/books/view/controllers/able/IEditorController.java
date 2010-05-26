@@ -25,7 +25,6 @@ import org.jtheque.core.managers.view.able.controller.Controller;
  * @author Baptiste Wicht
  */
 public interface IEditorController extends Controller {
-
     /**
      * Display the view to edit a editor.
      *

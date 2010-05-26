@@ -24,12 +24,10 @@ import org.jtheque.books.view.models.able.IBooksModel;
 import org.jtheque.primary.controller.able.ControllerState;
 import org.jtheque.primary.controller.impl.PrincipalController;
 
-import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import javax.swing.JTree;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.tree.TreePath;
-import java.util.Collection;
 
 /**
  * A controller for the book view.
@@ -40,30 +38,14 @@ public final class BookController extends PrincipalController<Book> implements I
     @Resource
     private IBookView bookView;
 
+    public BookController(ControllerState viewState, ControllerState modifyState,
+                          ControllerState newObjectState, ControllerState autoAddState) {
+        super(viewState, modifyState, newObjectState, autoAddState);
+    }
+
     @Override
     public IBookView getView() {
         return bookView;
-    }
-
-    /**
-     * Init the controller.
-     */
-    @PostConstruct
-    public void init() {
-        setState(getViewState());
-    }
-
-    @Override
-    public void valueChanged(TreeSelectionEvent event) {
-        TreePath current = ((JTree) event.getSource()).getSelectionPath();
-
-        if (current != null && current.getLastPathComponent() instanceof Book) {
-            Book book = (Book) current.getLastPathComponent();
-
-            if (book != null) {
-                view(book);
-            }
-        }
     }
 
     @Override
@@ -81,57 +63,7 @@ public final class BookController extends PrincipalController<Book> implements I
     }
 
     @Override
-    public void view(Book book) {
-        ControllerState newState = getState().view(book);
-
-        if (newState != null) {
-            setAndApplyState(newState);
-        }
-    }
-
-    @Override
-    public void manualEdit() {
-        ControllerState newState = getState().manualEdit();
-
-        if (newState != null) {
-            setAndApplyState(newState);
-        }
-    }
-
-    @Override
-    public void createFilm() {
-        ControllerState newState = getState().create();
-
-        if (newState != null) {
-            setAndApplyState(newState);
-        }
-    }
-
-    @Override
-    public void deleteCurrentBook() {
-        ControllerState newState = getState().delete();
-
-        if (newState != null) {
-            setAndApplyState(newState);
-        }
-    }
-
-    @Override
-    public void cancel() {
-        ControllerState newState = getState().cancel();
-
-        if (newState != null) {
-            setAndApplyState(newState);
-        }
-    }
-
-    @Override
     public String getDataType() {
         return IBooksService.DATA_TYPE;
-    }
-
-    @Override
-    public Collection<Book> getDisplayList() {
-        return getViewModel().getDisplayList();
     }
 }

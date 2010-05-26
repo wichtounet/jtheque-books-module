@@ -18,23 +18,24 @@ package org.jtheque.books.view.panels;
 
 import org.jtheque.books.persistence.od.able.Book;
 import org.jtheque.books.persistence.od.able.Editor;
+import org.jtheque.books.view.able.fb.IBookFormBean;
 import org.jtheque.books.view.actions.book.AcAddToList;
 import org.jtheque.books.view.actions.book.AcRemoveFromList;
 import org.jtheque.books.view.actions.editor.AcNewEditor;
-import org.jtheque.books.view.fb.IBookFormBean;
 import org.jtheque.books.view.models.list.AuthorsListModel;
-import org.jtheque.books.view.models.list.SimpleAuthorsModel;
 import org.jtheque.core.managers.Managers;
 import org.jtheque.core.managers.beans.IBeansManager;
 import org.jtheque.core.managers.error.JThequeError;
 import org.jtheque.core.managers.persistence.able.DataContainer;
 import org.jtheque.core.managers.resource.IResourceManager;
-import org.jtheque.core.utils.ui.PanelBuilder;
+import org.jtheque.core.managers.view.impl.components.model.SimpleListModel;
+import org.jtheque.core.utils.ui.builders.I18nPanelBuilder;
+import org.jtheque.core.utils.ui.builders.JThequePanelBuilder;
 import org.jtheque.core.utils.ui.ValidationUtils;
-import org.jtheque.primary.od.able.Language;
+import org.jtheque.core.utils.ui.builders.PanelBuilder;
 import org.jtheque.primary.od.able.Person;
-import org.jtheque.primary.od.able.Saga;
-import org.jtheque.primary.view.impl.actions.saga.NewSagaAction;
+import org.jtheque.primary.od.able.SimpleData;
+import org.jtheque.primary.view.impl.actions.simple.NewSimpleDataAction;
 import org.jtheque.primary.view.impl.listeners.ObjectChangedEvent;
 import org.jtheque.primary.view.impl.models.DataContainerCachedComboBoxModel;
 import org.jtheque.utils.ui.GridBagUtils;
@@ -59,8 +60,8 @@ import java.util.Collection;
  */
 public final class JPanelBookInfos extends JPanel implements IInfosPanel {
     private DataContainerCachedComboBoxModel<Editor> editorsModel;
-    private DataContainerCachedComboBoxModel<Language> languagesModel;
-    private DataContainerCachedComboBoxModel<Saga> sagasModel;
+    private DataContainerCachedComboBoxModel<SimpleData> languagesModel;
+    private DataContainerCachedComboBoxModel<SimpleData> sagasModel;
 
     private JComboBox comboEditors;
     private JComboBox comboLanguages;
@@ -73,7 +74,7 @@ public final class JPanelBookInfos extends JPanel implements IInfosPanel {
     private JList authorsBookList;
 
     private AuthorsListModel authorsModel;
-    private SimpleAuthorsModel authorsBookModel;
+    private SimpleListModel<Person> authorsBookModel;
 
     private JButton buttonNewEditor;
     private JButton buttonNewLanguage;
@@ -89,7 +90,7 @@ public final class JPanelBookInfos extends JPanel implements IInfosPanel {
     public JPanelBookInfos() {
         super();
 
-        PanelBuilder builder = new PanelBuilder(this);
+        I18nPanelBuilder builder = new JThequePanelBuilder(this);
 
         addEditorField(builder);
         addLanguageField(builder);
@@ -103,7 +104,7 @@ public final class JPanelBookInfos extends JPanel implements IInfosPanel {
      *
      * @param builder The builder of the panel.
      */
-    private void addEditorField(PanelBuilder builder) {
+    private void addEditorField(I18nPanelBuilder builder) {
         builder.addI18nLabel("book.editor", builder.gbcSet(0, 0));
 
         editorsModel = new DataContainerCachedComboBoxModel<Editor>(
@@ -122,11 +123,11 @@ public final class JPanelBookInfos extends JPanel implements IInfosPanel {
      *
      * @param builder The builder of the panel.
      */
-    private void addLanguageField(PanelBuilder builder) {
+    private void addLanguageField(I18nPanelBuilder builder) {
         builder.addI18nLabel("book.language", builder.gbcSet(0, 1));
 
-        languagesModel = new DataContainerCachedComboBoxModel<Language>(
-                Managers.getManager(IBeansManager.class).<DataContainer<Language>>getBean("languagesService"));
+        languagesModel = new DataContainerCachedComboBoxModel<SimpleData>(
+                Managers.getManager(IBeansManager.class).<DataContainer<SimpleData>>getBean("languagesService"));
 
         comboLanguages = builder.addComboBox(languagesModel, builder.gbcSet(1, 1));
         comboLanguages.setEnabled(false);
@@ -141,16 +142,17 @@ public final class JPanelBookInfos extends JPanel implements IInfosPanel {
      *
      * @param builder The builder of the panel.
      */
-    private void addSagaField(PanelBuilder builder) {
+    private void addSagaField(I18nPanelBuilder builder) {
         builder.addI18nLabel("book.saga", builder.gbcSet(0, 2));
 
-        sagasModel = new DataContainerCachedComboBoxModel<Saga>(
-                Managers.getManager(IBeansManager.class).<DataContainer<Saga>>getBean("sagasService"));
+        sagasModel = new DataContainerCachedComboBoxModel<SimpleData>(
+                Managers.getManager(IBeansManager.class).<DataContainer<SimpleData>>getBean("sagasService"));
 
         comboSagas = builder.addComboBox(sagasModel, builder.gbcSet(1, 2));
         comboSagas.setEnabled(false);
 
-        buttonNewSaga = builder.addButton(new NewSagaAction(), builder.gbcSet(2, 2, GridBagUtils.NONE, GridBagUtils.REMAINDER, 1));
+        buttonNewSaga = builder.addButton(new NewSimpleDataAction("generic.view.actions.new", "sagaController"),
+                builder.gbcSet(2, 2, GridBagUtils.NONE, GridBagUtils.REMAINDER, 1));
         buttonNewSaga.setEnabled(false);
     }
 
@@ -159,7 +161,7 @@ public final class JPanelBookInfos extends JPanel implements IInfosPanel {
      *
      * @param builder The builder of the panel.
      */
-    private void addFormattedFields(PanelBuilder builder) {
+    private void addFormattedFields(I18nPanelBuilder builder) {
         builder.addI18nLabel("book.year", builder.gbcSet(0, 3));
 
         NumberFormat format = NumberFormat.getNumberInstance();
@@ -185,7 +187,7 @@ public final class JPanelBookInfos extends JPanel implements IInfosPanel {
      * @param parent The builder of the panel.
      */
     private void addAuthorsPanel(PanelBuilder parent) {
-        PanelBuilder builder = new PanelBuilder();
+        PanelBuilder builder = new JThequePanelBuilder();
 
         authorsModel = new AuthorsListModel();
 
@@ -200,7 +202,7 @@ public final class JPanelBookInfos extends JPanel implements IInfosPanel {
         buttonRemoveAuthor = builder.addButton(new AcRemoveFromList(), builder.gbcSet(1, 1));
         buttonRemoveAuthor.setEnabled(false);
 
-        authorsBookModel = new SimpleAuthorsModel();
+        authorsBookModel = new SimpleListModel<Person>();
 
         authorsBookList = new JList(authorsBookModel);
         authorsBookList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
@@ -278,7 +280,7 @@ public final class JPanelBookInfos extends JPanel implements IInfosPanel {
         formBean.setTheSaga(sagasModel.getSelectedData());
         formBean.setYear(Integer.parseInt(fieldYear.getText()));
         formBean.setPages(Integer.parseInt(fieldPages.getText()));
-        formBean.setAuthors(authorsBookModel.getAuthors());
+        formBean.setAuthors(authorsBookModel.getObjects());
     }
 
     @Override

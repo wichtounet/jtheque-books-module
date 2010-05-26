@@ -16,16 +16,17 @@ package org.jtheque.books.view.toolbar;
  * along with JTheque.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import org.jtheque.books.view.actions.author.AcCancelAuthor;
 import org.jtheque.books.view.actions.author.AcDeleteAuthor;
-import org.jtheque.books.view.actions.author.AcEditAuthor;
-import org.jtheque.books.view.actions.author.AcNewAuthor;
 import org.jtheque.books.view.actions.author.AcSaveAuthor;
 import org.jtheque.core.managers.Managers;
 import org.jtheque.core.managers.view.able.IViewManager;
-import org.jtheque.core.utils.ui.PanelBuilder;
+import org.jtheque.core.utils.ui.builders.JThequePanelBuilder;
+import org.jtheque.core.utils.ui.builders.PanelBuilder;
 import org.jtheque.primary.view.able.ToolbarView;
 import org.jtheque.primary.view.able.ViewMode;
+import org.jtheque.primary.view.impl.actions.principal.CancelPrincipalAction;
+import org.jtheque.primary.view.impl.actions.principal.CreateNewPrincipalAction;
+import org.jtheque.primary.view.impl.actions.principal.ManualEditPrincipalAction;
 import org.jtheque.utils.ui.GridBagUtils;
 
 import javax.swing.JButton;
@@ -60,13 +61,13 @@ public final class JPanelAuthorToolBar extends JPanel implements ToolbarView {
      * Build the toolbar.
      */
     private void build() {
-        PanelBuilder builder = new PanelBuilder(this);
+        PanelBuilder builder = new JThequePanelBuilder(this);
 
         buttonSave = new JButton(new AcSaveAuthor());
-        buttonCancel = new JButton(new AcCancelAuthor());
         buttonDelete = new JButton(new AcDeleteAuthor());
-        buttonAdd = new JButton(new AcNewAuthor());
-        buttonEdit = new JButton(new AcEditAuthor());
+        buttonCancel = new JButton(new CancelPrincipalAction("author.actions.cancel", "authorController"));
+        buttonAdd = new JButton(new CreateNewPrincipalAction("author.actions.add", "authorController"));
+        buttonEdit = new JButton(new ManualEditPrincipalAction("author.actions.edit", "authorController"));
 
         if (mode == ViewMode.VIEW) {
             builder.add(buttonAdd, gbc.gbcSet(0, 0));

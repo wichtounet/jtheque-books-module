@@ -25,12 +25,10 @@ import org.jtheque.primary.controller.impl.PrincipalController;
 import org.jtheque.primary.od.able.Data;
 import org.jtheque.primary.od.able.Person;
 
-import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import javax.swing.JTree;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.tree.TreePath;
-import java.util.Collection;
 
 /**
  * A controller for the author view.
@@ -41,29 +39,9 @@ public final class AuthorController extends PrincipalController<Person> implemen
     @Resource
     private IAuthorView authorView;
 
-    /**
-     * Init the controller.
-     */
-    @PostConstruct
-    public void init() {
-        setState(getViewState());
-    }
-
-    @Override
-    public void valueChanged(TreeSelectionEvent event) {
-        TreePath current = ((JTree) event.getSource()).getSelectionPath();
-
-        if (current != null && current.getLastPathComponent() instanceof Data) {
-            Data author = (Data) current.getLastPathComponent();
-
-            if (author != null) {
-                ControllerState newState = getState().view(author);
-
-                if (newState != null) {
-                    setAndApplyState(newState);
-                }
-            }
-        }
+    public AuthorController(ControllerState viewState, ControllerState modifyState,
+                            ControllerState newObjectState, ControllerState autoAddState) {
+        super(viewState, modifyState, newObjectState, autoAddState);
     }
 
     @Override
@@ -81,42 +59,6 @@ public final class AuthorController extends PrincipalController<Person> implemen
     }
 
     @Override
-    public void manualEdit() {
-        ControllerState newState = getState().manualEdit();
-
-        if (newState != null) {
-            setAndApplyState(newState);
-        }
-    }
-
-    @Override
-    public void createAuthor() {
-        ControllerState newState = getState().create();
-
-        if (newState != null) {
-            setAndApplyState(newState);
-        }
-    }
-
-    @Override
-    public void deleteCurrentAuthor() {
-        ControllerState newState = getState().delete();
-
-        if (newState != null) {
-            setAndApplyState(newState);
-        }
-    }
-
-    @Override
-    public void cancel() {
-        ControllerState newState = getState().cancel();
-
-        if (newState != null) {
-            setAndApplyState(newState);
-        }
-    }
-
-    @Override
     public IAuthorView getView() {
         return authorView;
     }
@@ -124,10 +66,5 @@ public final class AuthorController extends PrincipalController<Person> implemen
     @Override
     public String getDataType() {
         return IAuthorsService.DATA_TYPE;
-    }
-
-    @Override
-    public Collection<Person> getDisplayList() {
-        return getViewModel().getDisplayList();
     }
 }

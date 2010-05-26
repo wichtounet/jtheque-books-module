@@ -19,84 +19,27 @@ package org.jtheque.books.view.controllers.able;
 import org.jtheque.books.persistence.od.able.Book;
 import org.jtheque.books.view.able.IBookView;
 import org.jtheque.books.view.models.able.IBooksModel;
-import org.jtheque.core.managers.view.able.controller.Controller;
-import org.jtheque.primary.controller.able.ControllerState;
-
-import javax.swing.event.TreeSelectionListener;
+import org.jtheque.primary.controller.able.IPrincipalController;
 
 /**
  * A book controller specification.
  *
  * @author Baptiste Wicht
  */
-public interface IBookController extends Controller, TreeSelectionListener {
+public interface IBookController extends IPrincipalController<Book> {
     /**
      * Save the current book.
      */
     void save();
 
     /**
-     * Display a book in the interface.
-     *
-     * @param book The book to edit.
-     */
-    void view(Book book);
-
-    /**
-     * Edit manually a book.
-     */
-    void manualEdit();
-
-    /**
-     * Create a new book.
-     */
-    void createFilm();
-
-    /**
-     * Delete the current book.
-     */
-    void deleteCurrentBook();
-
-    /**
-     * Cancel the current state.
-     */
-    void cancel();
-
-    /**
      * Return the model of the view.
      *
      * @return The model of the view.
      */
+    @Override
     IBooksModel getViewModel();
 
     @Override
     IBookView getView();
-
-    /**
-     * Return the auto add state of the controller.
-     *
-     * @return The auto add state.
-     */
-    ControllerState getAutoAddState();
-
-    /**
-     * Return the view state of the controller.
-     *
-     * @return The view state.
-     */
-    ControllerState getViewState();
-
-    /**
-     * Return the view state of the controller.
-     *
-     * @return The view state.
-     */
-    ControllerState getNewObjectState();
-
-    /**
-     * Return the view state of the controller.
-     *
-     * @return The view state.
-     */
-    ControllerState getModifyState();
 }

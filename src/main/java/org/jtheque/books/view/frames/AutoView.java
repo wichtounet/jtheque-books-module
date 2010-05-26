@@ -18,16 +18,15 @@ package org.jtheque.books.view.frames;
 
 import org.jtheque.books.services.impl.utils.web.BookResult;
 import org.jtheque.books.view.able.IAutoView;
-import org.jtheque.books.view.actions.CloseViewAction;
 import org.jtheque.books.view.actions.auto.AcSearch;
 import org.jtheque.books.view.actions.auto.AcValidateAutoAddView;
 import org.jtheque.books.view.models.AutoAddModel;
 import org.jtheque.books.view.models.able.IAutoAddModel;
 import org.jtheque.books.view.models.list.LanguagesListModel;
-import org.jtheque.core.managers.error.JThequeError;
-import org.jtheque.core.managers.view.impl.frame.abstraction.SwingDialogView;
-import org.jtheque.core.utils.ui.PanelBuilder;
-import org.jtheque.core.utils.ui.ValidationUtils;
+import org.jtheque.errors.able.IError;
+import org.jtheque.ui.utils.ValidationUtils;
+import org.jtheque.ui.utils.builders.I18nPanelBuilder;
+import org.jtheque.ui.utils.windows.dialogs.SwingBuildedDialogView;
 import org.jtheque.utils.ui.GridBagUtils;
 import org.jtheque.utils.ui.SwingUtils;
 
@@ -36,7 +35,6 @@ import javax.swing.DefaultListModel;
 import javax.swing.JList;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
-import java.awt.Container;
 import java.awt.Frame;
 import java.util.Collection;
 
@@ -45,7 +43,7 @@ import java.util.Collection;
  *
  * @author Baptiste Wicht
  */
-public final class AutoView extends SwingDialogView implements IAutoView {
+public final class AutoView extends SwingBuildedDialogView<IAutoAddModel> implements IAutoView {
     private JTextField fieldTitle;
     private JList listLanguages;
     private JList listBooks;
@@ -62,24 +60,18 @@ public final class AutoView extends SwingDialogView implements IAutoView {
     public AutoView(Frame frame) {
         super(frame);
 
-        setModel(new AutoAddModel());
-
-        setTitleKey("auto.view.title");
-        setContentPane(buildContentPane());
-        pack();
-
-        setLocationRelativeTo(getOwner());
+        build();
     }
 
-    /**
-     * Build the view.
-     *
-     * @return The content pane.
-     */
-    private Container buildContentPane() {
-        PanelBuilder builder = new PanelBuilder();
+	@Override
+	protected void initView(){
+		setModel(new AutoAddModel());
+        setTitleKey("auto.view.title");
+	}
 
-        builder.addI18nLabel("auto.view.title.film", builder.gbcSet(0, 0));
+	@Override
+	protected void buildView(I18nPanelBuilder builder){
+		builder.addI18nLabel("auto.view.title.film", builder.gbcSet(0, 0));
 
         Action searchAction = new AcSearch();
 
@@ -101,10 +93,8 @@ public final class AutoView extends SwingDialogView implements IAutoView {
         builder.addScrolled(listBooks, builder.gbcSet(2, 1, GridBagUtils.HORIZONTAL));
 
         builder.addButtonBar(builder.gbcSet(0, 2, GridBagUtils.HORIZONTAL),
-                new AcValidateAutoAddView(), new CloseViewAction("generic.actions.cancel", this));
-
-        return builder.getPanel();
-    }
+                new AcValidateAutoAddView(), getCloseAction("generic.actions.cancel"));
+	}
 
     @Override
     public void sendMessage(String message, Object value) {
@@ -134,11 +124,6 @@ public final class AutoView extends SwingDialogView implements IAutoView {
     }
 
     @Override
-    public IAutoAddModel getModel() {
-        return (IAutoAddModel) super.getModel();
-    }
-
-    @Override
     public boolean validateContent(int phase) {
         this.phase = phase;
 
@@ -146,7 +131,7 @@ public final class AutoView extends SwingDialogView implements IAutoView {
     }
 
     @Override
-    protected void validate(Collection<JThequeError> errors) {
+    protected void validate(Collection<IError> errors) {
         if (phase == PHASE_1) {
             ValidationUtils.rejectIfEmpty(fieldTitle.getText(), "auto.view.title.film", errors);
             ValidationUtils.rejectIfNothingSelected(listLanguages, "auto.view.languages", errors);

@@ -19,25 +19,8 @@ package org.jtheque.books.view.controllers.choice;
 import org.jtheque.books.persistence.od.able.Editor;
 import org.jtheque.books.services.able.IEditorsService;
 import org.jtheque.books.view.controllers.able.IEditorController;
-import org.jtheque.primary.controller.able.IBorrowerController;
-import org.jtheque.primary.controller.able.ICountryController;
-import org.jtheque.primary.controller.able.IKindController;
-import org.jtheque.primary.controller.able.ILanguageController;
-import org.jtheque.primary.controller.able.ISagaController;
-import org.jtheque.primary.controller.able.ITypeController;
-import org.jtheque.primary.od.able.Country;
-import org.jtheque.primary.od.able.Kind;
-import org.jtheque.primary.od.able.Language;
-import org.jtheque.primary.od.able.Person;
-import org.jtheque.primary.od.able.Saga;
-import org.jtheque.primary.od.able.Type;
-import org.jtheque.primary.services.able.IBorrowersService;
-import org.jtheque.primary.services.able.ICountriesService;
-import org.jtheque.primary.services.able.IKindsService;
-import org.jtheque.primary.services.able.ILanguagesService;
-import org.jtheque.primary.services.able.ISagasService;
-import org.jtheque.primary.services.able.ITypesService;
 import org.jtheque.primary.view.impl.choice.AbstractChoiceAction;
+import org.jtheque.primary.view.impl.choice.AbstractModifyChoiceAction;
 
 import javax.annotation.Resource;
 
@@ -46,27 +29,9 @@ import javax.annotation.Resource;
  *
  * @author Baptiste Wicht
  */
-public final class ModifyChoiceAction extends AbstractChoiceAction {
-    @Resource
-    private IKindController kindController;
-
-    @Resource
-    private ITypeController typeController;
-
-    @Resource
-    private ILanguageController languageController;
-
-    @Resource
-    private ICountryController countryController;
-
-    @Resource
-    private IBorrowerController borrowerController;
-
+public final class ModifyChoiceAction extends AbstractModifyChoiceAction {
     @Resource
     private IEditorController editorController;
-
-    @Resource
-    private ISagaController sagaController;
 
     @Override
     public boolean canDoAction(String action) {
@@ -75,20 +40,12 @@ public final class ModifyChoiceAction extends AbstractChoiceAction {
 
     @Override
     public void execute() {
-        if (IKindsService.DATA_TYPE.equals(getContent())) {
-            kindController.editKind((Kind) getSelectedItem());
-        } else if (ITypesService.DATA_TYPE.equals(getContent())) {
-            typeController.editType((Type) getSelectedItem());
-        } else if (ILanguagesService.DATA_TYPE.equals(getContent())) {
-            languageController.editLanguage((Language) getSelectedItem());
-        } else if (ICountriesService.DATA_TYPE.equals(getContent())) {
-            countryController.editCountry((Country) getSelectedItem());
-        } else if (IBorrowersService.DATA_TYPE.equals(getContent())) {
-            borrowerController.editBorrower((Person) getSelectedItem());
-        } else if (IEditorsService.DATA_TYPE.equals(getContent())) {
+        if(execute(getSelectedItem(), getContent())){
+            return;
+        }
+
+        if (IEditorsService.DATA_TYPE.equals(getContent())) {
             editorController.editEditor((Editor) getSelectedItem());
-        } else if (ISagasService.DATA_TYPE.equals(getContent())) {
-            sagaController.editSaga((Saga) getSelectedItem());
         }
     }
 }

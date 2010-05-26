@@ -17,46 +17,22 @@ package org.jtheque.books.view.models.list;
  */
 
 import org.jtheque.books.services.able.IBookAutoService;
-import org.jtheque.core.managers.Managers;
-import org.jtheque.core.managers.beans.IBeansManager;
-
-import javax.annotation.Resource;
-import javax.swing.DefaultListModel;
+import org.jtheque.ui.utils.models.SimpleListModel;
 
 /**
  * A list model for languages.
  *
  * @author Baptiste Wicht
  */
-public final class LanguagesListModel extends DefaultListModel {
-    private final String[] languages;
-
-    @Resource
-    private IBookAutoService bookAutoService;
-
+public final class LanguagesListModel extends SimpleListModel<String> {
     /**
      * Construct a new LanguagesListModel.
      */
     public LanguagesListModel() {
         super();
 
-        Managers.getManager(IBeansManager.class).inject(this);
+        IBookAutoService bookAutoService = CoreUtils.getBean("bookAutoService");
 
-        languages = bookAutoService.getLanguages();
-    }
-
-    @Override
-    public Object getElementAt(int index) {
-        return languages[index];
-    }
-
-    @Override
-    public Object get(int index) {
-        return languages[index];
-    }
-
-    @Override
-    public int getSize() {
-        return languages.length;
+        setElements(bookAutoService.getLanguages());
     }
 }

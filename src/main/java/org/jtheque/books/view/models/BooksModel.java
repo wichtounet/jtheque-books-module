@@ -17,6 +17,7 @@ package org.jtheque.books.view.models;
  */
 
 import org.jtheque.books.persistence.od.able.Book;
+import org.jtheque.books.services.able.IAuthorsService;
 import org.jtheque.books.services.able.IBooksService;
 import org.jtheque.books.view.models.able.IBooksModel;
 import org.jtheque.core.managers.Managers;
@@ -34,46 +35,18 @@ import java.util.Collection;
 public final class BooksModel extends PrincipalDataModel<Book> implements IBooksModel {
     private Book currentBook;
 
-    private Collection<Book> displayList;
-
-    private final IBooksService booksService;
-
     public BooksModel() {
         super();
 
-        booksService = Managers.getManager(IBeansManager.class).getBean("booksService");
-        booksService.addDataListener(this);
+        Managers.getManager(IBeansManager.class).<IBooksService>getBean("booksService").addDataListener(this);
     }
 
-    @Override
-    @SuppressWarnings("unchecked")
-    public void updateDisplayList(Collection<Book> books) {
-        displayList.clear();
+	@Override
+	public Collection<Book> getDatas(){
+		return Managers.getManager(IBeansManager.class).<IBooksService>getBean("booksService").getDatas();
+	}
 
-        if (books == null) {
-            displayList.addAll(booksService.getBooks());
-        } else {
-            displayList.addAll(books);
-        }
-
-        fireDisplayListChanged();
-    }
-
-    @Override
-    protected void updateDisplayList() {
-        updateDisplayList(null);
-    }
-
-    @Override
-    public Collection<Book> getDisplayList() {
-        if (displayList == null) {
-            displayList= booksService.getBooks();
-        }
-
-        return displayList;
-    }
-
-    @Override
+	@Override
     public Book getCurrentBook() {
         return currentBook;
     }

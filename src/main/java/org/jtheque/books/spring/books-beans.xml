@@ -36,7 +36,6 @@
     </bean>
 
     <import resource="books-views.xml"/>
-    <import resource="books-actions.xml"/>
 
     <!-- Services -->
 
@@ -44,7 +43,6 @@
     <bean id="bookAutoService" class="org.jtheque.books.services.impl.BookAutoService"/>
     <bean id="booksService" class="org.jtheque.books.services.impl.BooksService"/>
     <bean id="editorsService" class="org.jtheque.books.services.impl.EditorsService"/>
-    <bean id="bookNotesService" class="org.jtheque.books.services.impl.NotesService"/>
 
     <!-- Controllers -->
 

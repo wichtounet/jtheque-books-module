@@ -17,7 +17,7 @@ package org.jtheque.books.persistence.od.impl;
  */
 
 import org.jtheque.books.persistence.od.able.Editor;
-import org.jtheque.books.persistence.od.impl.abstraction.AbstractEditor;
+import org.jtheque.primary.od.impl.abstraction.AbstractData;
 import org.jtheque.utils.Constants;
 
 /**
@@ -25,15 +25,27 @@ import org.jtheque.utils.Constants;
  *
  * @author Baptiste Wicht
  */
-public final class EditorImpl extends AbstractEditor {
+public final class EditorImpl extends AbstractData implements Editor {
+    private String name;
+
+    @Override
+    public String getName() {
+        return name;
+    }
+
+    @Override
+    public void setName(String name) {
+        this.name = name;
+    }
+
     @Override
     public String getDisplayableText() {
-        return getName();
+        return name;
     }
 
     @Override
     public String toString() {
-        return getDisplayableText();
+        return name;
     }
 
     @Override
@@ -41,7 +53,7 @@ public final class EditorImpl extends AbstractEditor {
         int result = Constants.HASH_CODE_START;
 
         result = Constants.HASH_CODE_PRIME * result + getId();
-        result = Constants.HASH_CODE_PRIME * result + (getName() == null ? 0 : getName().hashCode());
+        result = Constants.HASH_CODE_PRIME * result + (name == null ? 0 : name.hashCode());
 
         return result;
     }
@@ -62,12 +74,11 @@ public final class EditorImpl extends AbstractEditor {
 
         final Editor other = (Editor) obj;
 
-
-        if (getName() == null) {
+        if (name == null) {
             if (other.getName() != null) {
                 return false;
             }
-        } else if (!getName().equals(other.getName())) {
+        } else if (!name.equals(other.getName())) {
             return false;
         }
 

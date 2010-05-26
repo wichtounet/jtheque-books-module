@@ -16,7 +16,7 @@ package org.jtheque.books.view.able;
  * along with JTheque.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import org.jtheque.books.view.fb.IBookFormBean;
+import org.jtheque.books.view.able.fb.IBookFormBean;
 import org.jtheque.core.managers.view.able.components.TabComponent;
 import org.jtheque.primary.view.able.PrincipalDataView;
 import org.jtheque.primary.view.impl.listeners.CurrentObjectListener;

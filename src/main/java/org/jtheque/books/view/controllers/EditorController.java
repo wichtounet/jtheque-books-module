@@ -20,10 +20,10 @@ import org.jtheque.books.persistence.od.able.Editor;
 import org.jtheque.books.services.able.IEditorsService;
 import org.jtheque.books.view.able.IEditorView;
 import org.jtheque.books.view.controllers.able.IEditorController;
-import org.jtheque.books.view.controllers.undo.create.CreatedEditorEdit;
 import org.jtheque.core.managers.Managers;
 import org.jtheque.core.managers.undo.IUndoRedoManager;
 import org.jtheque.core.managers.view.able.controller.AbstractController;
+import org.jtheque.primary.controller.impl.undo.GenericDataCreatedEdit;
 import org.jtheque.primary.view.able.ViewMode;
 
 import javax.annotation.Resource;
@@ -76,7 +76,8 @@ public final class EditorController extends AbstractController implements IEdito
         if (state == ViewMode.NEW) {
             editorsService.create(currentEditor);
 
-            Managers.getManager(IUndoRedoManager.class).addEdit(new CreatedEditorEdit(currentEditor));
+            Managers.getManager(IUndoRedoManager.class).addEdit(
+                    new GenericDataCreatedEdit<Editor>("editorsService", currentEditor));
         } else {
             editorsService.save(currentEditor);
         }

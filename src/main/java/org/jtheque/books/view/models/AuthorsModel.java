@@ -34,51 +34,18 @@ import java.util.Collection;
 public final class AuthorsModel extends PrincipalDataModel<Person> implements IAuthorsModel {
     private Person currentAuthor;
 
-    private Collection<Person> displayList;
-
-    private final IAuthorsService authorsService;
-
     public AuthorsModel() {
         super();
 
-        authorsService = Managers.getManager(IBeansManager.class).getBean("authorsService");
-        authorsService.addDataListener(this);
+        Managers.getManager(IBeansManager.class).<IAuthorsService>getBean("authorsService").addDataListener(this);
     }
 
-    @Override
-    @SuppressWarnings("unchecked")
-    public void updateDisplayList(Collection<Person> datas) {
-        displayList.clear();
+	@Override
+	public Collection<Person> getDatas(){
+		return Managers.getManager(IBeansManager.class).<IAuthorsService>getBean("authorsService").getDatas();
+	}
 
-        if (datas == null) {
-            displayList.addAll(authorsService.getAuthors());
-        } else {
-            displayList.addAll(datas);
-        }
-
-        fireDisplayListChanged();
-    }
-
-    @Override
-    protected void updateDisplayList() {
-        updateDisplayList(null);
-    }
-
-    /**
-     * Return the display list.
-     *
-     * @return The display list
-     */
-    @Override
-    public Collection<Person> getDisplayList() {
-        if (displayList == null) {
-            displayList = authorsService.getAuthors();
-        }
-
-        return displayList;
-    }
-
-    @Override
+	@Override
     public Person getCurrentAuthor() {
         return currentAuthor;
     }

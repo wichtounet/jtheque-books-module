@@ -18,12 +18,10 @@ package org.jtheque.books.view.fb;
 
 import org.jtheque.books.persistence.od.able.Book;
 import org.jtheque.books.persistence.od.able.Editor;
+import org.jtheque.books.view.able.fb.IBookFormBean;
 import org.jtheque.core.utils.db.Note;
-import org.jtheque.primary.od.able.Kind;
-import org.jtheque.primary.od.able.Language;
 import org.jtheque.primary.od.able.Person;
-import org.jtheque.primary.od.able.Saga;
-import org.jtheque.primary.od.able.Type;
+import org.jtheque.primary.od.able.SimpleData;
 import org.jtheque.utils.collections.CollectionUtils;
 
 import java.util.ArrayList;
@@ -73,12 +71,12 @@ public final class BookFormBean implements IBookFormBean {
     /**
      * The kind of book.
      */
-    private Kind theKind;
+    private SimpleData theKind;
 
     /**
      * The type of book.
      */
-    private Type theType;
+    private SimpleData theType;
 
     /**
      * The note.
@@ -93,12 +91,12 @@ public final class BookFormBean implements IBookFormBean {
     /**
      * The language.
      */
-    private Language theLanguage;
+    private SimpleData theLanguage;
 
     /**
      * The saga.
      */
-    private Saga theSaga;
+    private SimpleData theSaga;
 
 
     @Override
@@ -137,12 +135,12 @@ public final class BookFormBean implements IBookFormBean {
     }
 
     @Override
-    public void setTheKind(Kind theKind) {
+    public void setTheKind(SimpleData theKind) {
         this.theKind = theKind;
     }
 
     @Override
-    public void setTheType(Type theType) {
+    public void setTheType(SimpleData theType) {
         this.theType = theType;
     }
 
@@ -152,7 +150,7 @@ public final class BookFormBean implements IBookFormBean {
     }
 
     @Override
-    public void setTheLanguage(Language theLanguage) {
+    public void setTheLanguage(SimpleData theLanguage) {
         this.theLanguage = theLanguage;
     }
 
@@ -162,7 +160,7 @@ public final class BookFormBean implements IBookFormBean {
     }
 
     @Override
-    public void setTheSaga(Saga theSaga) {
+    public void setTheSaga(SimpleData theSaga) {
         this.theSaga = theSaga;
     }
 

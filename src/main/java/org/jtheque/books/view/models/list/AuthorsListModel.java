@@ -20,23 +20,19 @@ import org.jtheque.books.services.able.IAuthorsService;
 import org.jtheque.core.managers.Managers;
 import org.jtheque.core.managers.beans.IBeansManager;
 import org.jtheque.core.managers.persistence.able.DataListener;
+import org.jtheque.core.managers.view.impl.components.model.SimpleListModel;
 import org.jtheque.primary.od.able.Person;
 
 import javax.annotation.Resource;
-import javax.swing.DefaultListModel;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * A list model for authors.
  *
  * @author Baptiste Wicht
  */
-public final class AuthorsListModel extends DefaultListModel implements DataListener {
+public final class AuthorsListModel extends SimpleListModel<Person> implements DataListener {
     @Resource
     private IAuthorsService authorsService;
-
-    private List<Person> authors;
 
     /**
      * Construct a new AuthorsListModel.
@@ -47,70 +43,19 @@ public final class AuthorsListModel extends DefaultListModel implements DataList
         Managers.getManager(IBeansManager.class).inject(this);
 
         authorsService.addDataListener(this);
-        authors = new ArrayList<Person>(authorsService.getAuthors());
-    }
 
-    @Override
-    public Object getElementAt(int index) {
-        return authors.get(index);
-    }
-
-    @Override
-    public Object get(int index) {
-        return authors.get(index);
-    }
-
-    @Override
-    public int getSize() {
-        return authors.size();
-    }
-
-    @Override
-    public Object remove(int i) {
-        Person actor = authors.remove(i);
-        fireIntervalRemoved(this, i, i);
-        return actor;
-    }
-
-    @Override
-    public void addElement(Object obj) {
-        authors.add((Person) obj);
-        fireIntervalAdded(this, getSize(), getSize());
-    }
-
-    @Override
-    public void removeAllElements() {
-        authors.clear();
-        fireContentsChanged(this, 0, getSize());
-    }
-
-    @Override
-    public boolean removeElement(Object obj) {
-        Person author = (Person) obj;
-
-        int index = authors.indexOf(author);
-        boolean remove = authors.remove(author);
-        fireIntervalRemoved(this, index, index);
-        return remove;
+        setElements(authorsService.getPersons());
     }
 
     @Override
     public void dataChanged() {
-        update();
+        setElements(authorsService.getPersons());
     }
 
     /**
      * Reload the model.
      */
     public void reload() {
-        update();
-    }
-
-    /**
-     * Update the list model.
-     */
-    private void update() {
-        authors = new ArrayList<Person>(authorsService.getAuthors());
-        fireContentsChanged(this, 0, getSize());
+        setElements(authorsService.getPersons());
     }
 }

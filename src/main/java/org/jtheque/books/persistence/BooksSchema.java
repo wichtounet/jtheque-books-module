@@ -24,12 +24,9 @@ import org.jtheque.core.managers.beans.IBeansManager;
 import org.jtheque.core.managers.schema.AbstractSchema;
 import org.jtheque.core.managers.schema.HSQLImporter;
 import org.jtheque.core.managers.schema.Insert;
-import org.jtheque.primary.dao.able.IDaoKinds;
-import org.jtheque.primary.dao.able.IDaoLanguages;
 import org.jtheque.primary.dao.able.IDaoLendings;
 import org.jtheque.primary.dao.able.IDaoPersons;
-import org.jtheque.primary.dao.able.IDaoSagas;
-import org.jtheque.primary.dao.able.IDaoTypes;
+import org.jtheque.primary.od.able.SimpleData;
 import org.jtheque.utils.bean.Version;
 import org.springframework.jdbc.core.simple.ParameterizedRowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcTemplate;
@@ -105,11 +102,11 @@ public final class BooksSchema extends AbstractSchema {
         jdbcTemplate.update("ALTER TABLE " + IDaoBooks.BOOKS_AUTHOR_TABLE + " ADD FOREIGN KEY (THE_BOOK_FK) REFERENCES  " + IDaoBooks.TABLE + "  (ID) ON UPDATE SET NULL");
         jdbcTemplate.update("ALTER TABLE " + IDaoBooks.BOOKS_AUTHOR_TABLE + " ADD FOREIGN KEY (THE_AUTHOR_FK) REFERENCES  " + IDaoPersons.TABLE + "  (ID) ON UPDATE SET NULL");
 
-        jdbcTemplate.update("ALTER TABLE " + IDaoBooks.TABLE + " ADD FOREIGN KEY (THE_KIND_FK) REFERENCES  " + IDaoKinds.TABLE + "  (ID) ON UPDATE SET NULL");
-        jdbcTemplate.update("ALTER TABLE " + IDaoBooks.TABLE + " ADD FOREIGN KEY (THE_LANGUAGE_FK) REFERENCES  " + IDaoLanguages.TABLE + "  (ID) ON UPDATE SET NULL");
+        jdbcTemplate.update("ALTER TABLE " + IDaoBooks.TABLE + " ADD FOREIGN KEY (THE_KIND_FK) REFERENCES  " + SimpleData.DataType.KIND.getTable() + "  (ID) ON UPDATE SET NULL");
+        jdbcTemplate.update("ALTER TABLE " + IDaoBooks.TABLE + " ADD FOREIGN KEY (THE_LANGUAGE_FK) REFERENCES  " + SimpleData.DataType.LANGUAGE.getTable() + "  (ID) ON UPDATE SET NULL");
         jdbcTemplate.update("ALTER TABLE " + IDaoBooks.TABLE + " ADD FOREIGN KEY (THE_LENDING_FK) REFERENCES  " + IDaoLendings.TABLE + "  (ID) ON UPDATE SET NULL");
-        jdbcTemplate.update("ALTER TABLE " + IDaoBooks.TABLE + " ADD FOREIGN KEY (THE_SAGA_FK) REFERENCES  " + IDaoSagas.TABLE + "  (ID) ON UPDATE SET NULL");
-        jdbcTemplate.update("ALTER TABLE " + IDaoBooks.TABLE + " ADD FOREIGN KEY (THE_TYPE_FK) REFERENCES  " + IDaoTypes.TABLE + "  (ID) ON UPDATE SET NULL");
+        jdbcTemplate.update("ALTER TABLE " + IDaoBooks.TABLE + " ADD FOREIGN KEY (THE_SAGA_FK) REFERENCES  " + SimpleData.DataType.SAGA.getTable() + "  (ID) ON UPDATE SET NULL");
+        jdbcTemplate.update("ALTER TABLE " + IDaoBooks.TABLE + " ADD FOREIGN KEY (THE_TYPE_FK) REFERENCES  " + SimpleData.DataType.TYPE.getTable() + "  (ID) ON UPDATE SET NULL");
         jdbcTemplate.update("ALTER TABLE " + IDaoBooks.TABLE + " ADD FOREIGN KEY (THE_EDITOR_FK) REFERENCES  " + IDaoEditors.TABLE + "  (ID) ON UPDATE SET NULL");
     }
 
@@ -133,7 +130,7 @@ public final class BooksSchema extends AbstractSchema {
      *
      * @author Baptiste Wicht
      */
-    private static final class AuthorRowMapper implements ParameterizedRowMapper<Object[]> {
+    private static final class AuthorRowMapper implements RowMapper<Object[]> {
         @Override
         public Object[] mapRow(ResultSet rs, int i) throws SQLException {
             Object[] author = new Object[4];
@@ -151,9 +148,9 @@ public final class BooksSchema extends AbstractSchema {
     public void importDataFromHSQL(Iterable<Insert> inserts) {
         HSQLImporter importer = new HSQLImporter();
 
-        importer.match("OD_SAGA", "INSERT INTO " + IDaoSagas.TABLE + " (ID, NAME, IMPL) VALUES (?,?,?)", "Books", 0, 2);
-        importer.match("OD_KIND_BOOK", "INSERT INTO " + IDaoKinds.TABLE + " (ID, NAME, IMPL) VALUES (?,?,?)", "Books", 0, 2);
-        importer.match("OD_TYPE_BOOK", "INSERT INTO " + IDaoTypes.TABLE + " (ID, NAME, IMPL) VALUES (?,?,?)", "Books", 0, 2);
+        importer.match("OD_SAGA", "INSERT INTO " + SimpleData.DataType.SAGA.getTable() + " (ID, NAME, IMPL) VALUES (?,?,?)", "Books", 0, 2);
+        importer.match("OD_KIND_BOOK", "INSERT INTO " + SimpleData.DataType.KIND.getTable() + " (ID, NAME, IMPL) VALUES (?,?,?)", "Books", 0, 2);
+        importer.match("OD_TYPE_BOOK", "INSERT INTO " + SimpleData.DataType.TYPE.getTable() + " (ID, NAME, IMPL) VALUES (?,?,?)", "Books", 0, 2);
         importer.match("OD_LENDING_BOOK", "INSERT INTO " + IDaoLendings.TABLE + " (ID, DATE, THE_BORROWER_FK, IMPL) VALUES (?,?,?,?)", "Books", 0, 2, 3);
         importer.match("OD_EDITOR", "INSERT INTO " + IDaoEditors.TABLE + " (ID, NAME) VALUES (?,?)", 0, 2);
         importer.match("OD_AUTHOR", "INSERT INTO " + IDaoPersons.TABLE + " (ID, NAME, FIRST_NAME, NOTE, THE_COUNTRY_FK, TYPE) VALUES (?,?,?,?,?)", IAuthorsService.PERSON_TYPE, 0, 3, 2, 4, 5);

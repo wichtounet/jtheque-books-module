@@ -1,13 +1,10 @@
 package org.jtheque.books.persistence.od.able;
 
 import org.jtheque.primary.od.able.Data;
-import org.jtheque.primary.od.able.Kind;
-import org.jtheque.primary.od.able.Language;
 import org.jtheque.primary.od.able.Lending;
 import org.jtheque.primary.od.able.Notable;
 import org.jtheque.primary.od.able.Person;
-import org.jtheque.primary.od.able.Saga;
-import org.jtheque.primary.od.able.Type;
+import org.jtheque.primary.od.able.SimpleData;
 
 import java.util.Collection;
 
@@ -113,42 +110,42 @@ public interface Book extends Data, Notable {
      *
      * @return The kind of the book.
      */
-    Kind getTheKind();
+    SimpleData getTheKind();
 
     /**
      * Set the kind of the book.
      *
      * @param theKind The kind of the book.
      */
-    void setTheKind(Kind theKind);
+    void setTheKind(SimpleData theKind);
 
     /**
      * Return the the type of the book.
      *
      * @return The type of the book.
      */
-    Type getTheType();
+    SimpleData getTheType();
 
     /**
      * Set the type of the book.
      *
      * @param theType The type of the book.
      */
-    void setTheType(Type theType);
+    void setTheType(SimpleData theType);
 
     /**
      * Return the language of the book.
      *
      * @return The language of the book.
      */
-    Language getTheLanguage();
+    SimpleData getTheLanguage();
 
     /**
      * Set the language of the of the book.
      *
      * @param theLanguage The language of the book.
      */
-    void setTheLanguage(Language theLanguage);
+    void setTheLanguage(SimpleData theLanguage);
 
     /**
      * Return the editor of the book.
@@ -183,14 +180,14 @@ public interface Book extends Data, Notable {
      *
      * @return The saga of the book.
      */
-    Saga getTheSaga();
+    SimpleData getTheSaga();
 
     /**
      * Set the saga of the book.
      *
      * @param theSaga The saga of the book.
      */
-    void setTheSaga(Saga theSaga);
+    void setTheSaga(SimpleData theSaga);
 
     /**
      * Add author to the book.

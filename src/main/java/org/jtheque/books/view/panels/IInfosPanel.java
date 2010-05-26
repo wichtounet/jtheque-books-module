@@ -1,6 +1,6 @@
 package org.jtheque.books.view.panels;
 
-import org.jtheque.books.view.fb.IBookFormBean;
+import org.jtheque.books.view.able.fb.IBookFormBean;
 import org.jtheque.core.managers.error.JThequeError;
 import org.jtheque.primary.view.impl.listeners.CurrentObjectListener;
 

@@ -48,7 +48,7 @@ public final class AcDeleteAuthor extends JThequeAction {
                 Managers.getManager(ILanguageManager.class).getMessage("author.dialogs.confirmDelete.title"));
 
         if (yes) {
-            Managers.getManager(IBeansManager.class).<IAuthorController>getBean("authorController").deleteCurrentAuthor();
+            Managers.getManager(IBeansManager.class).<IAuthorController>getBean("authorController").deleteCurrent();
         }
     }
 }

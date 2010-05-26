@@ -17,9 +17,8 @@ package org.jtheque.books.view.sort;
  */
 
 import org.jtheque.books.services.able.IAuthorsService;
-import org.jtheque.primary.od.able.Country;
 import org.jtheque.primary.od.able.Person;
-import org.jtheque.primary.services.able.ICountriesService;
+import org.jtheque.primary.od.able.SimpleData;
 import org.jtheque.primary.view.impl.models.tree.Category;
 import org.jtheque.primary.view.impl.models.tree.JThequeTreeModel;
 import org.jtheque.primary.view.impl.models.tree.TreeElement;
@@ -40,18 +39,18 @@ public final class ByCountrySorter implements Sorter {
 
     @Override
     public boolean canSort(String content, String sortType) {
-        return content.equals(IAuthorsService.DATA_TYPE) && sortType.equals(ICountriesService.DATA_TYPE);
+        return content.equals(IAuthorsService.DATA_TYPE) && sortType.equals(SimpleData.DataType.COUNTRY.getDataType());
     }
 
     @Override
     public void sort(JThequeTreeModel model) {
         TreeElement root = model.getRoot();
 
-        Map<Country, Category> groups = new HashMap<Country, Category>(authorsService.getNumberOfAuthors() / 4);
-        Iterable<Person> authors = authorsService.getAuthors();
+        Map<SimpleData, Category> groups = new HashMap<SimpleData, Category>(authorsService.getNumberOfAuthors() / 4);
+        Iterable<Person> authors = authorsService.getPersons();
 
         for (Person author : authors) {
-            Country country = author.getTheCountry();
+            SimpleData country = author.getTheCountry();
 
             if (!groups.containsKey(country)) {
                 Category category = new Category(country.getDisplayableText());

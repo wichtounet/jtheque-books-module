@@ -28,13 +28,11 @@ import org.jtheque.core.managers.persistence.able.Entity;
 import org.jtheque.core.managers.persistence.context.IDaoPersistenceContext;
 import org.jtheque.core.utils.db.DaoNotes;
 import org.jtheque.core.utils.db.DaoNotes.NoteType;
-import org.jtheque.primary.dao.able.IDaoKinds;
-import org.jtheque.primary.dao.able.IDaoLanguages;
 import org.jtheque.primary.dao.able.IDaoLendings;
 import org.jtheque.primary.dao.able.IDaoPersons;
-import org.jtheque.primary.dao.able.IDaoSagas;
-import org.jtheque.primary.dao.able.IDaoTypes;
+import org.jtheque.primary.dao.able.IDaoSimpleDatas;
 import org.jtheque.primary.od.able.Person;
+import org.jtheque.utils.StringUtils;
 import org.springframework.jdbc.core.simple.ParameterizedRowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcTemplate;
 
@@ -62,25 +60,25 @@ public final class DaoBooks extends GenericDao<Book> implements IDaoBooks {
     private SimpleJdbcTemplate jdbcTemplate;
 
     @Resource
-    private IDaoSagas daoSagas;
+    private IDaoSimpleDatas daoSagas;
 
     @Resource
     private IDaoEditors daoEditors;
 
     @Resource
-    private IDaoTypes daoTypes;
+    private IDaoSimpleDatas daoTypes;
 
     @Resource
     private IDaoPersons daoPersons;
 
     @Resource
-    private IDaoLanguages daoLanguages;
+    private IDaoSimpleDatas daoLanguages;
 
     @Resource
     private IDaoLendings daoLendings;
 
     @Resource
-    private IDaoKinds daoKinds;
+    private IDaoSimpleDatas daoKinds;
 
     /**
      * Construct a new DaoBooks.
@@ -198,18 +196,21 @@ public final class DaoBooks extends GenericDao<Book> implements IDaoBooks {
 
             book.setId(rs.getInt("ID"));
             book.setTitle(rs.getString("TITLE"));
-            book.setNote(DaoNotes.getInstance().getNote(NoteType.getEnum(rs.getInt("NOTE"))));
             book.setPages(rs.getInt("PAGES_NUMBER"));
             book.setResume(rs.getString("RESUME"));
             book.setIsbn10(rs.getString("ISBN10"));
             book.setIsbn13(rs.getString("ISBN13"));
             book.setYear(rs.getInt("YEAR"));
             book.setTheEditor(daoEditors.getEditor(rs.getInt("THE_EDITOR_FK")));
-            book.setTheSaga(daoSagas.getSaga(rs.getInt("THE_SAGA_FK")));
-            book.setTheType(daoTypes.getType(rs.getInt("THE_TYPE_FK")));
+            book.setTheSaga(daoSagas.getSimpleData(rs.getInt("THE_SAGA_FK")));
+            book.setTheType(daoTypes.getSimpleData(rs.getInt("THE_TYPE_FK")));
             book.setTheLending(daoLendings.getLending(rs.getInt("THE_LENDING_FK")));
-            book.setTheKind(daoKinds.getKind(rs.getInt("THE_KIND_FK")));
-            book.setTheLanguage(daoLanguages.getLanguage(rs.getInt("THE_LANGUAGE_FK")));
+            book.setTheKind(daoKinds.getSimpleData(rs.getInt("THE_KIND_FK")));
+            book.setTheLanguage(daoLanguages.getSimpleData(rs.getInt("THE_LANGUAGE_FK")));
+
+			if (StringUtils.isNotEmpty(rs.getString("NOTE"))){
+				book.setNote(DaoNotes.getInstance().getNote(DaoNotes.NoteType.getEnum(rs.getInt("NOTE"))));
+			}
 
             mapRelations(book);
 
@@ -255,7 +256,7 @@ public final class DaoBooks extends GenericDao<Book> implements IDaoBooks {
 
             Object[] parameters = {
                     book.getTitle(),
-                    book.getNote().getValue().intValue(),
+                    book.getNote() == null ? 0 : book.getNote().getValue().intValue(),
                     book.getPages(),
                     book.getResume(),
                     book.getIsbn10(),
@@ -281,7 +282,7 @@ public final class DaoBooks extends GenericDao<Book> implements IDaoBooks {
 
             Object[] parameters = {
                     book.getTitle(),
-                    book.getNote().getValue().intValue(),
+                    book.getNote() == null ? 0 : book.getNote().getValue().intValue(),
                     book.getPages(),
                     book.getResume(),
                     book.getIsbn10(),

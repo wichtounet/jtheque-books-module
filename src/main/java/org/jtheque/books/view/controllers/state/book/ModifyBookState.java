@@ -19,13 +19,14 @@ package org.jtheque.books.view.controllers.state.book;
 import org.jtheque.books.persistence.od.able.Book;
 import org.jtheque.books.services.able.IBooksService;
 import org.jtheque.books.view.controllers.able.IBookController;
-import org.jtheque.books.view.fb.IBookFormBean;
+import org.jtheque.books.view.able.fb.IBookFormBean;
 import org.jtheque.books.view.models.able.IBooksModel;
 import org.jtheque.core.managers.Managers;
 import org.jtheque.core.managers.language.ILanguageManager;
 import org.jtheque.core.managers.view.able.IViewManager;
 import org.jtheque.primary.controller.able.ControllerState;
 import org.jtheque.primary.controller.able.FormBean;
+import org.jtheque.primary.controller.impl.AbstractControllerState;
 import org.jtheque.primary.od.able.Data;
 import org.jtheque.primary.view.able.ViewMode;
 
@@ -36,7 +37,7 @@ import javax.annotation.Resource;
  *
  * @author Baptiste Wicht
  */
-public final class ModifyBookState implements ControllerState {
+public final class ModifyBookState extends AbstractControllerState {
     @Resource
     private IBookController controller;
 
@@ -61,48 +62,10 @@ public final class ModifyBookState implements ControllerState {
     }
 
     @Override
-    public ControllerState autoEdit(Data data) {
-        Book book = (Book) data;
-
-        if (Managers.getManager(IViewManager.class).askUserForConfirmation(
-                Managers.getManager(ILanguageManager.class).getMessage("book.dialogs.confirmSave"),
-                Managers.getManager(ILanguageManager.class).getMessage("book.dialogs.confirmSave.title"))) {
-            controller.save();
-        } else {
-            getViewModel().getCurrentBook().restoreMemento();
-        }
-
-        getViewModel().setCurrentBook(book);
-
-        return controller.getAutoAddState();
-    }
-
-    @Override
     public ControllerState cancel() {
         getViewModel().getCurrentBook().restoreMemento();
 
         return controller.getViewState();
-    }
-
-    @Override
-    public ControllerState create() {
-        //Do nothing
-
-        return null;
-    }
-
-    @Override
-    public ControllerState manualEdit() {
-        //Do nothing
-
-        return null;
-    }
-
-    @Override
-    public ControllerState delete() {
-        //Do nothing
-
-        return null;
     }
 
     @Override

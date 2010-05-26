@@ -22,8 +22,6 @@ import org.jdesktop.swingx.border.DropShadowBorder;
 import org.jtheque.books.services.able.IAuthorsService;
 import org.jtheque.books.view.able.IAuthorView;
 import org.jtheque.books.view.actions.AcSortAuthors;
-import org.jtheque.books.view.fb.AuthorFormBean;
-import org.jtheque.books.view.fb.IAuthorFormBean;
 import org.jtheque.books.view.models.AuthorsModel;
 import org.jtheque.books.view.models.able.IAuthorsModel;
 import org.jtheque.books.view.toolbar.JPanelAuthorToolBar;
@@ -32,13 +30,17 @@ import org.jtheque.core.managers.beans.IBeansManager;
 import org.jtheque.core.managers.error.JThequeError;
 import org.jtheque.core.managers.persistence.able.DataContainer;
 import org.jtheque.core.managers.resource.IResourceManager;
-import org.jtheque.core.utils.ui.PanelBuilder;
+import org.jtheque.core.utils.ui.builders.I18nPanelBuilder;
+import org.jtheque.core.utils.ui.builders.JThequePanelBuilder;
 import org.jtheque.core.utils.ui.ValidationUtils;
+import org.jtheque.core.utils.ui.builders.PanelBuilder;
 import org.jtheque.primary.controller.able.FormBean;
-import org.jtheque.primary.od.able.Country;
 import org.jtheque.primary.od.able.Person;
-import org.jtheque.primary.services.able.ICountriesService;
+import org.jtheque.primary.od.able.SimpleData;
+import org.jtheque.primary.view.able.fb.IPersonFormBean;
+import org.jtheque.primary.view.impl.components.panels.AbstractPrincipalDataPanel;
 import org.jtheque.primary.view.impl.components.panels.JThequeTitledPanel;
+import org.jtheque.primary.view.impl.fb.PersonFormBean;
 import org.jtheque.primary.view.impl.listeners.ObjectChangedEvent;
 import org.jtheque.primary.view.impl.models.DataContainerCachedComboBoxModel;
 import org.jtheque.primary.view.impl.models.NotesComboBoxModel;
@@ -59,7 +61,7 @@ import java.util.Collection;
  *
  * @author Baptiste Wicht
  */
-public final class AuthorView extends AbstractPrincipalDelegatedView implements IAuthorView {
+public final class AuthorView extends AbstractPrincipalDelegatedView<AbstractPrincipalDataPanel<IAuthorsModel>> implements IAuthorView {
     private static final int NAMES_LIMIT = 80;
     private static final double A_QUARTER = 0.25;
 
@@ -99,8 +101,8 @@ public final class AuthorView extends AbstractPrincipalDelegatedView implements 
      * @return The filled <code>AuthorFormBean</code>.
      */
     @Override
-    public IAuthorFormBean fillFilmFormBean() {
-        IAuthorFormBean fb = new AuthorFormBean();
+    public IPersonFormBean fillFilmFormBean() {
+        IPersonFormBean fb = new PersonFormBean();
 
         getImplementationView().fillFormBean(fb);
 
@@ -117,7 +119,7 @@ public final class AuthorView extends AbstractPrincipalDelegatedView implements 
 
         private JTextField fieldFirstName;
         private JTextField fieldName;
-        private DataContainerCachedComboBoxModel<Country> countriesModel;
+        private DataContainerCachedComboBoxModel<SimpleData> countriesModel;
         private NotesComboBoxModel notesModel;
 
         private JComboBox comboCountries;
@@ -137,7 +139,7 @@ public final class AuthorView extends AbstractPrincipalDelegatedView implements 
         private void build() {
             getModel().addDisplayListListener(this);
 
-            PanelBuilder builder = new PanelBuilder(this);
+            PanelBuilder builder = new JThequePanelBuilder(this);
 
             buildListPanel(builder);
             buildSortPanel(builder);
@@ -156,7 +158,7 @@ public final class AuthorView extends AbstractPrincipalDelegatedView implements 
             panelList.setBorder(new DropShadowBorder());
             panelList.setTitleFont(panelList.getTitleFont().deriveFont(Font.BOLD));
 
-            PanelBuilder builder = new PanelBuilder();
+            PanelBuilder builder = new JThequePanelBuilder();
 
             setTreeModel(getSorter().createInitialModel(IAuthorsService.DATA_TYPE));
 
@@ -179,9 +181,9 @@ public final class AuthorView extends AbstractPrincipalDelegatedView implements 
             panelTri.setBorder(new DropShadowBorder());
             panelTri.setTitleFont(panelTri.getTitleFont().deriveFont(Font.BOLD));
 
-            PanelBuilder builder = new PanelBuilder();
+            PanelBuilder builder = new JThequePanelBuilder();
 
-            addSortAction(builder, 0, "author.actions.sort.country", ICountriesService.DATA_TYPE);
+            addSortAction(builder, 0, "author.actions.sort.country", SimpleData.DataType.COUNTRY.getDataType());
             addSortAction(builder, 1, "author.actions.sort.note", "Notes");
 
             panelTri.setContentContainer(builder.getPanel());
@@ -205,7 +207,7 @@ public final class AuthorView extends AbstractPrincipalDelegatedView implements 
             authorsPanel.setBorder(new DropShadowBorder());
             authorsPanel.setTitleFont(authorsPanel.getTitleFont().deriveFont(Font.BOLD));
 
-            PanelBuilder builder = new PanelBuilder();
+            I18nPanelBuilder builder = new JThequePanelBuilder();
 
             JPanelAuthorToolBar toolBar = new JPanelAuthorToolBar();
 
@@ -228,7 +230,7 @@ public final class AuthorView extends AbstractPrincipalDelegatedView implements 
          *
          * @param builder The builder to use.
          */
-        private void addFirstNameField(PanelBuilder builder) {
+        private void addFirstNameField(I18nPanelBuilder builder) {
             builder.addI18nLabel("author.firstname", builder.gbcSet(0, 1));
 
             fieldFirstName = builder.add(new JTextField(10),
@@ -242,7 +244,7 @@ public final class AuthorView extends AbstractPrincipalDelegatedView implements 
          *
          * @param builder The builder to use.
          */
-        private void addNameField(PanelBuilder builder) {
+        private void addNameField(I18nPanelBuilder builder) {
             builder.addI18nLabel("author.name", builder.gbcSet(0, 2));
 
             fieldName = builder.add(new JTextField(10),
@@ -256,11 +258,11 @@ public final class AuthorView extends AbstractPrincipalDelegatedView implements 
          *
          * @param builder The builder to use.
          */
-        private void addCountryField(PanelBuilder builder) {
+        private void addCountryField(I18nPanelBuilder builder) {
             builder.addI18nLabel("author.country", builder.gbcSet(0, 3));
 
-            countriesModel = new DataContainerCachedComboBoxModel<Country>(
-                    Managers.getManager(IBeansManager.class).<DataContainer<Country>>getBean("countriesService"));
+            countriesModel = new DataContainerCachedComboBoxModel<SimpleData>(
+                    Managers.getManager(IBeansManager.class).<DataContainer<SimpleData>>getBean("countriesService"));
 
             comboCountries = builder.addComboBox(countriesModel, builder.gbcSet(1, 3));
             comboCountries.setEnabled(false);
@@ -275,10 +277,10 @@ public final class AuthorView extends AbstractPrincipalDelegatedView implements 
          *
          * @param builder The builder to use.
          */
-        private void addNoteField(PanelBuilder builder) {
+        private void addNoteField(I18nPanelBuilder builder) {
             builder.addI18nLabel("author.note", builder.gbcSet(0, 4));
 
-            notesModel = new NotesComboBoxModel();
+            notesModel = new NotesComboBoxModel(daoNotes);
 
             comboNote = builder.addComboBox(notesModel,
                     builder.gbcSet(1, 4, GridBagUtils.NONE, GridBagUtils.BASELINE_LEADING, GridBagUtils.REMAINDER, GridBagUtils.REMAINDER, 1.0, 1.0));
@@ -287,7 +289,7 @@ public final class AuthorView extends AbstractPrincipalDelegatedView implements 
 
         @Override
         public void fillFormBean(FormBean formBean) {
-            IAuthorFormBean fb = (IAuthorFormBean) formBean;
+            IPersonFormBean fb = (IPersonFormBean) formBean;
 
             fb.setName(fieldName.getText());
             fb.setFirstName(fieldFirstName.getText());

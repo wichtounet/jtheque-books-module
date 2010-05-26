@@ -18,12 +18,12 @@ package org.jtheque.books.view.controllers.state.author;
 
 import org.jtheque.books.services.able.IAuthorsService;
 import org.jtheque.books.view.controllers.able.IAuthorController;
-import org.jtheque.books.view.controllers.undo.delete.DeletedAuthorEdit;
 import org.jtheque.books.view.models.able.IAuthorsModel;
 import org.jtheque.core.managers.Managers;
 import org.jtheque.core.managers.undo.IUndoRedoManager;
 import org.jtheque.primary.controller.able.ControllerState;
-import org.jtheque.primary.controller.able.FormBean;
+import org.jtheque.primary.controller.impl.AbstractControllerState;
+import org.jtheque.primary.controller.impl.undo.GenericDataDeletedEdit;
 import org.jtheque.primary.od.able.Data;
 import org.jtheque.primary.od.able.Person;
 import org.jtheque.primary.view.able.ViewMode;
@@ -35,7 +35,7 @@ import javax.annotation.Resource;
  *
  * @author Baptiste Wicht
  */
-public final class ViewAuthorState implements ControllerState {
+public final class ViewAuthorState extends AbstractControllerState {
     @Resource
     private IAuthorController controller;
 
@@ -62,42 +62,19 @@ public final class ViewAuthorState implements ControllerState {
     }
 
     @Override
-    public ControllerState autoEdit(Data data) {
-        Person author = (Person) data;
-
-        getViewModel().setCurrentAuthor(author);
-
-        return controller.getAutoAddState();
-    }
-
-    @Override
-    public ControllerState save(FormBean infos) {
-        //Do nothing
-
-        return null;
-    }
-
-    @Override
-    public ControllerState cancel() {
-        //Do nothing
-
-        return null;
-    }
-
-    @Override
     public ControllerState delete() {
         Person deletedAuthor = getViewModel().getCurrentAuthor();
 
         boolean deleted = authorsService.delete(deletedAuthor);
 
         if (deleted) {
-            if (authorsService.getAuthors().isEmpty()) {
+            if (authorsService.getPersons().isEmpty()) {
                 controller.getView().clear();
             } else {
                 controller.getView().selectFirst();
             }
 
-            Managers.getManager(IUndoRedoManager.class).addEdit(new DeletedAuthorEdit(deletedAuthor));
+            Managers.getManager(IUndoRedoManager.class).addEdit(new GenericDataDeletedEdit<Person>("authorsService", deletedAuthor));
         }
 
         return null;

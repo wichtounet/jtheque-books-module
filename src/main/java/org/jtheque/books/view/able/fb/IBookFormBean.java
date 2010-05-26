@@ -1,14 +1,11 @@
-package org.jtheque.books.view.fb;
+package org.jtheque.books.view.able.fb;
 
 import org.jtheque.books.persistence.od.able.Book;
 import org.jtheque.books.persistence.od.able.Editor;
 import org.jtheque.core.utils.db.Note;
 import org.jtheque.primary.controller.able.FormBean;
-import org.jtheque.primary.od.able.Kind;
-import org.jtheque.primary.od.able.Language;
 import org.jtheque.primary.od.able.Person;
-import org.jtheque.primary.od.able.Saga;
-import org.jtheque.primary.od.able.Type;
+import org.jtheque.primary.od.able.SimpleData;
 
 import java.util.Collection;
 
@@ -70,14 +67,14 @@ public interface IBookFormBean extends FormBean {
      *
      * @param theKind The kind of the book.
      */
-    void setTheKind(Kind theKind);
+    void setTheKind(SimpleData theKind);
 
     /**
      * Set the type of the book.
      *
      * @param theType The type of the book.
      */
-    void setTheType(Type theType);
+    void setTheType(SimpleData theType);
 
     /**
      * Set the note of the book.
@@ -91,7 +88,7 @@ public interface IBookFormBean extends FormBean {
      *
      * @param theLanguage The language of the book.
      */
-    void setTheLanguage(Language theLanguage);
+    void setTheLanguage(SimpleData theLanguage);
 
     /**
      * Set the editor of the book.
@@ -105,7 +102,7 @@ public interface IBookFormBean extends FormBean {
      *
      * @param theSaga The saga of the book.
      */
-    void setTheSaga(Saga theSaga);
+    void setTheSaga(SimpleData theSaga);
 
     /**
      * Fill the book with the infos of the form bean.

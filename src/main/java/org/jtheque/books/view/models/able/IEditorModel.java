@@ -1,7 +1,7 @@
 package org.jtheque.books.view.models.able;
 
 import org.jtheque.books.persistence.od.able.Editor;
-import org.jtheque.core.managers.view.able.components.IModel;
+import org.jtheque.ui.able.IModel;
 
 /**
  * @author Baptiste Wicht

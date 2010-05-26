@@ -18,9 +18,8 @@ package org.jtheque.books.view.controllers.state.book;
 
 import org.jtheque.books.persistence.od.able.Book;
 import org.jtheque.books.services.able.IBooksService;
+import org.jtheque.books.view.able.fb.IBookFormBean;
 import org.jtheque.books.view.controllers.able.IBookController;
-import org.jtheque.books.view.controllers.undo.create.CreatedBookEdit;
-import org.jtheque.books.view.fb.IBookFormBean;
 import org.jtheque.books.view.models.able.IBooksModel;
 import org.jtheque.core.managers.Managers;
 import org.jtheque.core.managers.language.ILanguageManager;
@@ -28,6 +27,8 @@ import org.jtheque.core.managers.undo.IUndoRedoManager;
 import org.jtheque.core.managers.view.able.IViewManager;
 import org.jtheque.primary.controller.able.ControllerState;
 import org.jtheque.primary.controller.able.FormBean;
+import org.jtheque.primary.controller.impl.AbstractControllerState;
+import org.jtheque.primary.controller.impl.undo.GenericDataCreatedEdit;
 import org.jtheque.primary.od.able.Data;
 import org.jtheque.primary.view.able.ViewMode;
 
@@ -38,7 +39,7 @@ import javax.annotation.Resource;
  *
  * @author Baptiste Wicht
  */
-public final class NewBookState implements ControllerState {
+public final class NewBookState extends AbstractControllerState {
     @Resource
     private IBookController controller;
 
@@ -59,13 +60,6 @@ public final class NewBookState implements ControllerState {
         getViewModel().setCurrentBook(booksService.getDefaultBook());
         controller.getView().setEnabled(true);
         controller.getView().getToolbarView().setDisplayMode(ViewMode.NEW);
-    }
-
-    @Override
-    public ControllerState autoEdit(Data data) {
-        switchBook(data);
-
-        return controller.getAutoAddState();
     }
 
     /**
@@ -97,27 +91,6 @@ public final class NewBookState implements ControllerState {
     }
 
     @Override
-    public ControllerState create() {
-        //Do nothing
-
-        return null;
-    }
-
-    @Override
-    public ControllerState manualEdit() {
-        //Do nothing
-
-        return null;
-    }
-
-    @Override
-    public ControllerState delete() {
-        //Do nothing
-
-        return null;
-    }
-
-    @Override
     public ControllerState save(FormBean bean) {
         IBookFormBean infos = (IBookFormBean) bean;
 
@@ -127,7 +100,7 @@ public final class NewBookState implements ControllerState {
 
         booksService.create(book);
 
-        Managers.getManager(IUndoRedoManager.class).addEdit(new CreatedBookEdit(book));
+        Managers.getManager(IUndoRedoManager.class).addEdit(new GenericDataCreatedEdit<Book>("booksService", book));
 
         controller.getView().resort();
 

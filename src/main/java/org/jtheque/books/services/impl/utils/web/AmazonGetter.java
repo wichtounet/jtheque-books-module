@@ -18,15 +18,14 @@ package org.jtheque.books.services.impl.utils.web;
 
 import org.jtheque.books.persistence.od.able.Book;
 import org.jtheque.books.services.able.IBooksService;
-import org.jtheque.books.services.able.INotesService;
+import org.jtheque.primary.services.able.INotesService;
 import org.jtheque.books.services.impl.utils.EditArguments;
 import org.jtheque.books.services.impl.utils.web.analyzers.AbstractBookAnalyzer;
 import org.jtheque.core.managers.Managers;
 import org.jtheque.core.managers.beans.IBeansManager;
 import org.jtheque.core.managers.log.IJThequeLogger;
 import org.jtheque.core.managers.log.Logger;
-import org.jtheque.primary.services.able.ILanguagesService;
-import org.jtheque.primary.services.able.ITypesService;
+import org.jtheque.primary.services.able.ISimpleDataService;
 
 import javax.annotation.Resource;
 import java.io.IOException;
@@ -47,10 +46,10 @@ public abstract class AmazonGetter extends AbstractWebGetter {
     private INotesService notesService;
 
     @Resource
-    private ILanguagesService languagesService;
+    private ISimpleDataService languagesService;
 
     @Resource
-    private ITypesService typesService;
+    private ISimpleDataService typesService;
 
     @Resource
     private IBooksService booksService;
@@ -166,9 +165,9 @@ public abstract class AmazonGetter extends AbstractWebGetter {
         String title = search.getTitle();
 
         getAnalyzer().getBook().setTitle(title);
-        getAnalyzer().getBook().setTheLanguage(languagesService.getDefaultLanguage());
+        getAnalyzer().getBook().setTheLanguage(languagesService.getDefaultSimpleData());
         getAnalyzer().getBook().setNote(notesService.getDefaultNote());
-        getAnalyzer().getBook().setTheType(typesService.getDefaultType());
+        getAnalyzer().getBook().setTheType(typesService.getDefaultSimpleData());
         getAnalyzer().getBook().setResume("");
     }
 

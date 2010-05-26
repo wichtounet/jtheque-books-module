@@ -18,6 +18,7 @@ package org.jtheque.books.services.able;
 
 import org.jtheque.books.persistence.od.able.Book;
 import org.jtheque.core.managers.persistence.able.DataContainer;
+import org.jtheque.primary.services.able.DataService;
 
 import java.util.Collection;
 
@@ -26,7 +27,7 @@ import java.util.Collection;
  *
  * @author Baptiste Wicht
  */
-public interface IBooksService extends DataContainer<Book> {
+public interface IBooksService extends DataContainer<Book>, DataService<Book> {
     String DATA_TYPE = "Books";
 
     /**
@@ -37,33 +38,11 @@ public interface IBooksService extends DataContainer<Book> {
     Book getDefaultBook();
 
     /**
-     * Create the book.
-     *
-     * @param book The book to create.
-     */
-    void create(Book book);
-
-    /**
      * Return all the books.
      *
      * @return A List containing all the books.
      */
     Collection<Book> getBooks();
-
-    /**
-     * Delete the book.
-     *
-     * @param book The book to delete.
-     * @return true if the book has been deleted.
-     */
-    boolean delete(Book book);
-
-    /**
-     * Save the book.
-     *
-     * @param book The book to save.
-     */
-    void save(Book book);
 
     /**
      * Return an empty book.

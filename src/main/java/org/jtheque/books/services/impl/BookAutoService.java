@@ -21,7 +21,7 @@ import org.jtheque.books.services.able.IBookAutoService;
 import org.jtheque.books.services.impl.utils.EditArguments;
 import org.jtheque.books.services.impl.utils.web.BookResult;
 import org.jtheque.books.services.impl.utils.web.WebGetterManager;
-import org.jtheque.primary.services.able.IKindsService;
+import org.jtheque.primary.services.able.ISimpleDataService;
 
 import javax.annotation.Resource;
 import java.util.Collection;
@@ -36,7 +36,7 @@ public final class BookAutoService implements IBookAutoService {
     private static final String[] LANGUAGES = {"Amazon FR", "Amazon EN"};
 
     @Resource
-    private IKindsService kindsService;
+    private ISimpleDataService kindsService;
 
     @Override
     public String[] getLanguages() {
@@ -48,7 +48,7 @@ public final class BookAutoService implements IBookAutoService {
         Book book = getManager().getBook(bookResult);
 
         if (book.getTheKind() == null) {
-            book.setTheKind(kindsService.getDefaultKind());
+            book.setTheKind(kindsService.getDefaultSimpleData());
         }
 
         return book;

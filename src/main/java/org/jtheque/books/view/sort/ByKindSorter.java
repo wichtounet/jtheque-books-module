@@ -18,8 +18,7 @@ package org.jtheque.books.view.sort;
 
 import org.jtheque.books.persistence.od.able.Book;
 import org.jtheque.books.services.able.IBooksService;
-import org.jtheque.primary.od.able.Kind;
-import org.jtheque.primary.services.able.IKindsService;
+import org.jtheque.primary.od.able.SimpleData;
 import org.jtheque.primary.view.impl.models.tree.Category;
 import org.jtheque.primary.view.impl.models.tree.JThequeTreeModel;
 import org.jtheque.primary.view.impl.models.tree.TreeElement;
@@ -40,18 +39,18 @@ public final class ByKindSorter implements Sorter {
 
     @Override
     public boolean canSort(String content, String sortType) {
-        return content.equals(IBooksService.DATA_TYPE) && sortType.equals(IKindsService.DATA_TYPE);
+        return content.equals(IBooksService.DATA_TYPE) && sortType.equals(SimpleData.DataType.KIND.getDataType());
     }
 
     @Override
     public void sort(JThequeTreeModel model) {
         TreeElement root = model.getRoot();
 
-        Map<Kind, Category> groups = new HashMap<Kind, Category>(booksService.getNumberOfBooks() / 4);
+        Map<SimpleData, Category> groups = new HashMap<SimpleData, Category>(booksService.getNumberOfBooks() / 4);
         Iterable<Book> contents = booksService.getBooks();
 
         for (Book book : contents) {
-            Kind kind = book.getTheKind();
+            SimpleData kind = book.getTheKind();
 
             if (!groups.containsKey(kind)) {
                 Category category = new Category(kind.getDisplayableText());
