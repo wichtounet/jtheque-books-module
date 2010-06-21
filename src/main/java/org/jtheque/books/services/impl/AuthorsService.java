@@ -25,11 +25,11 @@ import org.jtheque.primary.services.impl.PersonService;
  * @author Baptiste Wicht
  */
 public final class AuthorsService extends PersonService implements IAuthorsService {
-	public AuthorsService(){
-		super(PERSON_TYPE, DATA_TYPE);
-	}
+    public AuthorsService() {
+        super(PERSON_TYPE, DATA_TYPE);
+    }
 
-	@Override
+    @Override
     public int getNumberOfAuthors() {
         return getPersons().size();
     }

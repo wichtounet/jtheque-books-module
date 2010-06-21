@@ -35,6 +35,7 @@ import javax.swing.DefaultListModel;
 import javax.swing.JList;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
+
 import java.awt.Frame;
 import java.util.Collection;
 
@@ -63,15 +64,15 @@ public final class AutoView extends SwingBuildedDialogView<IAutoAddModel> implem
         build();
     }
 
-	@Override
-	protected void initView(){
-		setModel(new AutoAddModel());
+    @Override
+    protected void initView() {
+        setModel(new AutoAddModel());
         setTitleKey("auto.view.title");
-	}
+    }
 
-	@Override
-	protected void buildView(I18nPanelBuilder builder){
-		builder.addI18nLabel("auto.view.title.film", builder.gbcSet(0, 0));
+    @Override
+    protected void buildView(I18nPanelBuilder builder) {
+        builder.addI18nLabel("auto.view.title.film", builder.gbcSet(0, 0));
 
         Action searchAction = new AcSearch();
 
@@ -94,7 +95,7 @@ public final class AutoView extends SwingBuildedDialogView<IAutoAddModel> implem
 
         builder.addButtonBar(builder.gbcSet(0, 2, GridBagUtils.HORIZONTAL),
                 new AcValidateAutoAddView(), getCloseAction("generic.actions.cancel"));
-	}
+    }
 
     @Override
     public void sendMessage(String message, Object value) {

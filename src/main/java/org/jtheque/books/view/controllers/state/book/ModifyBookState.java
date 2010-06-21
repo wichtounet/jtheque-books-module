@@ -18,8 +18,8 @@ package org.jtheque.books.view.controllers.state.book;
 
 import org.jtheque.books.persistence.od.able.Book;
 import org.jtheque.books.services.able.IBooksService;
-import org.jtheque.books.view.controllers.able.IBookController;
 import org.jtheque.books.view.able.fb.IBookFormBean;
+import org.jtheque.books.view.controllers.able.IBookController;
 import org.jtheque.books.view.models.able.IBooksModel;
 import org.jtheque.core.managers.Managers;
 import org.jtheque.core.managers.language.ILanguageManager;

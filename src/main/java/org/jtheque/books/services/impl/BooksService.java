@@ -20,14 +20,16 @@ import org.jtheque.books.persistence.dao.able.IDaoBooks;
 import org.jtheque.books.persistence.od.able.Book;
 import org.jtheque.books.services.able.IBooksService;
 import org.jtheque.books.services.able.IEditorsService;
-import org.jtheque.primary.services.able.INotesService;
 import org.jtheque.core.managers.Managers;
 import org.jtheque.core.managers.language.ILanguageManager;
 import org.jtheque.core.managers.persistence.able.DataListener;
+import org.jtheque.primary.services.able.INotesService;
 import org.jtheque.primary.services.able.ISimpleDataService;
+
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+
 import java.util.Collection;
 
 /**

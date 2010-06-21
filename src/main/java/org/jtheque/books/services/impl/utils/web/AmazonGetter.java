@@ -18,16 +18,17 @@ package org.jtheque.books.services.impl.utils.web;
 
 import org.jtheque.books.persistence.od.able.Book;
 import org.jtheque.books.services.able.IBooksService;
-import org.jtheque.primary.services.able.INotesService;
 import org.jtheque.books.services.impl.utils.EditArguments;
 import org.jtheque.books.services.impl.utils.web.analyzers.AbstractBookAnalyzer;
 import org.jtheque.core.managers.Managers;
 import org.jtheque.core.managers.beans.IBeansManager;
 import org.jtheque.core.managers.log.IJThequeLogger;
 import org.jtheque.core.managers.log.Logger;
+import org.jtheque.primary.services.able.INotesService;
 import org.jtheque.primary.services.able.ISimpleDataService;
 
 import javax.annotation.Resource;
+
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -106,6 +107,7 @@ public abstract class AmazonGetter extends AbstractWebGetter {
      * Read the book result.
      *
      * @param line The line to read.
+     *
      * @return The filled book result.
      */
     private BookResult readBookResult(String line) {
@@ -197,7 +199,9 @@ public abstract class AmazonGetter extends AbstractWebGetter {
      * Open the connection to URL.
      *
      * @param url The url.
+     *
      * @return The Scanner to the url.
+     *
      * @throws IOException if an error occurs during url connection opening.
      */
     private static Scanner openConnectionToURL(String url) throws IOException {

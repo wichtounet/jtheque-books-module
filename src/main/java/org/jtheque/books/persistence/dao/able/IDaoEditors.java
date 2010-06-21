@@ -40,6 +40,7 @@ public interface IDaoEditors extends JThequeDao {
      * Return the editor with the specified ID.
      *
      * @param id The ID of the searched editor.
+     *
      * @return The editor.
      */
     Editor getEditor(int id);
@@ -48,6 +49,7 @@ public interface IDaoEditors extends JThequeDao {
      * Return the editor with the specified name.
      *
      * @param name The searched name.
+     *
      * @return The editor.
      */
     Editor getEditor(String name);
@@ -56,6 +58,7 @@ public interface IDaoEditors extends JThequeDao {
      * Indicate if an editor with this name exists in the application.
      *
      * @param name The searched name.
+     *
      * @return true if an editor exist with this name.
      */
     boolean exists(String name);
@@ -78,6 +81,7 @@ public interface IDaoEditors extends JThequeDao {
      * Delete the editor.
      *
      * @param editor The editor to delete.
+     *
      * @return true if the object is deleted else false.
      */
     boolean delete(Editor editor);

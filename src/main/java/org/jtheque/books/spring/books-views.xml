@@ -24,15 +24,15 @@
 
     <bean id="_authorView" class="org.jtheque.books.view.panels.AuthorView"/>
 
-    <bean id="_bookView" class="org.jtheque.books.view.panels.BookView" />
+    <bean id="_bookView" class="org.jtheque.books.view.panels.BookView"/>
 
     <bean id="_editorView" class="org.jtheque.books.view.frames.EditorView">
         <constructor-arg ref="_mainView"/>
     </bean>
 
     <!-- Panels -->
-    
-    <bean id="booksPanelInfos" class="org.jtheque.books.view.panels.JPanelBookInfos" />
+
+    <bean id="booksPanelInfos" class="org.jtheque.books.view.panels.JPanelBookInfos"/>
     <bean id="booksPanelOthers" class="org.jtheque.books.view.panels.JPanelBookOthers"/>
 
 </beans>

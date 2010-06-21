@@ -36,7 +36,7 @@ public final class DeleteChoiceAction extends AbstractPrimaryDeleteChoiceAction 
         super();
 
         addDeleters(new EditorDeleter());
-		addPrimaryDeleters();
+        addPrimaryDeleters();
     }
 
     /**
@@ -55,8 +55,8 @@ public final class DeleteChoiceAction extends AbstractPrimaryDeleteChoiceAction 
         @Override
         public void delete(Editor o) {
             addEditIfDeleted(
-					CoreUtils.<IEditorsService>getBean("editorsService").delete(o),
-					new GenericDataDeletedEdit<Editor>("editorsService", o));
+                    CoreUtils.<IEditorsService>getBean("editorsService").delete(o),
+                    new GenericDataDeletedEdit<Editor>("editorsService", o));
         }
     }
 }

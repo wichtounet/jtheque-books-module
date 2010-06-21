@@ -33,6 +33,7 @@ public interface IBookAutoService {
      *
      * @param language The language to search in.
      * @param search   The film search.
+     *
      * @return A List containing all the films found on the site for the search.
      */
     Collection<BookResult> getBooks(String language, String search);
@@ -50,6 +51,7 @@ public interface IBookAutoService {
      * Fill a film with the information of the film result and return it.
      *
      * @param filmResult The fim result to get the information from.
+     *
      * @return A film filled with the information of the site.
      */
     Book getBook(BookResult filmResult);

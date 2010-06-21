@@ -21,6 +21,7 @@ import org.jtheque.core.managers.error.JThequeError;
 import org.jtheque.primary.view.impl.listeners.CurrentObjectListener;
 
 import javax.swing.JComponent;
+
 import java.util.Collection;
 
 /**

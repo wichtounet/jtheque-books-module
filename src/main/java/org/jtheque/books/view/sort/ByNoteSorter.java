@@ -17,15 +17,16 @@ package org.jtheque.books.view.sort;
  */
 
 import org.jtheque.books.services.able.IAuthorsService;
-import org.jtheque.primary.services.able.INotesService;
 import org.jtheque.core.utils.db.Note;
 import org.jtheque.primary.od.able.Person;
+import org.jtheque.primary.services.able.INotesService;
 import org.jtheque.primary.view.impl.models.tree.Category;
 import org.jtheque.primary.view.impl.models.tree.JThequeTreeModel;
 import org.jtheque.primary.view.impl.models.tree.TreeElement;
 import org.jtheque.primary.view.impl.sort.Sorter;
 
 import javax.annotation.Resource;
+
 import java.util.HashMap;
 import java.util.Map;
 

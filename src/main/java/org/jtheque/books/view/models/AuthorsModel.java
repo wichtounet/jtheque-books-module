@@ -40,12 +40,12 @@ public final class AuthorsModel extends PrincipalDataModel<Person> implements IA
         Managers.getManager(IBeansManager.class).<IAuthorsService>getBean("authorsService").addDataListener(this);
     }
 
-	@Override
-	public Collection<Person> getDatas(){
-		return Managers.getManager(IBeansManager.class).<IAuthorsService>getBean("authorsService").getDatas();
-	}
+    @Override
+    public Collection<Person> getDatas() {
+        return Managers.getManager(IBeansManager.class).<IAuthorsService>getBean("authorsService").getDatas();
+    }
 
-	@Override
+    @Override
     public Person getCurrentAuthor() {
         return currentAuthor;
     }

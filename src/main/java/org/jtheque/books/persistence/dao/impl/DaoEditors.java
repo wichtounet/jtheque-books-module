@@ -24,10 +24,12 @@ import org.jtheque.core.managers.persistence.Query;
 import org.jtheque.core.managers.persistence.QueryMapper;
 import org.jtheque.core.managers.persistence.able.Entity;
 import org.jtheque.core.managers.persistence.context.IDaoPersistenceContext;
+
 import org.springframework.jdbc.core.simple.ParameterizedRowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcTemplate;
 
 import javax.annotation.Resource;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Collection;

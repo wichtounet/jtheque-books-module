@@ -32,6 +32,7 @@ public interface WebGetter {
      * Indicate if this getter can get on a specific language.
      *
      * @param language The language to test.
+     *
      * @return true if the getter can get on else false.
      */
     boolean canGetOn(String language);
@@ -47,6 +48,7 @@ public interface WebGetter {
      * Return the books for a search.
      *
      * @param search The search.
+     *
      * @return A List containing all the results corresponding to the search.
      */
     Collection<BookResult> getBooks(String search);
@@ -57,6 +59,7 @@ public interface WebGetter {
      * @param search The search.
      * @param book   The book.
      * @param args   The args of the edit.
+     *
      * @return The filled book.
      */
     Book getBook(BookResult search, Book book, EditArguments args);

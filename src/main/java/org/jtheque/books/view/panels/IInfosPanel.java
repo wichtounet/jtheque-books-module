@@ -6,6 +6,7 @@ import org.jtheque.primary.view.impl.listeners.CurrentObjectListener;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JComponent;
+
 import java.util.Collection;
 
 /**

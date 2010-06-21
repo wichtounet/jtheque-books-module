@@ -33,6 +33,7 @@ import org.jtheque.utils.bean.EqualsUtils;
 import org.jtheque.utils.bean.HashCodeUtils;
 
 import javax.swing.Icon;
+
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -284,7 +285,7 @@ public final class BookImpl extends AbstractData implements Book {
 
     @Override
     public boolean equals(Object obj) {
-        Book other = (Book)obj;
+        Book other = (Book) obj;
 
         return EqualsUtils.areEqualsDirect(
                 this, obj,

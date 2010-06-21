@@ -25,9 +25,6 @@ import org.jtheque.primary.controller.able.ControllerState;
 import org.jtheque.primary.controller.impl.PrincipalController;
 
 import javax.annotation.Resource;
-import javax.swing.JTree;
-import javax.swing.event.TreeSelectionEvent;
-import javax.swing.tree.TreePath;
 
 /**
  * A controller for the book view.

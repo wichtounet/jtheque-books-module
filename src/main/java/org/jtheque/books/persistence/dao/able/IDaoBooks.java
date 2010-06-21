@@ -55,6 +55,7 @@ public interface IDaoBooks extends JThequeDao {
      * Delete the book.
      *
      * @param book The book to delete.
+     *
      * @return true if the object is deleted else false.
      */
     boolean delete(Book book);

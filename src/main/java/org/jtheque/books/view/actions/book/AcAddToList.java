@@ -23,6 +23,7 @@ import org.jtheque.core.managers.view.impl.actions.JThequeSimpleAction;
 import org.jtheque.utils.collections.ArrayUtils;
 
 import javax.swing.DefaultListModel;
+
 import java.awt.event.ActionEvent;
 import java.util.Arrays;
 

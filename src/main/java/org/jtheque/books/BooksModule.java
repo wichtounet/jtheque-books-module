@@ -114,7 +114,7 @@ public final class BooksModule {
             Managers.getManager(IViewManager.class).addTabComponent(component);
         }
     }
-    
+
     /**
      * Un plug the module.
      */

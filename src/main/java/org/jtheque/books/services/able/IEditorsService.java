@@ -39,6 +39,7 @@ public interface IEditorsService extends DataContainer<Editor>, DataService<Edit
      * Return the editor with the name.
      *
      * @param name The name to search for.
+     *
      * @return The editor.
      */
     Editor getEditor(String name);
@@ -47,6 +48,7 @@ public interface IEditorsService extends DataContainer<Editor>, DataService<Edit
      * Indicate if exists an editor with a name.
      *
      * @param name The name to search for.
+     *
      * @return true if the author exists else false.
      */
     boolean exists(String name);

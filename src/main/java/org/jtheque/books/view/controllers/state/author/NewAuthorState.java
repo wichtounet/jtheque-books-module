@@ -68,11 +68,11 @@ public final class NewAuthorState extends AbstractControllerState {
 
         controller.getView().selectFirst();
 
-		if (authorsService.getPersons().size() <= 0) {
-			nextState = controller.getViewState();
-		}
+        if (authorsService.getPersons().size() <= 0) {
+            nextState = controller.getViewState();
+        }
 
-		return nextState;
+        return nextState;
     }
 
     @Override

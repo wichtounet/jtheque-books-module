@@ -19,11 +19,11 @@ package org.jtheque.books.services.impl.utils.web.analyzers;
 import org.jtheque.books.persistence.od.able.Editor;
 import org.jtheque.books.services.able.IAuthorsService;
 import org.jtheque.books.services.able.IEditorsService;
-import org.jtheque.primary.od.able.SimpleData;
-import org.jtheque.primary.services.able.INotesService;
 import org.jtheque.core.managers.Managers;
 import org.jtheque.core.managers.beans.IBeansManager;
 import org.jtheque.primary.od.able.Person;
+import org.jtheque.primary.od.able.SimpleData;
+import org.jtheque.primary.services.able.INotesService;
 import org.jtheque.primary.services.able.ISimpleDataService;
 import org.jtheque.primary.utils.web.analyzers.generic.GenericGenerator;
 import org.jtheque.primary.utils.web.analyzers.generic.field.FieldGetter;
@@ -32,6 +32,7 @@ import org.jtheque.utils.StringUtils;
 import org.jtheque.utils.bean.DataUtils;
 
 import javax.annotation.Resource;
+
 import java.util.Scanner;
 import java.util.regex.Pattern;
 

@@ -38,7 +38,7 @@ public class BooksMenu extends AbstractMenu {
     }
 
     @Override
-    protected List<Feature> getFileMenuSubFeatures(){
+    protected List<Feature> getFileMenuSubFeatures() {
         return features(
                 createSubFeature(100, new AcRefreshList())
         );

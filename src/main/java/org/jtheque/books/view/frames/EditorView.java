@@ -31,6 +31,7 @@ import org.jtheque.utils.ui.SwingUtils;
 
 import javax.swing.Action;
 import javax.swing.JTextField;
+
 import java.awt.Frame;
 import java.util.Collection;
 
@@ -53,17 +54,17 @@ public final class EditorView extends SwingBuildedDialogView<IEditorModel> imple
     public EditorView(Frame frame) {
         super(frame);
 
-		build();
+        build();
     }
 
-	@Override
-	protected void initView(){
-		setModel(new EditorModel());
-	}
+    @Override
+    protected void initView() {
+        setModel(new EditorModel());
+    }
 
-	@Override
-	protected void buildView(I18nPanelBuilder builder){
-		 builder.addI18nLabel("editor.view.name", builder.gbcSet(0, 0));
+    @Override
+    protected void buildView(I18nPanelBuilder builder) {
+        builder.addI18nLabel("editor.view.name", builder.gbcSet(0, 0));
 
         Action validateAction = new AcValidateEditorView();
 
@@ -74,14 +75,14 @@ public final class EditorView extends SwingBuildedDialogView<IEditorModel> imple
         builder.addButtonBar(builder.gbcSet(0, 1, GridBagUtils.HORIZONTAL, 2, 1), validateAction,
                 getCloseAction("generic.view.actions.cancel"));
 
-		reload();
-	}
+        reload();
+    }
 
-	@Override
+    @Override
     public void reload() {
         Editor editor = getModel().getEditor();
 
-        if(editor.isSaved()){
+        if (editor.isSaved()) {
             setTitle(getMessage("editor.view.title.modify") + editor.getName());
         } else {
             setTitleKey("editor.view.title");

@@ -20,9 +20,11 @@ import org.jtheque.books.persistence.dao.able.IDaoEditors;
 import org.jtheque.books.persistence.od.able.Editor;
 import org.jtheque.books.services.able.IEditorsService;
 import org.jtheque.core.managers.persistence.able.DataListener;
+
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+
 import java.util.Collection;
 
 /**

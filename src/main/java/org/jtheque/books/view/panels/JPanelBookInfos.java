@@ -29,9 +29,9 @@ import org.jtheque.core.managers.error.JThequeError;
 import org.jtheque.core.managers.persistence.able.DataContainer;
 import org.jtheque.core.managers.resource.IResourceManager;
 import org.jtheque.core.managers.view.impl.components.model.SimpleListModel;
+import org.jtheque.core.utils.ui.ValidationUtils;
 import org.jtheque.core.utils.ui.builders.I18nPanelBuilder;
 import org.jtheque.core.utils.ui.builders.JThequePanelBuilder;
-import org.jtheque.core.utils.ui.ValidationUtils;
 import org.jtheque.core.utils.ui.builders.PanelBuilder;
 import org.jtheque.primary.od.able.Person;
 import org.jtheque.primary.od.able.SimpleData;
@@ -50,6 +50,7 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.ListSelectionModel;
 import javax.swing.text.DefaultFormatter;
+
 import java.text.NumberFormat;
 import java.util.Collection;
 

@@ -34,6 +34,7 @@ public final class WebGetterManager {
      *
      * @param language The language.
      * @param search   The search.
+     *
      * @return A List containing all the books.
      */
     public Collection<BookResult> getBooks(String language, String search) {
@@ -46,6 +47,7 @@ public final class WebGetterManager {
      * Return the book.
      *
      * @param search The search.
+     *
      * @return The filled book.
      */
     public Book getBook(BookResult search) {

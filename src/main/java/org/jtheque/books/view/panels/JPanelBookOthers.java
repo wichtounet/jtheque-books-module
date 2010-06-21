@@ -20,9 +20,9 @@ import org.jtheque.books.persistence.od.able.Book;
 import org.jtheque.books.view.able.IOthersPanel;
 import org.jtheque.books.view.able.fb.IBookFormBean;
 import org.jtheque.core.managers.error.JThequeError;
+import org.jtheque.core.utils.ui.ValidationUtils;
 import org.jtheque.core.utils.ui.builders.I18nPanelBuilder;
 import org.jtheque.core.utils.ui.builders.JThequePanelBuilder;
-import org.jtheque.core.utils.ui.ValidationUtils;
 import org.jtheque.primary.view.impl.listeners.ObjectChangedEvent;
 import org.jtheque.primary.view.impl.models.NotesComboBoxModel;
 import org.jtheque.primary.view.impl.renderers.NoteComboRenderer;
@@ -35,6 +35,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.ListCellRenderer;
+
 import java.util.Collection;
 
 /**

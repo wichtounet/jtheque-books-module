@@ -68,7 +68,7 @@ public final class JPanelBookToolBar extends JPanel implements ToolbarView {
         buttonAdd = new JDropDownButton(
                 new CreateNewPrincipalAction("book.actions.add.manual", "bookController"),
                 new AcAutoAddBook());
-        
+
         buttonEdit = new JDropDownButton(
                 new ManualEditPrincipalAction("book.actions.edit.manual", "bookController"),
                 new AcAutoEditBook());

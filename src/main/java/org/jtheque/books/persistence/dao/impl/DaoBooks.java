@@ -33,10 +33,12 @@ import org.jtheque.primary.dao.able.IDaoPersons;
 import org.jtheque.primary.dao.able.IDaoSimpleDatas;
 import org.jtheque.primary.od.able.Person;
 import org.jtheque.utils.StringUtils;
+
 import org.springframework.jdbc.core.simple.ParameterizedRowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcTemplate;
 
 import javax.annotation.Resource;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Collection;
@@ -208,9 +210,9 @@ public final class DaoBooks extends GenericDao<Book> implements IDaoBooks {
             book.setTheKind(daoKinds.getSimpleData(rs.getInt("THE_KIND_FK")));
             book.setTheLanguage(daoLanguages.getSimpleData(rs.getInt("THE_LANGUAGE_FK")));
 
-			if (StringUtils.isNotEmpty(rs.getString("NOTE"))){
-				book.setNote(DaoNotes.getInstance().getNote(DaoNotes.NoteType.getEnum(rs.getInt("NOTE"))));
-			}
+            if (StringUtils.isNotEmpty(rs.getString("NOTE"))) {
+                book.setNote(DaoNotes.getInstance().getNote(DaoNotes.NoteType.getEnum(rs.getInt("NOTE"))));
+            }
 
             mapRelations(book);
 

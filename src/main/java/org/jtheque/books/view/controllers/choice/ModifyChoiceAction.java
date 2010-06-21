@@ -19,7 +19,6 @@ package org.jtheque.books.view.controllers.choice;
 import org.jtheque.books.persistence.od.able.Editor;
 import org.jtheque.books.services.able.IEditorsService;
 import org.jtheque.books.view.controllers.able.IEditorController;
-import org.jtheque.primary.view.impl.choice.AbstractChoiceAction;
 import org.jtheque.primary.view.impl.choice.AbstractModifyChoiceAction;
 
 import javax.annotation.Resource;
@@ -40,7 +39,7 @@ public final class ModifyChoiceAction extends AbstractModifyChoiceAction {
 
     @Override
     public void execute() {
-        if(execute(getSelectedItem(), getContent())){
+        if (execute(getSelectedItem(), getContent())) {
             return;
         }
 

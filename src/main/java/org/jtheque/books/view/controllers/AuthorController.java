@@ -22,13 +22,9 @@ import org.jtheque.books.view.controllers.able.IAuthorController;
 import org.jtheque.books.view.models.able.IAuthorsModel;
 import org.jtheque.primary.controller.able.ControllerState;
 import org.jtheque.primary.controller.impl.PrincipalController;
-import org.jtheque.primary.od.able.Data;
 import org.jtheque.primary.od.able.Person;
 
 import javax.annotation.Resource;
-import javax.swing.JTree;
-import javax.swing.event.TreeSelectionEvent;
-import javax.swing.tree.TreePath;
 
 /**
  * A controller for the author view.

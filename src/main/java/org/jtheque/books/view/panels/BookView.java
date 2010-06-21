@@ -16,9 +16,6 @@ package org.jtheque.books.view.panels;
  * along with JTheque.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import org.jdesktop.swingx.JXHyperlink;
-import org.jdesktop.swingx.JXTitledPanel;
-import org.jdesktop.swingx.border.DropShadowBorder;
 import org.jtheque.books.persistence.od.able.Book;
 import org.jtheque.books.services.able.IBooksService;
 import org.jtheque.books.services.able.IEditorsService;
@@ -37,9 +34,9 @@ import org.jtheque.core.managers.language.ILanguageManager;
 import org.jtheque.core.managers.language.TabTitleUpdater;
 import org.jtheque.core.managers.persistence.able.DataContainer;
 import org.jtheque.core.managers.resource.IResourceManager;
+import org.jtheque.core.utils.ui.ValidationUtils;
 import org.jtheque.core.utils.ui.builders.I18nPanelBuilder;
 import org.jtheque.core.utils.ui.builders.JThequePanelBuilder;
-import org.jtheque.core.utils.ui.ValidationUtils;
 import org.jtheque.core.utils.ui.builders.PanelBuilder;
 import org.jtheque.primary.controller.able.FormBean;
 import org.jtheque.primary.od.able.SimpleData;
@@ -51,6 +48,10 @@ import org.jtheque.primary.view.impl.models.tree.JThequeTreeModel;
 import org.jtheque.utils.ui.GridBagUtils;
 import org.jtheque.utils.ui.SwingUtils;
 
+import org.jdesktop.swingx.JXHyperlink;
+import org.jdesktop.swingx.JXTitledPanel;
+import org.jdesktop.swingx.border.DropShadowBorder;
+
 import javax.annotation.PostConstruct;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -59,6 +60,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import javax.swing.UIManager;
 import javax.swing.event.TreeSelectionListener;
+
 import java.awt.Font;
 import java.awt.Insets;
 import java.util.Collection;

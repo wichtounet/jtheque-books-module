@@ -64,6 +64,7 @@ public interface IAutoView extends IWindowView {
      * Validate the content.
      *
      * @param phase The current phase.
+     *
      * @return true if the content is valid else false.
      */
     boolean validateContent(int phase);
